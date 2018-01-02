@@ -1,0 +1,680 @@
+<!--
+  ~ Copyright 2008-2016 Andre Pfeiler
+  ~
+  ~ This file is part of SpotBugs-IDEA.
+  ~
+  ~ SpotBugs-IDEA is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ SpotBugs-IDEA is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with SpotBugs-IDEA.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<!DOCTYPE idea-plugin PUBLIC "Plugin/DTD" "http://plugins.intellij.net/plugin.dtd">
+<idea-plugin url="http://andrepdo.github.io/findbugs-idea">
+    <name>SpotBugs-IDEA</name>
+    <description>
+        <![CDATA[
+		The SpotBugs plugin for IntelliJ IDEA<br/>
+		Provides static byte code analysis to look for bugs in Java code from within IntelliJ IDEA.
+		SpotBugs is a defect detection tool for Java that uses static analysis to look for more than 200 bug patterns,
+		such as null pointer dereferences, infinite recursive loops, bad uses of the Java libraries and deadlocks.
+		SpotBugs can identify hundreds of serious defects in large applications (typically about 1 defect per 1000-2000
+		lines of non-commenting source statements).
+		SpotBugs-IDEA uses SpotBugs&trade; under the hood. For more information
+		see <a href="https://github.com/spotbugs/spotbugs">https://github.com/spotbugs/spotbugs</a>.
+		<p>
+		..."We use IDEA inspections and SpotBugs complementary. SpotBugs is running in our continuous integration process and IDEA inspections are used during coding."
+		What about using both during coding from within IntelliJ IDEA?
+		</p>
+		<p>
+            <ul>
+                <li>for screenshots see <a href='http://andrepdo.github.io/findbugs-idea'>http://andrepdo.github.io/findbugs-idea</a></li>
+                <li>@see article at dzone: <a href='http://jetbrains.dzone.com/tips/intellij-idea-finds-bugs'>http://jetbrains.dzone.com/tips/intellij-idea-finds-bugs</a></li>
+            </ul>
+		</p>
+		<p>
+		SpotBugs-IDEA plugin features:
+		<ul>
+            <li>SpotBugs 3 support</li>
+            <li>Quickfix: annotate, suppress spotbugs patterns (GutterIcon and document markup (alt+enter))</li>
+            <li>idea 13.0 until the latest 15 EAP compatibility</li>
+            <li>configure findbugs on idea project and module level</li>
+            <li>jump to source from results shown in toolwindow including anonymous classes</li>
+            <li>bug descriptions, solutions</li>
+            <li>run analysis always in background</li>
+            <li>run findbugs analysis on all affected files after compile/automake</li>
+            <li>min. priority to report</li>
+            <li>background scanning</li>
+            <li>configurable effort run level</li>
+            <li>configurable detectors</li>
+            <li>bug categories to report</li>
+            <li>file filter (include, exclude, exclude baseline bugs)</li>
+            <li>load additional detector plugins like fb-contrib.jar</li>
+            <li>group results by: bug category, classname, package, priority, bug rank</li>
+            <li>intellij local history support</li>
+            <li>quick search within the result tree</li>
+            <li>basic Scala, Groovy and AspectJ support</li>
+            <li>Analyze actions (all actions are also available in the intellij project tree, toolbar menu, context menu):
+                <ul>
+                    <li>analyze all modified files</li>
+                    <li>analyze all files on the active changelist (available from SpotBugs-IDEA main ToolWindow and the ChangelistToolWindow)</li>
+                    <li>analyze class under cursor</li>
+                    <li>analyze current editor file</li>
+                    <li>analyze all files of an intellij project</li>
+                    <li>analyze all files of an intellij module</li>
+                    <li>analyze all files of the selected package</li>
+                    <li>analyze a bunch of selected files (project tree)</li>
+                    <li>analyze a scope</li>
+                </ul>
+            </li>
+            <li>export a bug collection to html and/or xml with limited configurable dir based archive support</li>
+            <li>import a bug collection from xml</li>
+            <li>configurable : open an exported bug collection html page in the intellij configured browser</li>
+            <li>configurable : preview found bugs in an editor preview panel</li>
+		</ul>
+		</p>
+		]]>
+    </description>
+    <change-notes>
+        <![CDATA[<html>
+        <h3>1.0.2</h3>
+        <ul>
+            <li>Migrated build system to gradle and gradle-intellij-plugin</li>
+            <li>Migrated to SpotBugs 3.1.1</li>
+            <li>Plugin compatibility: IDEA 2017</li>
+        </ul>
+        <h3>1.0.1</h3>
+        <ul>
+            <li>Issue 146: Support minimum rank</li>
+            <li>Issue 154: Fix possible classloader issue with dom4j</li>
+            <li>Issue 157: Fix possible ISE caused by after-compile hook</li>
+            <li>Issue 172: Fix possible ISE caused by Search Everywhere</li>
+            <li>Issue 176: Fix illegal toolwindow access outside EDT</li>
+            <li>Plugin compatibility: IDEA 15, IDEA 2016, Android Studio 2.2</li>
+        </ul>
+        <h3>1.0.0</h3>
+        <ul>
+            <li>Issue 129: Fix possible ISE caused by LineMarker</li>
+            <li>Issue 132: Fix issue with file-based IDEA project (.ipr) with IDEA 15</li>
+            <li>"Run analyze before commit" should only run when activated</li>
+            <li>Improved error submitter</li>
+        </ul>
+        <h3>0.9.999</h3>
+        <ul>
+            <li>Issue 112: Support test sources</li>
+            <li>Issue 116: Support run analyze before commit</li>
+            <li>Issue 120, 122, 126: Fix possible NPE</li>
+            <li>Issue 121: Fix bug in legacy settings converter</li>
+            <li>Issue 124: Fix possible ClassCastException caused by ShowQuickSearch</li>
+            <li>Issue 128: Fix possible ClassCastException caused by Abstract*Action</li>
+        </ul>
+        <h3>0.9.998</h3>
+        <ul>
+            <li>Issue 48, 108, 114, 118: UI settings rewrite</li>
+            <li>Note that the settings format was changed. The old format is still supported.</li>
+            <li>Issue 68: Introduce custom error report submitter</li>
+            <li>Issue 106: Improved error handling/feedback</li>
+            <li>Issue 115: Analyze per module</li>
+            <li>Issue 116: Compile before run analyze (enabled by default)</li>
+            <li>Issue 10, 111, 117: Minor fixes, cleanups and improvements</li>
+            <li>Update bundled custom plugins: fb-contrib 6.6.1 and find-sec-bugs 1.4.4</li>
+            <li>Note that IDEA must run with >= JRE 1.7 to use fb-contrib 6.6.1</li>
+            <li>Plugin compatibility: IDEA 15, IDEA 2016, Android Studio 2.1</li>
+            <li>Note that IDEA 13 and 14 is no longer supported</li>
+        </ul>
+        <h3>0.9.997</h3>
+        <ul>
+            <li>Issue 97: HiDPI improvements (incomplete, icons)</li>
+            <li>Issue 99: fix possible NPE</li>
+            <li>Issue 100: configurable notification</li>
+            <li>Issue 101: delaying auto-analyze after auto-compile by 30 seconds (default)</li>
+            <li>Issue 102: make deployment of bundled custom plugins more stable</li>
+            <li>Update bundled custom plugins: fb-contrib 6.2.1 and find-sec-bugs 1.4.1</li>
+            <li>Plugin compatibility: IDEA 13.0 (133.193) until the latest IDEA 15 EA (142.3230.1)</li>
+            <li>Minor fixes, cleanups and improvements</li>
+        </ul>
+        <h3>0.9.996</h3>
+        <ul>
+            <li>Bundle with patched SpotBugs 3.0.1 (compiled with JDK 6)</li>
+            <li>Issue 79: fix possible AE on "Suppress for class"</li>
+            <li>Issue 90: fix open maven project (POM file)</li>
+            <li>Issue 91: make BugInstance.writeXML more robust (patched SpotBugs)</li>
+            <li>Issue 92: fix possible NPE on regroup while analysis is running</li>
+            <li>Issue 95: fix error caused by TypeQualifier detector (patched SpotBugs)</li>
+            <li>Update bundled custom plugin find-sec-bugs 1.4.0</li>
+            <li>Plugin compatibility: IDEA 13.0 (133.193) until the latest IDEA 14 EA (141.498.1)</li>
+            <li>Minor fixes, cleanups and improvements</li>
+        </ul>
+        <h3>0.9.995</h3>
+        <ul>
+            <li>Bundle with SpotBugs 3.0.1-rc2 compiled with JDK 6</li>
+            <li>Issue 31: X-button should clear UI</li>
+            <li>Issue 78: avoid assertion error</li>
+            <li>Issue 87: support -Didea.is.internal=true</li>
+            <li>Support analyze after auto make (replacement for the inspection)</li>
+            <li>Basic Scala, Groovy and AspectJ support</li>
+            <li>Update bundled custom plugin find-sec-bugs 1.3.0</li>
+            <li>Plugin compatibility: IDEA 13.0 (133.193) until the latest IDEA 14 release (140.2683.2)</li>
+            <li>Note that IDEA 12.x is no longer supported</li>
+            <li>Minor fixes, cleanups and improvements</li>
+        </ul>
+        <h3>0.9.994</h3>
+        <ul>
+            <li>Bundle with SpotBugs 3.0.1 EAP (Rev. 11189b911ff3) compiled with JDK 6</li>
+            <li>Issue 77</li>
+            <li>Update bundled custom plugins: fb-contrib 6.0.0 and find-sec-bugs 1.2.1</li>
+            <li>Plugin compatibility: IDEA 12.1.4 (129.713) until the latest IDEA 14 release (139.224)</li>
+        </ul>
+        <h3>0.9.993</h3>
+        <ul>
+            <li>Bundle with SpotBugs 3.0.0</li>
+            <li>Issue 51</li>
+            <li>Issue 62</li>
+            <li>Issue 63</li>
+            <li>Issue 64</li>
+            <li>Issue 65</li>
+            <li>Bundled with custom plugins: findbugs-for-android 0.5, fb-contrib 5.2.1 and find-sec-bugs 1.2.0</li>
+            <li>Minor fixes, cleanups and improvements</li>
+            <li>Plugin compatibility: IDEA 12.1.4 (129.713) until the newest IDEA 13 release 13.1.3 (135.909) inclusive the latest EAP 13.1.4 (135.1146) and 14 (138.777)</li>
+        </ul>
+        <h3>0.9.992</h3>
+        <ul>
+            <li>Issue 46: support import findbugs settings from sonar profile xml</li>
+            <li>Issue 50: bundle with findbugs 2.0.3</li>
+            <li>Issue 52: Fix NPE and make element visitor more defensive</li>
+            <li>Issue 55: new default SuppressFBWarnings</li>
+            <li>Issue 56: disable "Analyze Package" action on invalid VirtualFile selection (f.e module directory selected)</li>
+            <li>Minor cleanups and improvements</li>
+            <li>Plugin compatibility: IDEA 12.1.4 (129.713) until the newest IDEA 13 release 13.0.2 (133.969) inclusive the latest EAP 13.1 (134.1160)</li>
+        </ul>
+        <h3>0.9.991</h3>
+        <ul>
+            <li>Issue 29: annotation color: do not change foreground and background - make only use of effect color and effect type (dark color theme problems)</li>
+            <li>Issue 41: compilemanager fixed (after hook idea 12) </li>
+            <li>some cleanups</li>
+            <li>Issue 47: New "Analyze Scope" action</li>
+            <li>IDEA 13 RC3 (133.162) compatibility (builds/works with 129.713 too) </li>
+        </ul>
+        <h3>0.9.99</h3>
+        <ul>
+            <li>mainly and many UI fixes/adaptations for the dark side of idea</li>
+            <li>some release management stuff</li>
+            <li>thanks to Reto Merz for contributing lot of fixes, enhancements and compatibility issues fixes</li>
+            <li>Issue 25</li>
+            <li>apply patch Issue 29 (settings panel) contributed by simon@billingsley.me.uk</li>
+            <li>apply patch  Issue 38  IntelliJ FileChooser (dark theme osx) contributed by</li>
+        </ul>
+        <h3>0.9.98</h3>
+        <ul>
+            <li>thanks to Reto Merz for contributing lot of fixes, enhancements and compatibility issues fixes</li>
+            <li>removed idea8 compatibility</li>
+            <li>for details see revision: r201 - r219</li>
+            <li>import/export plugins findbugs settings</li>
+            <li>make plugin searchable</li>
+        </ul>
+        <h3>0.9.97</h3>
+        <ul>
+		    <li>findbugs-2 support</li>
+		    <li>Quickfix: annotate, suppress findbugs patterns</li>
+		    <li>idea 9 until idea 12 compatibility</li>
+		</ul>
+        <h3>0.9.96</h3>
+		<ul>
+		    <li>JumpToSource now works for anonymous classes (per default findbugs does not report any source line annotation for anonymous classes)</li>
+		    <li>add preview support: preview bug in source file (Preview panel inside toolwindow)</li>
+		    <li>add import bug collection from xml</li>
+		    <li>export a bug collection to html and/or xml with limited configurable dir based archive support</li>
+			<li>fix export (xml, html)</li>
+            <li>fix Issue 14 (Inspection ID must satisfy [a-zA-Z_0-9.]+ pattern)</li>
+            <li>fix exclude- include filter settings and exclude base line bugs</li>
+            <li>fix issue 15 IDEA hangs when user closes SpotBugs tab.</li>
+            <li>add persistence action states (scrollTosource, GroupBy, preview)</li>
+            <li>add bug pattern abbr to bug pattern result explanation view matching preference bug pattern category </li>
+            <li>configurable : open an exported bug collection html page in the intellij configured browser</li>
+            <li>configurable : default export dir</li>
+            <li>some performance improvements (non blocking Grouping and JavaPsiFacade.getInstance(...).findClass)</li>
+		</ul>
+        <h3>0.9.95</h3>
+		<ul>
+			<li>add export (xml html)</li>
+            <li>fix possible npe (balloontip)</li>
+            <li>add support for directory based config format</li>
+            <li>made openjdk-7 compatible</li>
+            <li>apdated some deprecated usages</li>
+		</ul>
+        <h3>0.9.94</h3>
+		<ul>
+			<li>fixed ClassCastException (unregister ChangelistAction)</li>
+		</ul>
+        <h3>0.9.93</h3>
+		<ul>
+			<li>fixed AbstractMethodError due to API change (ChangeListListener)</li>
+		</ul>
+        <h3>0.9.92</h3>
+		<ul>
+			<li>initialize default properties on run if empty</li>
+            <li>configurable: analyze affected files after compile</li>
+		</ul>
+		<h3>0.9.91</h3>
+		<ul>
+			<li>maybe fix init default properties on first init</li>
+            <li>show settings dialog (no configured detectors, categories)</li>
+            <li>rename all target (build.xml)</li>
+            <li>configurable activate tool window on analyzis run property</li>
+		</ul>
+		<h3>0.9.9</h3>
+		<ul>
+			<li>time to configure ... treated some configuration options:</li>
+			<li>configure findbugs on idea project and module level</li>
+			<ul>
+			    <li>&nbsp;min. priority to report</li>
+			    <li>&nbsp;background scanning</li>
+			    <li>&nbsp;configurable effort run level</li>
+			    <li>&nbsp;configurable detectors</li>
+			    <li>&nbsp;bug categories to report</li>
+			    <li>&nbsp;file filter (include, exclude, exclude baseline bugs)</li>
+			    <li>&nbsp;load additional detector plugins like fs-contrib.jar</li>
+			</ul>
+			<li>updated findbugs under the hood to version 1.3.9<li>
+			<li>new action: run analysis on all changed files of the the active (selected) changelist (findbugs-idea toolwindow and changelist toolwindow)</li>
+			<li>new action: group by bug rank</li>
+		</ul>
+		<h3>0.9.84-dev</h3>
+		<ul>
+			<li>refix [Issue #4] jump to source not working in win environments</li>
+			<li>updated findbugs under the hood to version 1.3.8<li>
+			<li>add findbugs bug pattern running as inspection (note: this is an experimental feature, quickfix (SpotBugs.SuppressWaring(<bugPattern>)) is not fully/finally implemented)<li>
+		</ul>
+		<h3>0.9.83-dev</h3>
+		<ul>
+		    <li>some minor fixes</li>
+			<li>fix again [Issue #7] Exception while navigating results tree</li>
+		</ul>
+		<h3>0.9.82-dev</h3>
+		<h3>0.9.81-dev</h3>
+		<h3>0.9.31-dev</h3>
+		<h3>0.9.30-dev</h3>
+		<h3>0.9.21</h3>
+		<h3>0.9.2</h3>
+		<h3>0.9.1</h3>
+		<ul>
+			<li>Initial dev release (contest jit release)</li>
+			<li><a href="https://findbugs-idea.dev.java.net/#screenshots">for screenshots see https://findbugs-idea.dev.java.net/#screenshots</a></li>
+			<li><a href="https://findbugs-idea.dev.java.net/servlets/ProjectIssues">issue tracker</a></li>
+			<li>some features are still missing, e.g. sorting by Class or by bug category or package. current default ordering is by bug category. jump to source/bug is still missing.</li>
+		</ul>
+		<html>]]>
+    </change-notes>
+    <id>SpotBugs-IDEA</id>
+    <version>@VERSION@</version>
+    <vendor email="see@https://github.com/andrepdo" url="https://github.com/andrepdo">Andre Pfeiler
+    </vendor>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html
+         -->
+    <idea-version since-build="143"/>
+
+    <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
+         on how to target different products -->
+    <depends>com.intellij.modules.lang</depends>
+
+    <!--<helpset file="your-help.jar" path="path-to-helpset.hs"/>-->
+    <resource-bundle>org.twodividedbyzero.idea.findbugs.resources.i18n.Messages</resource-bundle>
+    <extensions defaultExtensionNs="com.intellij">
+        <toolWindow anchor="bottom" id="SpotBugs-IDEA" icon="/org/twodividedbyzero/idea/findbugs/resources/icons/bug13x13.png"
+                    factoryClass="org.twodividedbyzero.idea.findbugs.core.ToolWindowFactoryImpl"/>
+
+        <projectService serviceImplementation="org.twodividedbyzero.idea.findbugs.core.WorkspaceSettings"/>
+        <projectService serviceImplementation="org.twodividedbyzero.idea.findbugs.core.ProjectSettings"/>
+        <projectService serviceImplementation="org.twodividedbyzero.idea.findbugs.gui.preferences.LegacyProjectSettings"/>
+        <projectConfigurable provider="org.twodividedbyzero.idea.findbugs.core.ProjectConfigurableProvider"
+                             displayName="SpotBugs-IDEA"/>
+        <search.optionContributor implementation="org.twodividedbyzero.idea.findbugs.gui.settings.SearchableOptionContributorImpl"/>
+
+        <moduleService serviceImplementation="org.twodividedbyzero.idea.findbugs.core.ModuleSettings"/>
+        <moduleService serviceImplementation="org.twodividedbyzero.idea.findbugs.gui.preferences.LegacyModuleSettings"/>
+        <moduleConfigurable provider="org.twodividedbyzero.idea.findbugs.core.ModuleConfigurableProvider"
+                            displayName="SpotBugs-IDEA"/>
+        <checkinHandlerFactory implementation="org.twodividedbyzero.idea.findbugs.core.CheckinHandlerFactoryImpl"/>
+    </extensions>
+    <extensions defaultExtensionNs="com.intellij">
+        <errorHandler implementation="org.twodividedbyzero.idea.findbugs.core.ErrorReportSubmitterImpl"/>
+        <annotator language="JAVA" implementationClass="org.twodividedbyzero.idea.findbugs.gui.editor.BugAnnotator"/>
+        <codeInsight.lineMarkerProvider language="JAVA" implementationClass="org.twodividedbyzero.idea.findbugs.gui.editor.BugsLineMarkerProvider"/>
+    </extensions>
+    <extensions defaultExtensionNs="com.intellij">
+        <annotator language="Scala" implementationClass="org.twodividedbyzero.idea.findbugs.gui.editor.BugAnnotator"/>
+        <codeInsight.lineMarkerProvider language="Scala" implementationClass="org.twodividedbyzero.idea.findbugs.gui.editor.BugsLineMarkerProvider"/>
+    </extensions>
+    <extensions defaultExtensionNs="com.intellij">
+        <annotator language="Groovy" implementationClass="org.twodividedbyzero.idea.findbugs.gui.editor.BugAnnotator"/>
+        <codeInsight.lineMarkerProvider language="Groovy" implementationClass="org.twodividedbyzero.idea.findbugs.gui.editor.BugsLineMarkerProvider"/>
+    </extensions>
+    <project-components>
+        <component>
+            <implementation-class>org.twodividedbyzero.idea.findbugs.core.FindBugsCompileAfterHook</implementation-class>
+        </component>
+    </project-components>
+    <project-components>
+        <component>
+            <implementation-class>org.twodividedbyzero.idea.findbugs.core.PluginSuggestion</implementation-class>
+        </component>
+    </project-components>
+    <project-components>
+        <component>
+            <implementation-class>org.twodividedbyzero.idea.findbugs.gui.preferences.LegacyProjectSettingsConverter</implementation-class>
+        </component>
+    </project-components>
+    <project-components>
+        <component>
+            <implementation-class>org.twodividedbyzero.idea.findbugs.core.ProblemCache</implementation-class>
+        </component>
+    </project-components>
+
+    <actions>
+        <group id="SpotBugs.EditorPopup" text="SpotBugs" popup="true">
+            <add-to-group anchor="after" group-id="EditorPopupMenu" relative-to-action="AnalyzeMenu"/>
+        </group>
+
+        <group id="SpotBugs.ProjectViewPopupMenu" text="SpotBugs" popup="true">
+            <add-to-group anchor="after" group-id="ProjectViewPopupMenu" relative-to-action="AnalyzeMenu"/>
+        </group>
+
+        <group id="SpotBugs.AnalyzeMenu" text="SpotBugs" popup="true">
+            <add-to-group anchor="last" group-id="AnalyzeMenu"/>
+        </group>
+
+        <action id="SpotBugs.SelectedFilesAction"
+                class="org.twodividedbyzero.idea.findbugs.actions.AnalyzeSelectedFiles"
+                text="Analyze Selected File(s)"
+                description="Run SpotBugs analysis on the current selected file(s) in the project view."
+                icon="/org/twodividedbyzero/idea/findbugs/resources/icons/actions/analyzeSelectedFile.png">
+            <!--<add-to-group group-id="EditorPopupMenu" anchor="last"/>-->
+            <!--<add-to-group group-id="SpotBugsEditorPopup" anchor="last"/>-->
+            <add-to-group group-id="SpotBugs.ProjectViewPopupMenu" anchor="last"/>
+            <!--<add-to-group group-id="SpotBugsAnalyzeMenu" anchor="last"/>-->
+        </action>
+
+        <group id="SpotBugs.ToolBarActions.left" text="SpotBugsSubGroup" popup="true">
+            <!--<add-to-group anchor="last" group-id="EditorPopupMenu"/>-->
+            <!--<add-to-group group-id="SpotBugsEditorPopup" anchor="last"/>-->
+
+            <action id="SpotBugs.CurrentFileAction"
+                    class="org.twodividedbyzero.idea.findbugs.actions.AnalyzeCurrentEditorFile"
+                    text="Analyze Current File"
+                    description="Run SpotBugs analysis on the current editor file."
+                    icon="/org/twodividedbyzero/idea/findbugs/resources/icons/actions/analyzeSelectedFile.png">
+
+                <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt F"/>
+
+                <!--<add-to-group group-id="EditorPopupMenu" anchor="last"/>-->
+                <add-to-group group-id="SpotBugs.EditorPopup" anchor="last"/>
+                <!--<add-to-group group-id="SpotBugsProjectViewPopupMenu" anchor="last"/>-->
+                <add-to-group group-id="SpotBugs.AnalyzeMenu" anchor="last"/>
+            </action>
+
+            <action id="SpotBugs.ClassUnderCursorAction"
+                    class="org.twodividedbyzero.idea.findbugs.actions.AnalyzeClassUnderCursor"
+                    text="Analyze Class (non-anonymous) under Cursor"
+                    description="Run SpotBugs analysis on the class (non-anonymous) under the editor cursor."
+                    icon="/org/twodividedbyzero/idea/findbugs/resources/icons/actions/analyzeClassUnderCursor.png">
+
+                <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt C"/>
+
+                <!--<add-to-group group-id="EditorPopupMenu" anchor="last"/>-->
+                <add-to-group group-id="SpotBugs.EditorPopup" anchor="last"/>
+                <!--<add-to-group group-id="SpotBugsProjectViewPopupMenu" anchor="last"/>-->
+                <add-to-group group-id="SpotBugs.AnalyzeMenu" anchor="last"/>
+            </action>
+
+            <action id="SpotBugs.AnalysePackage"
+                    class="org.twodividedbyzero.idea.findbugs.actions.AnalyzePackageFiles"
+                    text="Analyze Package(s) Files"
+                    description="Run SpotBugs analysis on files off the selected package(s)."
+                    icon="/org/twodividedbyzero/idea/findbugs/resources/icons/actions/analyzePackages.png">
+
+                <!--<add-to-group group-id="EditorPopupMenu" anchor="last"/>-->
+                <add-to-group group-id="SpotBugs.EditorPopup" anchor="last"/>
+                <add-to-group group-id="SpotBugs.ProjectViewPopupMenu" anchor="last"/>
+                <!--<add-to-group group-id="SpotBugs.AnalyzeMenu" anchor="last"/>-->
+            </action>
+
+            <action id="SpotBugs.ModuleFilesAction"
+                    class="org.twodividedbyzero.idea.findbugs.actions.AnalyzeModuleFiles"
+                    text="Analyze Module Files"
+                    description="Run SpotBugs analysis on all module files."
+                    icon="/org/twodividedbyzero/idea/findbugs/resources/icons/actions/analyzeModule.png">
+
+                <!--<add-to-group group-id="EditorPopupMenu" anchor="last"/>-->
+                <add-to-group group-id="SpotBugs.EditorPopup" anchor="last"/>
+                <add-to-group group-id="SpotBugs.ProjectViewPopupMenu" anchor="last"/>
+                <add-to-group group-id="SpotBugs.AnalyzeMenu" anchor="last"/>
+            </action>
+
+            <action id="SpotBugs.ProjectFilesAction"
+                    class="org.twodividedbyzero.idea.findbugs.actions.AnalyzeProjectFiles"
+                    text="Analyze Project Files"
+                    description="Run SpotBugs analysis on all project files."
+                    icon="/org/twodividedbyzero/idea/findbugs/resources/icons/actions/analyzeProject.png">
+
+                <!--<add-to-group group-id="EditorPopupMenu" anchor="last"/>-->
+                <add-to-group group-id="SpotBugs.EditorPopup" anchor="last"/>
+                <add-to-group group-id="SpotBugs.ProjectViewPopupMenu" anchor="last"/>
+                <add-to-group group-id="SpotBugs.AnalyzeMenu" anchor="last"/>
+            </action>
+
+            <action id="SpotBugs.AnalyseScope"
+                    class="org.twodividedbyzero.idea.findbugs.actions.AnalyzeScopeFiles"
+                    text="Analyze Scope Files"
+                    description="Run SpotBugs analysis on files of the specified scope."
+                    icon="/org/twodividedbyzero/idea/findbugs/resources/icons/actions/analyzeScope.png">
+
+                <add-to-group group-id="SpotBugs.EditorPopup" anchor="last"/>
+                <add-to-group group-id="SpotBugs.ProjectViewPopupMenu" anchor="last"/>
+            </action>
+
+            <action id="SpotBugs.DefaultChangeListAction"
+                    class="org.twodividedbyzero.idea.findbugs.actions.AnalyzeAllModifiedFiles"
+                    text="Analyze All Modified Files"
+                    description="Run SpotBugs analysis on all modified files. (Changelists)"
+                    icon="/org/twodividedbyzero/idea/findbugs/resources/icons/actions/analyzeModifiedFiles.png">
+
+                <!--<add-to-group group-id="EditorPopupMenu" anchor="last"/>-->
+                <add-to-group group-id="SpotBugs.EditorPopup" anchor="last"/>
+                <add-to-group group-id="SpotBugs.ProjectViewPopupMenu" anchor="last"/>
+                <add-to-group group-id="SpotBugs.AnalyzeMenu" anchor="last"/>
+
+                <keyboard-shortcut keymap="$default" first-keystroke="alt shift C"/>
+            </action>
+
+            <action id="SpotBugs.ActiveChangeListAction"
+                    class="org.twodividedbyzero.idea.findbugs.actions.AnalyzeChangelistFiles"
+                    text="Analyze changelist files"
+                    description="Run SpotBugs analysis on selected changelist(s)."
+                    icon="/org/twodividedbyzero/idea/findbugs/resources/icons/actions/analyzeActiveChangelist.png">
+
+                <!--<add-to-group group-id="EditorPopupMenu" anchor="last"/>-->
+                <add-to-group group-id="SpotBugs.EditorPopup" anchor="last"/>
+                <add-to-group group-id="SpotBugs.ProjectViewPopupMenu" anchor="last"/>
+                <add-to-group group-id="SpotBugs.AnalyzeMenu" anchor="last"/>
+
+                <keyboard-shortcut keymap="$default" first-keystroke="alt shift A"/>
+            </action>
+
+
+            <separator/>
+
+            <action id="SpotBugs.StopAction"
+                    class="org.twodividedbyzero.idea.findbugs.actions.StopAction"
+                    text="Stop the analysis run"
+                    description="Stop the currently running analysis."
+                    icon="/actions/suspend.png"/>
+
+            <action id="SpotBugs.CloseAction"
+                    class="org.twodividedbyzero.idea.findbugs.actions.ClearAndCloseToolWindow"
+                    text="Clear and close SpotBugs Tool Window"
+                    description="Clear and close the SpotBugs Tool Window Panel."
+                    icon="/actions/cancel.png"/>
+
+            <action id="SpotBugs.HelpAction"
+                    class="org.twodividedbyzero.idea.findbugs.actions.HelpAction"
+                    text="SpotBugs-IDEA help"
+                    description="Show the SpotBugs-IDEA plugin help."
+                    icon="/actions/help.png"/>
+
+        </group>
+
+
+        <action id="SpotBugs.ChangesViewToolbar.ActiveChangeListAction"
+                class="org.twodividedbyzero.idea.findbugs.actions.AnalyzeChangelistFiles"
+                text="SpotBugs - Analyze changelist files"
+                description="Run SpotBugs analysis on selected changelist(s)."
+                icon="/org/twodividedbyzero/idea/findbugs/resources/icons/actions/fbAnalyzeActiveChangelist.png">
+
+            <add-to-group group-id="ChangesViewToolbar" anchor="last"/>
+            <add-to-group group-id="ChangesViewPopupMenu" anchor="last"/>
+
+            <keyboard-shortcut keymap="$default" first-keystroke="alt shift C"/>
+        </action>
+
+        <group id="SpotBugs.ToolBarActions.right" text="SpotBugsSubGroup" popup="true">
+
+            <action id="SpotBugs.GroupByBugCategory"
+                    class="org.twodividedbyzero.idea.findbugs.actions.GroupByBugCategory"
+                    text="Group by bug category"
+                    description="Group by bug category."
+                    icon="/org/twodividedbyzero/idea/findbugs/resources/icons/actions/groupByBugCategory.png"/>
+
+            <action id="SpotBugs.GroupByClass"
+                    class="org.twodividedbyzero.idea.findbugs.actions.GroupByClass"
+                    text="Group by class"
+                    description="Group by class."
+                    icon="/org/twodividedbyzero/idea/findbugs/resources/icons/actions/groupByClass.png"/>
+
+            <action id="SpotBugs.GroupByPackage"
+                    class="org.twodividedbyzero.idea.findbugs.actions.GroupByPackage"
+                    text="Group by package"
+                    description="Group by package."
+                    icon="/org/twodividedbyzero/idea/findbugs/resources/icons/actions/groupByPackage.png"/>
+<!--
+
+            <action id="SpotBugs.GroupByPriority"
+                    class="org.twodividedbyzero.idea.findbugs.actions.GroupByPriority"
+                    text="Group by priority"
+                    description="Group by priority."
+                    icon="/org/twodividedbyzero/idea/findbugs/resources/icons/actions/groupByPriority.png"/>
+-->
+
+            <action id="SpotBugs.GroupByRank"
+                    class="org.twodividedbyzero.idea.findbugs.actions.GroupByRank"
+                    text="Group by bug rank"
+                    description="Group by bug rank."
+                    icon="/org/twodividedbyzero/idea/findbugs/resources/icons/actions/groupByPriority.png"/>
+
+            <!-- <action id="SpotBugs.GroupByFilter"
+               class="org.twodividedbyzero.idea.findbugs.actions.GroupByFilter"
+               text="Filter/Group bugs"
+               description="Filter bugs."
+               popup="true"
+               icon="/icons/inspector/useFilter.png"/>-->
+        </group>
+        <group id="SpotBugs.ToolBarActions.navigation" text="SpotBugsSubGroup" popup="true">
+
+            <action id="SpotBugs.ScrollToSourceAction"
+                    class="org.twodividedbyzero.idea.findbugs.actions.ScrollToSource"
+                    text="Autoscroll to Source"
+                    description="Autoscroll to the source location of possible bugs."
+                    icon="/general/autoscrollToSource.png"/>
+
+            <action id="SpotBugs.PreviewSelectBugInstance"
+                    class="org.twodividedbyzero.idea.findbugs.actions.PreviewSelectBugInstance"
+                    text="Preview the current selected bug."
+                    description="Preview the current selected bug."
+                    icon="/actions/preview.png">
+
+                <keyboard-shortcut keymap="$default" first-keystroke="alt Q"/>
+                <mouse-shortcut keymap="$default" keystroke="alt button1"/>
+            </action>
+
+            <action id="SpotBugs.ShowQuickSearch"
+                    class="org.twodividedbyzero.idea.findbugs.actions.ShowQuickSearch"
+                    text="Find a matching string in the current analysis results."
+                    description="Find a matching string in the current analysis results."
+                    icon="/actions/find.png">
+
+                <keyboard-shortcut keymap="$default" first-keystroke="ctrl F"/>
+             </action>
+
+            <action id="SpotBugs.ExpandAllAction"
+                    class="org.twodividedbyzero.idea.findbugs.actions.ExpandAll"
+                    text="Expand All"
+                    description="Expand all elements in the tool window."
+                    icon="/actions/expandall.png"/>
+
+            <action id="SpotBugs.CollapseAllAction"
+                    class="org.twodividedbyzero.idea.findbugs.actions.CollapseAll"
+                    text="Collapse All"
+                    description="Collapse all elements in the tool window"
+                    icon="/actions/collapseall.png"/>
+
+            <!--<action id="SpotBugs.TreePreviousOccurence"
+					class="org.twodividedbyzero.idea.findbugs.actions.TreePreviousOccurence"
+					text="Next Bug"
+					description="Navigate to the previous occurence"
+					icon="/org/twodividedbyzero/idea/findbugs/resources/icons/actions/moveUp.png">
+                <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt UP"/>
+            </action>
+
+            <action id="SpotBugs.TreeNextOccurence"
+					class="org.twodividedbyzero.idea.findbugs.actions.TreeNextOccurence"
+					text="Previous Bug"
+					description="Navigate to the next oocurence"
+					icon="/org/twodividedbyzero/idea/findbugs/resources/icons/actions/moveDown.png">
+                <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt DOWN"/>
+            </action>-->
+
+            <separator/>
+
+            <action id="SpotBugs.Preferences"
+                    class="org.twodividedbyzero.idea.findbugs.actions.ShowPreferencesPage"
+                    text="Plugin Preferences"
+                    description="SpotBugs plugin preferences page."
+                    icon="/general/ideOptions.png"/>
+
+        </group>
+
+        <group id="SpotBugs.ToolBarActions.utils" text="SpotBugsSubGroup" popup="true">
+
+            <action id="SpotBugs.ExportBugCollection"
+                    class="org.twodividedbyzero.idea.findbugs.actions.ExportBugCollection"
+                    text="Export Bug Collection to XML/HTML"
+                    description="SpotBugs plugin Export to XML/HTML."
+                    icon="/actions/export.png"/>
+
+            <action id="SpotBugs.ImportBugCollection"
+                    class="org.twodividedbyzero.idea.findbugs.actions.ImportBugCollection"
+                    text="Import previous saved Bug Collection"
+                    description="SpotBugs plugin import previous saved bug collection."
+                    icon="/actions/install.png"/>
+
+        </group>
+
+
+        <group id="SpotBugs.GutterPopup.group" text="SpotBugsSubGroup" popup="true">
+            <action id="SpotBugs.GutterPoup"
+                    class="org.twodividedbyzero.idea.findbugs.actions.ShowPreferencesPage"
+                    text="Plugin Preferences"
+                    description="SpotBugs plugin preferences page."
+                    icon="/general/ideOptions.png"/>
+        </group>
+
+    </actions>
+</idea-plugin>
