@@ -19,6 +19,7 @@
 package org.twodividedbyzero.idea.findbugs.resources;
 
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.util.IconLoader;
 import com.intellij.util.containers.SoftHashMap;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
@@ -132,7 +133,7 @@ public final class ResourcesLoader {
 
 	@NotNull
 	public static Icon loadIcon(final String filename) {
-		return loadIcon(ICON_RESOURCES_PKG, filename);
+		return IconLoader.getIcon(ICON_RESOURCES_PKG + '/' + filename);
 	}
 
 
