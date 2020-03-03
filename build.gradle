@@ -1,7 +1,7 @@
 #!groovy
 
 plugins {
-    id "org.jetbrains.intellij" version "0.2.17"
+    id "org.jetbrains.intellij" version "0.4.16"
 }
 
 apply plugin: 'org.jetbrains.intellij'
@@ -20,7 +20,7 @@ intellij {
     if (project.hasProperty("ijVersion")) {
         version ijVersion
     } else {
-        version '2017.1'
+        version '2019.1'
     }
 
     pluginName 'spotbugs-idea'
@@ -34,9 +34,17 @@ runIde {
     systemProperties(["jdk.util.zip.ensureTrailingSlash":false])
 }
 
+/*
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+A problem occurred evaluating root project 'spotbugs-idea'.
+> Could not find method runIdea() for arguments [build_bx44c5s67a78hdgfid54wfjj6$_run_closure4@75342e13] on root project 'spotbugs-idea' of type org.gradle.api.Project.
+
 runIdea {
     systemProperties(["jdk.util.zip.ensureTrailingSlash":false])
 }
+*/
 
 dependencies {
     compile ('com.github.spotbugs:spotbugs:4.0.0') {
