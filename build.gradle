@@ -20,7 +20,7 @@ intellij {
     if (project.hasProperty("ijVersion")) {
         version ijVersion
     } else {
-        version '2019.1'
+        version '2019.3'
     }
 
     pluginName 'spotbugs-idea'
@@ -28,6 +28,7 @@ intellij {
     type 'IC'
 
     plugins 'git4idea'
+    plugins 'java'
 }
 
 runIde {
