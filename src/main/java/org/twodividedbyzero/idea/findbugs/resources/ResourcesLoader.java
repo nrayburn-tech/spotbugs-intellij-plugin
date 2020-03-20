@@ -20,7 +20,7 @@ package org.twodividedbyzero.idea.findbugs.resources;
 
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.IconLoader;
-import com.intellij.util.containers.SoftHashMap;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -55,7 +55,7 @@ public final class ResourcesLoader {
 	private static volatile ResourceBundle _bundle;
 	public static final String BUNDLE = "org.twodividedbyzero.idea.findbugs.resources.i18n.Messages";
 	private static final String ICON_RESOURCES_PKG = "/org/twodividedbyzero/idea/findbugs/resources/icons";
-	private static final Map<String, Icon> _iconCache = new SoftHashMap<String, Icon>();
+	private static final Map<String, Icon> _iconCache = ContainerUtil.createSoftMap();
 
 
 	private ResourcesLoader() {
