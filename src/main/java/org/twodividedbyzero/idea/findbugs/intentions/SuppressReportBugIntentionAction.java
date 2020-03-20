@@ -30,6 +30,9 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.roots.DependencyScope;
+import com.intellij.openapi.roots.ExternalLibraryDescriptor;
+import com.intellij.openapi.roots.JavaProjectModelModificationService;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.Iconable;
 import com.intellij.openapi.util.text.StringUtil;
@@ -254,7 +257,33 @@ public class SuppressReportBugIntentionAction extends SuppressIntentionAction im
 			JavaCodeStyleManager.getInstance(project).shortenClassReferences(modifierList);
 			if (needsImportStatement(suppressWarningsClassName)) {
 				addImport(project, container);
+
+				final Module module = ModuleUtilCore.findModuleForPsiElement(container.getContainingFile());
+				assert module != null;
+
+				final JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
+
+				final String qname = annotation.getQualifiedName();
+				assert qname != null;
+
+				if (facade.findClass(qname, container.getContainingFile().getResolveScope()) == null) {
+						ApplicationManager.getApplication().invokeLater(() -> addAnnotationsDependency(project, module));
+				}
 			}
+		}
+	}
+
+	public void addAnnotationsDependency(@NotNull final Project project,
+										 @NotNull final Module moduleWithoutAnnotations) {
+		if (Messages.showOkCancelDialog(project, "SpotBugs annotations library is missing.\n" +
+						"Would you like to add it?",
+				"Add Missing Dependency", Messages.OK_BUTTON, Messages.CANCEL_BUTTON, Messages.getErrorIcon()) == Messages.OK) {
+			final ExternalLibraryDescriptor spotbugsAnnotations = new ExternalLibraryDescriptor(
+					"com.github.spotbugs", "spotbugs-annotations", null, null, "4.0.1"
+			);
+			JavaProjectModelModificationService.getInstance(project).addDependency(
+					moduleWithoutAnnotations, spotbugsAnnotations, DependencyScope.COMPILE
+			);
 		}
 	}
 
