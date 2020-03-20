@@ -39,17 +39,7 @@ import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vcs.changes.ChangeListManager;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiAnonymousClass;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiClassOwner;
-import com.intellij.psi.PsiCompiledElement;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiFileSystemItem;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.PsiMethod;
+import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
 import edu.umd.cs.findbugs.BugInstance;
@@ -492,5 +482,20 @@ public final class IdeaUtilImpl {
 	public static String expandPathMacro(final ComponentManager project, @NotNull final String path) {
 		final PathMacroManager macroManager = PathMacroManager.getInstance(project);
 		return macroManager.expandPath(path);
+	}
+
+	public static PsiElement getOnlyLambdaExpressionOrPsiElement(@NotNull final PsiElement psiElement) {
+		final PsiLambdaExpression[] lastLambdaExpression = {null};
+		final int[] lambdaCount = {0};
+
+		psiElement.accept(new JavaRecursiveElementVisitor() {
+			@Override
+			public void visitLambdaExpression(PsiLambdaExpression lambdaExpression) {
+				super.visitLambdaExpression(lambdaExpression);
+				lastLambdaExpression[0] = lambdaExpression;
+				++lambdaCount[0];
+			}
+		});
+		return lambdaCount[0] == 1 ? lastLambdaExpression[0] : psiElement;
 	}
 }

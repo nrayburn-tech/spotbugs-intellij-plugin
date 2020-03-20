@@ -18,6 +18,7 @@
  */
 package org.twodividedbyzero.idea.findbugs.gui.toolwindow.view;
 
+import com.intellij.debugger.impl.DebuggerUtilsEx;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.EditorFactory;
@@ -38,12 +39,14 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.ui.JBColor;
 import edu.umd.cs.findbugs.BugInstance;
+import edu.umd.cs.findbugs.MethodAnnotation;
 import edu.umd.cs.findbugs.SortedBugCollection;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.twodividedbyzero.idea.findbugs.common.EventDispatchThreadHelper;
 import org.twodividedbyzero.idea.findbugs.common.ExtendedProblemDescriptor;
+import org.twodividedbyzero.idea.findbugs.common.util.BugInstanceUtil;
 import org.twodividedbyzero.idea.findbugs.common.util.IdeaUtilImpl;
 import org.twodividedbyzero.idea.findbugs.core.Bug;
 import org.twodividedbyzero.idea.findbugs.core.FindBugsProject;
@@ -211,6 +214,10 @@ public class BugTreePanel extends JPanel {
 
 		RangeMarker marker = null;
 		if (element != null) {
+			final MethodAnnotation primaryMethod = BugInstanceUtil.getPrimaryMethod(bugInstanceNode.getBugInstance());
+			if (primaryMethod != null && DebuggerUtilsEx.isLambdaName(primaryMethod.getMethodName())) {
+				element = IdeaUtilImpl.getOnlyLambdaExpressionOrPsiElement(element);
+			}
 			marker = document.createRangeMarker(element.getTextRange());
 		} else if (lineStart >= 0 && lineEnd >= 0) {
 			marker = document.createRangeMarker(document.getLineStartOffset(lineStart), document.getLineEndOffset(lineEnd));
