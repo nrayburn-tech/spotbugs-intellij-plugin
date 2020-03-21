@@ -31,13 +31,13 @@ import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.ui.awt.RelativePoint;
 import com.intellij.util.text.DateFormatUtil;
 import edu.umd.cs.findbugs.Version;
+import icons.PluginIcons;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.twodividedbyzero.idea.findbugs.common.VersionManager;
 import org.twodividedbyzero.idea.findbugs.common.util.FindBugsUtil;
 import org.twodividedbyzero.idea.findbugs.core.FindBugsState;
 import org.twodividedbyzero.idea.findbugs.gui.common.BalloonTipFactory;
-import org.twodividedbyzero.idea.findbugs.resources.GuiResources;
 import org.twodividedbyzero.idea.findbugs.resources.ResourcesLoader;
 
 import javax.swing.event.HyperlinkEvent;
@@ -79,7 +79,7 @@ public final class HelpAction extends AbstractAction {
 		final Component parent = e.getInputEvent().getComponent();
 		final BalloonBuilder builder = JBPopupFactory.getInstance().createHtmlTextBalloonBuilder(
 				createHelpInfo().toString(),
-				GuiResources.FINDBUGS_ICON,
+				PluginIcons.FINDBUGS_ICON,
 				MessageType.INFO.getPopupBackground(),
 				new HyperlinkListener() {
 					@Override

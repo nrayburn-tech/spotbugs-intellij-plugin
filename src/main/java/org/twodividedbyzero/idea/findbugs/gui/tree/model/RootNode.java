@@ -18,6 +18,7 @@
  */
 package org.twodividedbyzero.idea.findbugs.gui.tree.model;
 
+import com.intellij.ide.ui.ProductIcons;
 import com.intellij.ui.JBColor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -36,7 +37,7 @@ import java.util.List;
 
 public class RootNode extends AbstractTreeNode<VisitableTreeNode> implements VisitableTreeNode {
 
-	private static final Icon EXPAND_ICON = new MaskIcon(ResourcesLoader.loadIcon("fb-idea-logo_16x16.png"), JBColor.BLACK);
+	private static final Icon EXPAND_ICON = new MaskIcon(ResourcesLoader.loadIcon("fb-logo.png"), JBColor.BLACK);
 	private static final Icon COLLAPSE_ICON = EXPAND_ICON;
 
 	private int _bugCount;

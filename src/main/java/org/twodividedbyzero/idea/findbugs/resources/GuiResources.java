@@ -18,102 +18,23 @@
  */
 package org.twodividedbyzero.idea.findbugs.resources;
 
-import com.intellij.icons.AllIcons;
 import com.intellij.ui.JBColor;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.UIUtil;
 import org.jdesktop.swingx.color.ColorUtil;
 import org.jetbrains.annotations.NotNull;
-import org.twodividedbyzero.idea.findbugs.common.util.New;
 
-import javax.swing.Icon;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.StyleSheet;
 import java.awt.Color;
-import java.util.Collections;
-import java.util.Map;
 
-@SuppressWarnings({"HardCodedStringLiteral", "HardcodedFileSeparator"})
+@SuppressWarnings({"HardcodedFileSeparator"})
 public class GuiResources {
-
-	public static final Icon FINDBUGS_ICON = ResourcesLoader.loadIcon("bug.png");
-	public static final Icon FINDBUGS_ICON_13X13 = ResourcesLoader.loadIcon("bug13x13.png");
-	public static final Icon FINDBUGS_CONFIGURATION_ICON = ResourcesLoader.loadIcon("smallBuggy.png");
-	public static final Icon FINDBUGS_EXECUTE_ICON = ResourcesLoader.loadIcon("actions/bug18x18.png");
-	public static final Icon FINDBUGS_CLOUD_ICON = ResourcesLoader.loadIcon("bug_cloud.png");
-
-	public static final Icon CLOSE_EDITOR_ICON = ResourcesLoader.loadIcon("close.png");
-	public static final Icon CLOSE_EDITOR_HOVER_ICON = ResourcesLoader.loadIcon("closeHovered.png");
 
 	public static final Color HIGH_PRIORITY_COLOR = JBColor.RED;
 	public static final Color MIDDLE_PRIORITY_COLOR = JBColor.YELLOW;
 	public static final Color LOW_PRIORITY_COLOR = JBColor.GREEN;
 	public static final Color EXP_PRIORITY_COLOR = JBColor.BLACK;
-
-	public static final Icon PRIORITY_HIGH_ICON = ResourcesLoader.loadIcon("priority/bug_high.png");
-	public static final Icon PRIORITY_NORMAL_ICON = ResourcesLoader.loadIcon("priority/bug_normal.png");
-	public static final Icon PRIORITY_LOW_ICON = ResourcesLoader.loadIcon("priority/bug_low.png");
-	public static final Icon PRIORITY_EXP_ICON = ResourcesLoader.loadIcon("priority/bug_exp.png");
-
-	/**
-	 * --------------------------------------------------------------------------------------------------
-	 * Grouping icons
-	 */
-	public static final Icon GROUP_BY_CATEGORY_ICON = ResourcesLoader.loadIcon("actions/groupByBugCategory.png");
-	public static final Icon GROUP_BY_CLASS_ICON = ResourcesLoader.loadIcon("actions/groupByClass.png");
-	public static final Icon GROUP_BY_RANK_ICON = ResourcesLoader.loadIcon("actions/groupByRank.png");
-	public static final Icon GROUP_BY_PRIORITY_ICON = ResourcesLoader.loadIcon("actions/groupByPriority.png");
-	public static final Icon GROUP_BY_PACKAGE_ICON = ResourcesLoader.loadIcon("actions/groupByPackage.png");
-
-	public static final Icon GROUP_BY_RANK_SCARIEST_ICON = ResourcesLoader.loadIcon("priority/rankScariest.png");
-	public static final Icon GROUP_BY_RANK_SCARY_ICON = ResourcesLoader.loadIcon("priority/rankScary.png");
-	public static final Icon GROUP_BY_RANK_TROUBLING_ICON = ResourcesLoader.loadIcon("priority/rankTroubling.png");
-	public static final Icon GROUP_BY_RANK_OF_CONCERN_ICON = ResourcesLoader.loadIcon("priority/rankOfConcern.png");
-	public static final Map<String, Icon> GROUP_BY_RANK_ICONS;
-
-	static {
-		final Map<String, Icon> groupByRankIcons = New.map(5);
-		groupByRankIcons.put("SCARIEST", GROUP_BY_RANK_SCARIEST_ICON);
-		groupByRankIcons.put("SCARY", GROUP_BY_RANK_SCARY_ICON);
-		groupByRankIcons.put("TROUBLING", GROUP_BY_RANK_TROUBLING_ICON);
-		groupByRankIcons.put("OF_CONCERN", GROUP_BY_RANK_OF_CONCERN_ICON);
-		groupByRankIcons.put("OF CONCERN", GROUP_BY_RANK_OF_CONCERN_ICON);
-		GROUP_BY_RANK_ICONS = Collections.unmodifiableMap(groupByRankIcons);
-	}
-
-	public static final Icon GROUP_BY_PRIORITY_HIGH_ICON = ResourcesLoader.loadIcon("priority/priorityHigh.png");
-	public static final Icon GROUP_BY_PRIORITY_MEDIUM_ICON = ResourcesLoader.loadIcon("priority/priorityMedium.png");
-	public static final Icon GROUP_BY_PRIORITY_LOW_ICON = ResourcesLoader.loadIcon("priority/priorityLow.png");
-	public static final Icon GROUP_BY_PRIORITY_EXP_ICON = ResourcesLoader.loadIcon("priority/priorityExp.png");
-	public static final Icon GROUP_BY_PRIORITY_IGNORE_ICON = ResourcesLoader.loadIcon("priority/priorityIgnore.png");
-	public static final Map<String, Icon> GROUP_BY_PRIORITY_ICONS;
-
-
-	static {
-		final Map<String, Icon> groupByPriorityIcons = New.map(5);
-		groupByPriorityIcons.put("Low", GROUP_BY_PRIORITY_LOW_ICON);
-		groupByPriorityIcons.put("Medium", GROUP_BY_PRIORITY_MEDIUM_ICON);
-		groupByPriorityIcons.put("High", GROUP_BY_PRIORITY_HIGH_ICON);
-		groupByPriorityIcons.put("Exp", GROUP_BY_PRIORITY_EXP_ICON);
-		groupByPriorityIcons.put("Ignore", GROUP_BY_PRIORITY_IGNORE_ICON); // this should never happen
-		GROUP_BY_PRIORITY_ICONS = Collections.unmodifiableMap(groupByPriorityIcons);
-	}
-
-
-	/**
-	 * --------------------------------------------------------------------------------------------------
-	 * Tree icons
-	 */
-	public static final Icon TREENODE_OPEN_ICON = AllIcons.Nodes.TreeOpen;
-	public static final Icon TREENODE_CLOSED_ICON = AllIcons.Nodes.TreeClosed;
-
-
-	/**
-	 * --------------------------------------------------------------------------------------------------
-	 * Navigation icons
-	 */
-	public static final Icon NAVIGATION_MOVEUP_ICON = AllIcons.Actions.MoveUp;
-	public static final Icon NAVIGATION_MOVEDOWN_ICON = AllIcons.Actions.MoveDown;
 
 	private static final StyleSheet EDITORPANE_STYLESHEET;
 

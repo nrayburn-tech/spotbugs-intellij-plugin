@@ -18,8 +18,8 @@
  */
 package org.twodividedbyzero.idea.findbugs.gui.tree.model;
 
+import icons.PluginIcons;
 import org.twodividedbyzero.idea.findbugs.gui.tree.GroupBy;
-import org.twodividedbyzero.idea.findbugs.resources.GuiResources;
 
 import javax.swing.Icon;
 
@@ -41,8 +41,8 @@ public abstract class AbstractNodeDescriptor<E> {
 	int _memberCount; // FIXME: ??? needed ???
 	String _tooltip;
 
-	Icon _expandedIcon = GuiResources.TREENODE_OPEN_ICON;
-	Icon _collapsedIcon = GuiResources.TREENODE_CLOSED_ICON;
+	Icon _expandedIcon = PluginIcons.TREENODE_OPEN_ICON;
+	Icon _collapsedIcon = PluginIcons.TREENODE_CLOSED_ICON;
 
 
 	public final GroupBy getGroupBy() {

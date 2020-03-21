@@ -90,7 +90,7 @@ final class AdvancedSettingsAction extends DefaultActionGroup {
 			super(
 					StringUtil.capitalizeWords(ResourcesLoader.getString("settings.action.reset.title"), true),
 					ResourcesLoader.getString("settings.action.reset.description"),
-					AllIcons.Actions.Reset_to_default
+					AllIcons.Actions.Rollback
 			);
 		}
 
@@ -167,7 +167,7 @@ final class AdvancedSettingsAction extends DefaultActionGroup {
 			super(
 					StringUtil.capitalizeWords(ResourcesLoader.getString("settings.action.export.title"), true),
 					ResourcesLoader.getString("settings.action.export.description"),
-					AllIcons.Actions.Export
+					AllIcons.ToolbarDecorator.Export
 			);
 		}
 

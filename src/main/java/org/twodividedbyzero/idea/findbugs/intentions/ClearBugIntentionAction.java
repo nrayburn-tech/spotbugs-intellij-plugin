@@ -19,6 +19,7 @@
 package org.twodividedbyzero.idea.findbugs.intentions;
 
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
+import com.intellij.icons.AllIcons;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
@@ -78,6 +79,6 @@ public class ClearBugIntentionAction extends SuppressReportBugIntentionAction {
 	@SuppressWarnings("HardcodedFileSeparator")
 	@Override
 	public Icon getIcon(final int flags) {
-		return ResourcesLoader.loadIcon("intentions/stop.png");
+		return AllIcons.Actions.Cancel;
 	}
 }

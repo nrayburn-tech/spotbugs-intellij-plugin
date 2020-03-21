@@ -22,9 +22,9 @@ import com.intellij.openapi.Disposable;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.EditorFactory;
 import com.intellij.psi.PsiFile;
+import icons.PluginIcons;
 import info.clearthought.layout.TableLayout;
 import org.jetbrains.annotations.Nullable;
-import org.twodividedbyzero.idea.findbugs.resources.GuiResources;
 
 import javax.swing.AbstractButton;
 import javax.swing.JButton;
@@ -39,7 +39,7 @@ import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-@SuppressWarnings({"HardCodedStringLiteral", "AnonymousInnerClass"})
+@SuppressWarnings({"AnonymousInnerClass"})
 final class PreviewPanel implements Disposable {
 
 	private final JPanel _delegate;
@@ -50,7 +50,7 @@ final class PreviewPanel implements Disposable {
 	private static final JLabel NO_BUG_SELECTED_LABEL;
 
 	static {
-		NO_BUG_SELECTED_LABEL = new JLabel("Select a bug to preview", GuiResources.FINDBUGS_ICON, SwingConstants.CENTER);
+		NO_BUG_SELECTED_LABEL = new JLabel("Select a bug to preview", PluginIcons.FINDBUGS_ICON, SwingConstants.CENTER);
 	}
 
 
@@ -68,7 +68,7 @@ final class PreviewPanel implements Disposable {
 		_labelPanel.add(new JLabel("Preview"), "1, 1, 1, 1");
 		_labelPanel.add(_label, "3, 1, 3, 1");
 
-		final AbstractButton closeButton = new JButton(GuiResources.CLOSE_EDITOR_ICON);
+		final AbstractButton closeButton = new JButton(PluginIcons.CLOSE_EDITOR_ICON);
 		closeButton.setToolTipText("close preview");
 		closeButton.setBorderPainted(false);
 		closeButton.setFocusable(false);
@@ -76,9 +76,9 @@ final class PreviewPanel implements Disposable {
 		closeButton.setContentAreaFilled(false);
 		closeButton.setRequestFocusEnabled(false);
 		closeButton.setRolloverEnabled(false);
-		closeButton.setRolloverIcon(GuiResources.CLOSE_EDITOR_HOVER_ICON);
-		closeButton.setRolloverSelectedIcon(GuiResources.CLOSE_EDITOR_HOVER_ICON);
-		closeButton.setPressedIcon(GuiResources.CLOSE_EDITOR_HOVER_ICON);
+		closeButton.setRolloverIcon(PluginIcons.CLOSE_EDITOR_HOVER_ICON);
+		closeButton.setRolloverSelectedIcon(PluginIcons.CLOSE_EDITOR_HOVER_ICON);
+		closeButton.setPressedIcon(PluginIcons.CLOSE_EDITOR_HOVER_ICON);
 
 		closeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(final ActionEvent e) {

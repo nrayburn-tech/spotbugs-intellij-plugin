@@ -330,7 +330,7 @@
     <!--<helpset file="your-help.jar" path="path-to-helpset.hs"/>-->
     <resource-bundle>org.twodividedbyzero.idea.findbugs.resources.i18n.Messages</resource-bundle>
     <extensions defaultExtensionNs="com.intellij">
-        <toolWindow anchor="bottom" id="SpotBugs-IDEA" icon="/org/twodividedbyzero/idea/findbugs/resources/icons/bug13x13.png"
+        <toolWindow anchor="bottom" id="SpotBugs-IDEA" icon="PluginIcons.FINDBUGS_ICON_13X13"
                     factoryClass="org.twodividedbyzero.idea.findbugs.core.ToolWindowFactoryImpl"/>
 
         <projectService serviceImplementation="org.twodividedbyzero.idea.findbugs.core.WorkspaceSettings"/>
@@ -397,7 +397,7 @@
                 class="org.twodividedbyzero.idea.findbugs.actions.AnalyzeSelectedFiles"
                 text="Analyze Selected File(s)"
                 description="Run SpotBugs analysis on the current selected file(s) in the project view."
-                icon="/org/twodividedbyzero/idea/findbugs/resources/icons/actions/analyzeSelectedFile.png">
+                icon="PluginIcons.ANALYZE_SELECTED_FILE_ICON">
             <!--<add-to-group group-id="EditorPopupMenu" anchor="last"/>-->
             <!--<add-to-group group-id="SpotBugsEditorPopup" anchor="last"/>-->
             <add-to-group group-id="SpotBugs.ProjectViewPopupMenu" anchor="last"/>
@@ -412,7 +412,7 @@
                     class="org.twodividedbyzero.idea.findbugs.actions.AnalyzeCurrentEditorFile"
                     text="Analyze Current File"
                     description="Run SpotBugs analysis on the current editor file."
-                    icon="/org/twodividedbyzero/idea/findbugs/resources/icons/actions/analyzeSelectedFile.png">
+                    icon="PluginIcons.ANALYZE_SELECTED_FILE_ICON">
 
                 <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt F"/>
 
@@ -426,7 +426,7 @@
                     class="org.twodividedbyzero.idea.findbugs.actions.AnalyzeClassUnderCursor"
                     text="Analyze Class (non-anonymous) under Cursor"
                     description="Run SpotBugs analysis on the class (non-anonymous) under the editor cursor."
-                    icon="/org/twodividedbyzero/idea/findbugs/resources/icons/actions/analyzeClassUnderCursor.png">
+                    icon="PluginIcons.ANALYZE_CLASS_UNDER_CURSOR_ICON">
 
                 <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt C"/>
 
@@ -440,7 +440,7 @@
                     class="org.twodividedbyzero.idea.findbugs.actions.AnalyzePackageFiles"
                     text="Analyze Package(s) Files"
                     description="Run SpotBugs analysis on files off the selected package(s)."
-                    icon="/org/twodividedbyzero/idea/findbugs/resources/icons/actions/analyzePackages.png">
+                    icon="PluginIcons.ANALYZE_PACKAGE_FILES_ICON">
 
                 <!--<add-to-group group-id="EditorPopupMenu" anchor="last"/>-->
                 <add-to-group group-id="SpotBugs.EditorPopup" anchor="last"/>
@@ -452,7 +452,7 @@
                     class="org.twodividedbyzero.idea.findbugs.actions.AnalyzeModuleFiles"
                     text="Analyze Module Files"
                     description="Run SpotBugs analysis on all module files."
-                    icon="/org/twodividedbyzero/idea/findbugs/resources/icons/actions/analyzeModule.png">
+                    icon="PluginIcons.ANALYZE_MODULE_FILES_ICON">
 
                 <!--<add-to-group group-id="EditorPopupMenu" anchor="last"/>-->
                 <add-to-group group-id="SpotBugs.EditorPopup" anchor="last"/>
@@ -464,7 +464,7 @@
                     class="org.twodividedbyzero.idea.findbugs.actions.AnalyzeProjectFiles"
                     text="Analyze Project Files"
                     description="Run SpotBugs analysis on all project files."
-                    icon="/org/twodividedbyzero/idea/findbugs/resources/icons/actions/analyzeProject.png">
+                    icon="PluginIcons.ANALYZE_PROJECT_FILES_ICON">
 
                 <!--<add-to-group group-id="EditorPopupMenu" anchor="last"/>-->
                 <add-to-group group-id="SpotBugs.EditorPopup" anchor="last"/>
@@ -476,7 +476,7 @@
                     class="org.twodividedbyzero.idea.findbugs.actions.AnalyzeScopeFiles"
                     text="Analyze Scope Files"
                     description="Run SpotBugs analysis on files of the specified scope."
-                    icon="/org/twodividedbyzero/idea/findbugs/resources/icons/actions/analyzeScope.png">
+                    icon="PluginIcons.ANALYZE_SCOPE_FILES_ICON">
 
                 <add-to-group group-id="SpotBugs.EditorPopup" anchor="last"/>
                 <add-to-group group-id="SpotBugs.ProjectViewPopupMenu" anchor="last"/>
@@ -486,7 +486,7 @@
                     class="org.twodividedbyzero.idea.findbugs.actions.AnalyzeAllModifiedFiles"
                     text="Analyze All Modified Files"
                     description="Run SpotBugs analysis on all modified files. (Changelists)"
-                    icon="/org/twodividedbyzero/idea/findbugs/resources/icons/actions/analyzeModifiedFiles.png">
+                    icon="PluginIcons.ANALYZE_ALL_MODIFIED_FILES_ICON">
 
                 <!--<add-to-group group-id="EditorPopupMenu" anchor="last"/>-->
                 <add-to-group group-id="SpotBugs.EditorPopup" anchor="last"/>
@@ -500,7 +500,7 @@
                     class="org.twodividedbyzero.idea.findbugs.actions.AnalyzeChangelistFiles"
                     text="Analyze changelist files"
                     description="Run SpotBugs analysis on selected changelist(s)."
-                    icon="/org/twodividedbyzero/idea/findbugs/resources/icons/actions/analyzeActiveChangelist.png">
+                    icon="PluginIcons.ANALYZE_CHANGELIST_FILES_ICON">
 
                 <!--<add-to-group group-id="EditorPopupMenu" anchor="last"/>-->
                 <add-to-group group-id="SpotBugs.EditorPopup" anchor="last"/>
@@ -538,7 +538,7 @@
                 class="org.twodividedbyzero.idea.findbugs.actions.AnalyzeChangelistFiles"
                 text="SpotBugs - Analyze changelist files"
                 description="Run SpotBugs analysis on selected changelist(s)."
-                icon="/org/twodividedbyzero/idea/findbugs/resources/icons/actions/fbAnalyzeActiveChangelist.png">
+                icon="PluginIcons.ANALYZE_SELECTED_FILE_ICON">
 
             <add-to-group group-id="ChangesViewToolbar" anchor="last"/>
             <add-to-group group-id="ChangesViewPopupMenu" anchor="last"/>
@@ -552,19 +552,19 @@
                     class="org.twodividedbyzero.idea.findbugs.actions.GroupByBugCategory"
                     text="Group by bug category"
                     description="Group by bug category."
-                    icon="/org/twodividedbyzero/idea/findbugs/resources/icons/actions/groupByBugCategory.png"/>
+                    icon="PluginIcons.GROUP_BY_CATEGORY_ICON"/>
 
             <action id="SpotBugs.GroupByClass"
                     class="org.twodividedbyzero.idea.findbugs.actions.GroupByClass"
                     text="Group by class"
                     description="Group by class."
-                    icon="/org/twodividedbyzero/idea/findbugs/resources/icons/actions/groupByClass.png"/>
+                    icon="PluginIcons.GROUP_BY_CLASS_ICON"/>
 
             <action id="SpotBugs.GroupByPackage"
                     class="org.twodividedbyzero.idea.findbugs.actions.GroupByPackage"
                     text="Group by package"
                     description="Group by package."
-                    icon="/org/twodividedbyzero/idea/findbugs/resources/icons/actions/groupByPackage.png"/>
+                    icon="PluginIcons.GROUP_BY_PACKAGE_ICON"/>
 <!--
 
             <action id="SpotBugs.GroupByPriority"
@@ -578,7 +578,7 @@
                     class="org.twodividedbyzero.idea.findbugs.actions.GroupByRank"
                     text="Group by bug rank"
                     description="Group by bug rank."
-                    icon="/org/twodividedbyzero/idea/findbugs/resources/icons/actions/groupByPriority.png"/>
+                    icon="PluginIcons.GROUP_BY_PRIORITY_ICON"/>
 
             <!-- <action id="SpotBugs.GroupByFilter"
                class="org.twodividedbyzero.idea.findbugs.actions.GroupByFilter"

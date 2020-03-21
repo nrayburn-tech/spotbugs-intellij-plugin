@@ -23,13 +23,13 @@ import com.intellij.openapi.wm.IdeFocusManager;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.components.JBList;
 import com.intellij.util.ui.JBUI;
+import icons.PluginIcons;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.twodividedbyzero.idea.findbugs.common.util.GuiUtil;
 import org.twodividedbyzero.idea.findbugs.gui.common.AbstractBar;
 import org.twodividedbyzero.idea.findbugs.gui.common.ScrollPaneFacade;
 import org.twodividedbyzero.idea.findbugs.gui.common.ToolBarButton;
-import org.twodividedbyzero.idea.findbugs.resources.GuiResources;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
@@ -775,8 +775,8 @@ abstract class QuickSearch<E> {
 
 	private class NavigationToolBar extends AbstractBar {
 
-		private final Icon _prevIcon = GuiResources.NAVIGATION_MOVEUP_ICON;
-		private final Icon _nextIcon = GuiResources.NAVIGATION_MOVEDOWN_ICON;
+		private final Icon _prevIcon = PluginIcons.NAVIGATION_MOVEUP_ICON;
+		private final Icon _nextIcon = PluginIcons.NAVIGATION_MOVEDOWN_ICON;
 		private ToolBarButton _prevButton;
 		private ToolBarButton _nextButton;
 

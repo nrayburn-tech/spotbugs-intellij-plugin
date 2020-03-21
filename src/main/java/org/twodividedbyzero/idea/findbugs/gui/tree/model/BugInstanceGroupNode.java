@@ -22,6 +22,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.ui.JBColor;
 import edu.umd.cs.findbugs.BugRankCategory;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import icons.PluginIcons;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.twodividedbyzero.idea.findbugs.common.util.New;
@@ -32,7 +33,6 @@ import org.twodividedbyzero.idea.findbugs.gui.tree.NodeVisitor;
 import org.twodividedbyzero.idea.findbugs.gui.tree.RecurseNodeVisitor;
 import org.twodividedbyzero.idea.findbugs.gui.tree.RecurseNodeVisitor.RecurseVisitCriteria;
 import org.twodividedbyzero.idea.findbugs.gui.tree.view.MaskIcon;
-import org.twodividedbyzero.idea.findbugs.resources.GuiResources;
 
 import javax.swing.Icon;
 import javax.swing.tree.TreeNode;
@@ -191,27 +191,27 @@ public final class BugInstanceGroupNode extends AbstractTreeNode<VisitableTreeNo
 	private Icon getGroupByCollapsedIcon(final GroupBy groupBy) {
 		switch (groupBy) {
 			case BugCategory:
-				return GuiResources.GROUP_BY_CATEGORY_ICON;
+				return PluginIcons.GROUP_BY_CATEGORY_ICON;
 			case BugShortDescription:
 			case BugType:
 				return _collapsedIcon;
 			case Class:
-				return GuiResources.GROUP_BY_CLASS_ICON;
+				return PluginIcons.GROUP_BY_CLASS_ICON;
 			case Package:
-				return GuiResources.GROUP_BY_PACKAGE_ICON;
+				return PluginIcons.GROUP_BY_PACKAGE_ICON;
 			case Priority:
 				final String priorityString = bug.getInstance().getPriorityString();
-				if (GuiResources.GROUP_BY_PRIORITY_ICONS.containsKey(priorityString)) {
-					return GuiResources.GROUP_BY_PRIORITY_ICONS.get(priorityString);
+				if (PluginIcons.GROUP_BY_PRIORITY_ICONS.containsKey(priorityString)) {
+					return PluginIcons.GROUP_BY_PRIORITY_ICONS.get(priorityString);
 				} else {
-					return GuiResources.GROUP_BY_PRIORITY_EXP_ICON;
+					return PluginIcons.GROUP_BY_PRIORITY_EXP_ICON;
 				}
 			case BugRank:
 				final String rankString = BugRankCategory.getRank(bug.getInstance().getBugRank()).toString().toUpperCase(Locale.ENGLISH);
-				if (GuiResources.GROUP_BY_RANK_ICONS.containsKey(rankString)) {
-					return GuiResources.GROUP_BY_RANK_ICONS.get(rankString);
+				if (PluginIcons.GROUP_BY_RANK_ICONS.containsKey(rankString)) {
+					return PluginIcons.GROUP_BY_RANK_ICONS.get(rankString);
 				} else {
-					return GuiResources.GROUP_BY_PRIORITY_ICON;
+					return PluginIcons.GROUP_BY_PRIORITY_ICON;
 				}
 			default:
 				return _collapsedIcon;
@@ -221,27 +221,27 @@ public final class BugInstanceGroupNode extends AbstractTreeNode<VisitableTreeNo
 	private Icon getGroupByExpandedIcon(final GroupBy groupBy) {
 		switch (groupBy) {
 			case BugCategory:
-				return GuiResources.GROUP_BY_CATEGORY_ICON;
+				return PluginIcons.GROUP_BY_CATEGORY_ICON;
 			case BugShortDescription:
 			case BugType:
 				return _expandedIcon;
 			case Class:
-				return GuiResources.GROUP_BY_CLASS_ICON;
+				return PluginIcons.GROUP_BY_CLASS_ICON;
 			case Package:
-				return GuiResources.GROUP_BY_PACKAGE_ICON;
+				return PluginIcons.GROUP_BY_PACKAGE_ICON;
 			case Priority:
 				final String priorityString = bug.getInstance().getPriorityString();
-				if (GuiResources.GROUP_BY_PRIORITY_ICONS.containsKey(priorityString)) {
-					return GuiResources.GROUP_BY_PRIORITY_ICONS.get(priorityString);
+				if (PluginIcons.GROUP_BY_PRIORITY_ICONS.containsKey(priorityString)) {
+					return PluginIcons.GROUP_BY_PRIORITY_ICONS.get(priorityString);
 				} else {
-					return GuiResources.GROUP_BY_PRIORITY_EXP_ICON;
+					return PluginIcons.GROUP_BY_PRIORITY_EXP_ICON;
 				}
 			case BugRank:
 				final String rankString = BugRankCategory.getRank(bug.getInstance().getBugRank()).name();
-				if (GuiResources.GROUP_BY_RANK_ICONS.containsKey(rankString)) {
-					return GuiResources.GROUP_BY_RANK_ICONS.get(rankString);
+				if (PluginIcons.GROUP_BY_RANK_ICONS.containsKey(rankString)) {
+					return PluginIcons.GROUP_BY_RANK_ICONS.get(rankString);
 				} else {
-					return GuiResources.GROUP_BY_PRIORITY_ICON;
+					return PluginIcons.GROUP_BY_PRIORITY_ICON;
 				}
 			default:
 				return _expandedIcon;

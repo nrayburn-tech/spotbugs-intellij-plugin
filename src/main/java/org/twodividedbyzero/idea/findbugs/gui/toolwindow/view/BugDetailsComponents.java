@@ -29,11 +29,11 @@ import edu.umd.cs.findbugs.BugInstance;
 import edu.umd.cs.findbugs.BugPattern;
 import edu.umd.cs.findbugs.DetectorFactory;
 import edu.umd.cs.findbugs.FieldAnnotation;
-import edu.umd.cs.findbugs.I18N;
 import edu.umd.cs.findbugs.MethodAnnotation;
 import edu.umd.cs.findbugs.Plugin;
 import edu.umd.cs.findbugs.SortedBugCollection;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import icons.PluginIcons;
 import org.jetbrains.annotations.NotNull;
 import org.twodividedbyzero.idea.findbugs.common.util.BugInstanceUtil;
 import org.twodividedbyzero.idea.findbugs.gui.common.CustomLineBorder;
@@ -114,9 +114,9 @@ public final class BugDetailsComponents {
 
 			if (SystemInfo.isMac) {
 				// Aqua LF will rotate content
-				_jTabbedPane.addTab("Bug Details", GuiResources.FINDBUGS_ICON, getBugDetailsSplitPane(), "Bug details concerning the current selected bug in the left tree");
+				_jTabbedPane.addTab("Bug Details", PluginIcons.FINDBUGS_ICON, getBugDetailsSplitPane(), "Bug details concerning the current selected bug in the left tree");
 			} else {
-				_jTabbedPane.addTab(null, new VerticalTextIcon("Bug Details", true, GuiResources.FINDBUGS_ICON), getBugDetailsSplitPane(), "Bug details concerning the current selected bug in the left tree");
+				_jTabbedPane.addTab(null, new VerticalTextIcon("Bug Details", true, PluginIcons.FINDBUGS_ICON), getBugDetailsSplitPane(), "Bug details concerning the current selected bug in the left tree");
 			}
 
 			_jTabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
@@ -125,9 +125,9 @@ public final class BugDetailsComponents {
 			if (Plugin.getByPluginId(EDU_UMD_CS_FINDBUGS_PLUGINS_WEB_CLOUD) != null) {
 				if (SystemInfo.isMac) {
 					// Aqua LF will rotate content
-					_jTabbedPane.addTab("Comments", GuiResources.FINDBUGS_CLOUD_ICON, getCloudCommentsPanel(), "Comments from the FindBugs Cloud");
+					_jTabbedPane.addTab("Comments", PluginIcons.FINDBUGS_CLOUD_ICON, getCloudCommentsPanel(), "Comments from the FindBugs Cloud");
 				} else {
-					_jTabbedPane.addTab(null, new VerticalTextIcon("Comments", true, GuiResources.FINDBUGS_CLOUD_ICON), getCloudCommentsPanel(), "Comments from the FindBugs Cloud");
+					_jTabbedPane.addTab(null, new VerticalTextIcon("Comments", true, PluginIcons.FINDBUGS_CLOUD_ICON), getCloudCommentsPanel(), "Comments from the FindBugs Cloud");
 				}
 				_jTabbedPane.setMnemonicAt(1, KeyEvent.VK_2);
 			}

@@ -21,10 +21,10 @@ package org.twodividedbyzero.idea.findbugs.gui.intentions;
 import com.intellij.openapi.ui.popup.PopupStep;
 import com.intellij.openapi.ui.popup.util.BaseListPopupStep;
 import com.intellij.openapi.util.Iconable;
+import icons.PluginIcons;
 import org.jetbrains.annotations.NotNull;
 import org.twodividedbyzero.idea.findbugs.common.FindBugsPluginConstants;
 import org.twodividedbyzero.idea.findbugs.common.util.GuiUtil;
-import org.twodividedbyzero.idea.findbugs.resources.GuiResources;
 import org.twodividedbyzero.idea.findbugs.resources.ResourcesLoader;
 
 import javax.swing.Icon;
@@ -70,6 +70,6 @@ public class RootGroupBugIntentionListPopupStep extends BaseListPopupStep<GroupB
 
 
 	public Icon getIcon(final int i) {
-		return GuiResources.FINDBUGS_ICON;
+		return PluginIcons.FINDBUGS_ICON;
 	}
 }

@@ -19,10 +19,13 @@
 package org.twodividedbyzero.idea.findbugs.intentions;
 
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
+import com.intellij.icons.AllIcons;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.ui.RowIcon;
+import com.intellij.util.IconUtil;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import org.twodividedbyzero.idea.findbugs.common.ExtendedProblemDescriptor;
@@ -57,6 +60,9 @@ public class ClearAndSuppressBugIntentionAction extends SuppressReportBugIntenti
 	@SuppressWarnings("HardcodedFileSeparator")
 	@Override
 	public Icon getIcon(final int flags) {
-		return ResourcesLoader.loadIcon("intentions/inspectionsClearAndSuppress.png");
+		return new RowIcon(
+				IconUtil.scale(AllIcons.Actions.Cancel, null, 0.5f),
+				IconUtil.scale(AllIcons.Ide.HectorOff, null, 0.5f)
+		);
 	}
 }

@@ -22,6 +22,7 @@ import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
 import com.intellij.codeInspection.InspectionsBundle;
 import com.intellij.codeInspection.SuppressIntentionAction;
 import com.intellij.codeInspection.SuppressManager;
+import com.intellij.icons.AllIcons;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
@@ -85,7 +86,7 @@ public class SuppressReportBugIntentionAction extends SuppressIntentionAction im
 
 	@SuppressWarnings({"override", "HardcodedFileSeparator"}) // idea 8 compatibility
 	public Icon getIcon(final int flags) {
-		return ResourcesLoader.loadIcon("intentions/inspectionsOff.png");
+		return AllIcons.Ide.HectorOff;
 		//return GuiUtil.getIcon(_problemDescriptor);
 	}
 
