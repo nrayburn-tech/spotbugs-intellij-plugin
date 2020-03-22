@@ -42,7 +42,12 @@ import org.twodividedbyzero.idea.findbugs.resources.ResourcesLoader;
 
 import java.io.File;
 
-public final class AnalyzeModuleFiles extends AbstractAnalyzeAction {
+public abstract class AnalyzeModuleFiles extends AbstractAnalyzeAction {
+	private boolean includeTests;
+
+	public AnalyzeModuleFiles(boolean includeTests) {
+		this.includeTests = includeTests;
+	}
 
 	@Override
 	void updateImpl(
@@ -70,12 +75,6 @@ public final class AnalyzeModuleFiles extends AbstractAnalyzeAction {
 			@NotNull final ToolWindow toolWindow,
 			@NotNull final FindBugsState state
 	) {
-
-		final int answer = askIncludeTest(project);
-		if (answer == Messages.CANCEL) {
-			return;
-		}
-		final boolean includeTests = Messages.YES == answer;
 
 		final Module module = getModule(e);
 

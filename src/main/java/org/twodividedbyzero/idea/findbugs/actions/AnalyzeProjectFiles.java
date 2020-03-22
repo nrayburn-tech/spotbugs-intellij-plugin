@@ -44,7 +44,12 @@ import org.twodividedbyzero.idea.findbugs.resources.ResourcesLoader;
 import java.io.File;
 import java.util.List;
 
-public final class AnalyzeProjectFiles extends AbstractAnalyzeAction {
+public abstract class AnalyzeProjectFiles extends AbstractAnalyzeAction {
+	private boolean includeTests;
+
+	AnalyzeProjectFiles(boolean includeTests) {
+		this.includeTests = includeTests;
+	}
 
 	@Override
 	void updateImpl(
@@ -68,12 +73,6 @@ public final class AnalyzeProjectFiles extends AbstractAnalyzeAction {
 			@NotNull final ToolWindow toolWindow,
 			@NotNull final FindBugsState state
 	) {
-
-		final int answer = askIncludeTest(project);
-		if (answer == Messages.CANCEL) {
-			return;
-		}
-		final boolean includeTests = Messages.YES == answer;
 
 		new FindBugsStarter(project, "Running FindBugs analysis for project '" + project.getName() + "'...") {
 			@Override

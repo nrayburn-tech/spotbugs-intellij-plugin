@@ -448,11 +448,11 @@
                 <!--<add-to-group group-id="SpotBugs.AnalyzeMenu" anchor="last"/>-->
             </action>
 
-            <action id="SpotBugs.ModuleFilesAction"
-                    class="org.twodividedbyzero.idea.findbugs.actions.AnalyzeModuleFiles"
-                    text="Analyze Module Files"
-                    description="Run SpotBugs analysis on all module files."
-                    icon="PluginIcons.ANALYZE_MODULE_FILES_ICON">
+            <action id="SpotBugs.ModuleFilesNotIncludingTestsAction"
+                    class="org.twodividedbyzero.idea.findbugs.actions.AnalyzeModuleFilesNotIncludingTests"
+                    text="Analyze Module Files Not Including Test Sources"
+                    description="Run SpotBugs analysis on all module files not including test sources."
+                    icon="PluginIcons.ANALYZE_MODULE_FILES_NOT_INCLUDING_TESTS_ICON">
 
                 <!--<add-to-group group-id="EditorPopupMenu" anchor="last"/>-->
                 <add-to-group group-id="SpotBugs.EditorPopup" anchor="last"/>
@@ -460,11 +460,35 @@
                 <add-to-group group-id="SpotBugs.AnalyzeMenu" anchor="last"/>
             </action>
 
-            <action id="SpotBugs.ProjectFilesAction"
-                    class="org.twodividedbyzero.idea.findbugs.actions.AnalyzeProjectFiles"
-                    text="Analyze Project Files"
-                    description="Run SpotBugs analysis on all project files."
-                    icon="PluginIcons.ANALYZE_PROJECT_FILES_ICON">
+            <action id="SpotBugs.ModuleFilesIncludingTestsAction"
+                    class="org.twodividedbyzero.idea.findbugs.actions.AnalyzeModuleFilesIncludingTests"
+                    text="Analyze Module Files Including Test Sources"
+                    description="Run SpotBugs analysis on all module files including test sources."
+                    icon="PluginIcons.ANALYZE_MODULE_FILES_INCLUDING_TESTS_ICON">
+
+                <!--<add-to-group group-id="EditorPopupMenu" anchor="last"/>-->
+                <add-to-group group-id="SpotBugs.EditorPopup" anchor="last"/>
+                <add-to-group group-id="SpotBugs.ProjectViewPopupMenu" anchor="last"/>
+                <add-to-group group-id="SpotBugs.AnalyzeMenu" anchor="last"/>
+            </action>
+
+            <action id="SpotBugs.ProjectFilesNotIncludingTestsAction"
+                    class="org.twodividedbyzero.idea.findbugs.actions.AnalyzeProjectFilesNotIncludingTests"
+                    text="Analyze Project Files Not Including Test Sources."
+                    description="Run SpotBugs analysis on all project files not including test sources."
+                    icon="PluginIcons.ANALYZE_PROJECT_FILES_NOT_INCLUDING_TESTS_ICON">
+
+                <!--<add-to-group group-id="EditorPopupMenu" anchor="last"/>-->
+                <add-to-group group-id="SpotBugs.EditorPopup" anchor="last"/>
+                <add-to-group group-id="SpotBugs.ProjectViewPopupMenu" anchor="last"/>
+                <add-to-group group-id="SpotBugs.AnalyzeMenu" anchor="last"/>
+            </action>
+
+            <action id="SpotBugs.ProjectFilesIncludingTestsAction"
+                    class="org.twodividedbyzero.idea.findbugs.actions.AnalyzeProjectFilesIncludingTests"
+                    text="Analyze Project Files Including Test Sources."
+                    description="Run SpotBugs analysis on all project files including test sources."
+                    icon="PluginIcons.ANALYZE_PROJECT_FILES_INCLUDING_TESTS_ICON">
 
                 <!--<add-to-group group-id="EditorPopupMenu" anchor="last"/>-->
                 <add-to-group group-id="SpotBugs.EditorPopup" anchor="last"/>

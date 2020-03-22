@@ -2,6 +2,7 @@ package icons;
 
 import com.intellij.icons.AllIcons;
 import com.intellij.ui.LayeredIcon;
+import com.intellij.util.IconUtil;
 import org.twodividedbyzero.idea.findbugs.resources.ResourcesLoader;
 
 import javax.swing.*;
@@ -16,6 +17,8 @@ public interface PluginIcons {
     Icon CLOSE_EDITOR_ICON = AllIcons.Actions.Close;
     Icon CLOSE_EDITOR_HOVER_ICON = AllIcons.Actions.CloseHovered;
 
+    Icon INCLUDING_TESTS_MARK_ICON = IconUtil.flip(IconUtil.flip(AllIcons.Nodes.JunitTestMark , false), true);
+
     /**
      * --------------------------------------------------------------------------------------------------
      * Analyzing icons
@@ -26,8 +29,14 @@ public interface PluginIcons {
     );
     Icon ANALYZE_CLASS_UNDER_CURSOR_ICON = LayeredIcon.create(AllIcons.Nodes.Class, AllIcons.Nodes.RunnableMark);
     Icon ANALYZE_PACKAGE_FILES_ICON = LayeredIcon.create(AllIcons.Nodes.Package, AllIcons.Nodes.RunnableMark);
-    Icon ANALYZE_MODULE_FILES_ICON = LayeredIcon.create(AllIcons.Nodes.Module, AllIcons.Nodes.RunnableMark);
-    Icon ANALYZE_PROJECT_FILES_ICON = LayeredIcon.create(AllIcons.Nodes.Project, AllIcons.Nodes.RunnableMark);
+    Icon ANALYZE_MODULE_FILES_NOT_INCLUDING_TESTS_ICON = LayeredIcon.create(AllIcons.Nodes.Module, AllIcons.Nodes.RunnableMark);
+    Icon ANALYZE_MODULE_FILES_INCLUDING_TESTS_ICON = new LayeredIcon(
+            AllIcons.Nodes.Module, AllIcons.Nodes.RunnableMark, INCLUDING_TESTS_MARK_ICON
+    );
+    Icon ANALYZE_PROJECT_FILES_NOT_INCLUDING_TESTS_ICON = LayeredIcon.create(AllIcons.Nodes.Project, AllIcons.Nodes.RunnableMark);
+    Icon ANALYZE_PROJECT_FILES_INCLUDING_TESTS_ICON = new LayeredIcon(
+            AllIcons.Nodes.Project, AllIcons.Nodes.RunnableMark, INCLUDING_TESTS_MARK_ICON
+    );
     Icon ANALYZE_SCOPE_FILES_ICON = LayeredIcon.create(AllIcons.Ide.LocalScope, AllIcons.Nodes.RunnableMark);
     Icon ANALYZE_ALL_MODIFIED_FILES_ICON = LayeredIcon.create(AllIcons.Scope.ChangedFilesAll, AllIcons.Nodes.RunnableMark);
     Icon ANALYZE_CHANGELIST_FILES_ICON = LayeredIcon.create(AllIcons.Scope.ChangedFiles, AllIcons.Nodes.RunnableMark);
