@@ -19,7 +19,7 @@
 package org.twodividedbyzero.idea.findbugs.resources;
 
 import com.intellij.ui.JBColor;
-import com.intellij.util.ui.JBUI;
+import com.intellij.ui.scale.JBUIScale;
 import com.intellij.util.ui.UIUtil;
 import org.jdesktop.swingx.color.ColorUtil;
 import org.jetbrains.annotations.NotNull;
@@ -48,9 +48,9 @@ public class GuiResources {
 		final String red = ColorUtil.toHexString(JBColor.red);
 		final String cremeWhite = ColorUtil.toHexString(new JBColor(new Color(0x005555), JBColor.green));
 		final String fontColor = UIUtil.isUnderDarcula() ? "#bbbbbb" : ColorUtil.toHexString(JBColor.black);
-		final int fontSize = JBUI.isHiDPI() ? 24 : 12;
-		final int h1FontSize = JBUI.isHiDPI() ? 32 : 16;
-		final int h2FontSize = JBUI.isHiDPI() ? 28 : 14;
+		final int fontSize = JBUIScale.scale(12);
+		final int h1FontSize = JBUIScale.scale(16);
+		final int h2FontSize = JBUIScale.scale(14);
 
 		EDITORPANE_STYLESHEET = new StyleSheet();
 		EDITORPANE_STYLESHEET.addRule("body {font-size: " + fontSize + "pt; color: " + fontColor + "}");

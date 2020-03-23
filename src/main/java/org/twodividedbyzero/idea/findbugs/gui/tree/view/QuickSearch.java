@@ -22,7 +22,7 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.wm.IdeFocusManager;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.components.JBList;
-import com.intellij.util.ui.JBUI;
+import com.intellij.ui.scale.JBUIScale;
 import icons.PluginIcons;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -582,7 +582,7 @@ abstract class QuickSearch<E> {
 
 			_label = new JLabel("Search for: ");
 			//noinspection MagicNumber
-			_label.setFont(new Font(getFont().getName(), Font.BOLD, JBUI.isHiDPI() ? 24 : 12));
+			_label.setFont(new Font(getFont().getName(), Font.BOLD, JBUIScale.scale(12)));
 			_label.setForeground(_foregroundColor);
 			_label.setVerticalAlignment(SwingConstants.BOTTOM);
 
