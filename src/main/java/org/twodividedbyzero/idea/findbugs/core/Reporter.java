@@ -182,7 +182,7 @@ final class Reporter extends AbstractBugReporter implements FindBugsProgress {
 		final Set<String> missingClasses = getMissingClasses();
 		if (!missingClasses.isEmpty()) {
 			final Map<String, Map<String, Throwable>> status = new HashMap<String, Map<String, Throwable>>();
-			final String key = "The following classes needed for FindBugs analysis were missing:";
+			final String key = "The following classes needed for SpotBugs analysis were missing:";
 			status.put(key, new HashMap<String, Throwable>());
 
 			final Map<String, Throwable> map = status.get(key);

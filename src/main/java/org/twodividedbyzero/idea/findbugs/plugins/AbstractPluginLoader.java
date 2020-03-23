@@ -245,7 +245,7 @@ public abstract class AbstractPluginLoader {
 				currentProject = ProjectManager.getInstance().getDefaultProject();
 			}
 			new Notification(
-					"FindBugs Custom Plugin Load Error",
+					"SpotBugs Custom Plugin Load Error",
 					ResourcesLoader.getString("error.customPlugins.title"),
 					message,
 					NotificationType.ERROR,

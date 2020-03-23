@@ -67,7 +67,7 @@ public final class AnalyzeCurrentEditorFile extends AbstractAnalyzeAction {
 
 		final VirtualFile[] selectedFiles = IdeaUtilImpl.getVirtualFiles(e.getDataContext());
 
-		new FindBugsStarter(project, "Running FindBugs analysis for editor files...") {
+		new FindBugsStarter(project, "Running SpotBugs analysis for editor files...") {
 			@Override
 			protected void createCompileScope(@NotNull final CompilerManager compilerManager, @NotNull final Consumer<CompileScope> consumer) {
 				consumer.consume(createFilesCompileScope(compilerManager, selectedFiles));

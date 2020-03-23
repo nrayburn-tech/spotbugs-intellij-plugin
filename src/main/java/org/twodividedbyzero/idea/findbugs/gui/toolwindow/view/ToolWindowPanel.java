@@ -497,7 +497,7 @@ public final class ToolWindowPanel extends JPanel implements AnalysisStateListen
 									"Settings | Appearance & Behavior | Notifications | " +
 									NOTIFICATION_GROUP_ID_ANALYSIS_FINISHED +
 									"\ncan be used to configure the notification.",
-							"FindBugs Analysis Finished Notification",
+							"SpotBugs Analysis Finished Notification",
 							"Disable Notification", CommonBundle.getCancelButtonText(), Messages.getWarningIcon());
 					if (result == Messages.YES) {
 						NotificationUtil.getNotificationsConfigurationImpl().changeSettings(
