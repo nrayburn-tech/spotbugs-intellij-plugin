@@ -20,7 +20,6 @@
 package org.twodividedbyzero.idea.findbugs.gui.tree.view;
 
 import com.intellij.ui.JBColor;
-import com.intellij.util.ui.UIUtil;
 
 import javax.swing.JComponent;
 import javax.swing.JList;
@@ -581,7 +580,7 @@ public final class ViewTooltips extends MouseAdapter implements MouseMotionListe
 		 */
 		public void setComponent(final Component jc) {
 			final Dimension d = jc.getPreferredSize();
-			final BufferedImage nue = UIUtil.createImage(d.width, d.height, BufferedImage.TYPE_INT_ARGB_PRE);// was height +2
+			final BufferedImage nue = new BufferedImage(d.width, d.height, BufferedImage.TYPE_INT_ARGB_PRE);// was height +2
 			SwingUtilities.paintComponent(nue.getGraphics(), jc, this, 0, 0, d.width, d.height); // was height +2
 			setImage(nue);
 		}
