@@ -61,7 +61,7 @@ final class PreviewPanel implements Disposable {
 
 		final double border = 5;
 		final double colsGap = 2;
-		final double[][] size = {{border, TableLayout.PREFERRED, colsGap, TableLayout.PREFERRED, colsGap, TableLayout.FILL, border}, // Columns
+		final double[][] size = {{border, TableLayout.PREFERRED, colsGap, TableLayout.PREFERRED, colsGap, TableLayout.FILL, 2 * PluginIcons.CLOSE_EDITOR_ICON.getIconWidth()}, // Columns
 				{border, TableLayout.PREFERRED, border}};// Rows
 		final LayoutManager tbl = new TableLayout(size);
 		_labelPanel = new JPanel(tbl);
@@ -85,7 +85,7 @@ final class PreviewPanel implements Disposable {
 				clear();
 			}
 		});
-		_labelPanel.add(closeButton, "5, 1, 5, 1, R, T");
+		_labelPanel.add(closeButton, "6, 1, 5, 1, R, T");
 
 		_delegate.add(NO_BUG_SELECTED_LABEL, BorderLayout.CENTER);
 		_delegate.add(_labelPanel, BorderLayout.NORTH);
