@@ -3,17 +3,19 @@
 SpotBugs-IDEA provides static byte code analysis to look for bugs in Java code from within IntelliJ IDEA.
 The plugin uses [SpotBugs](https://spotbugs.github.io/) under the hood.
 
-Copyright 2008-2013 [Andre Pfeiler](andrepdo@dev.java.net)
+The plugin is created by [Andrey Cherkasov](jqy@protonmail.com) and sponsored by JetBrains s.r.o.
+
+The plugin is based on [FindBugs-IDEA](https://github.com/andrepdo/findbugs-idea), which is created by [Andre Pfeiler](mailto:andrepdo@dev.java.net) and licensed under the [GNU LESSER GENERAL PUBLIC LICENSE](https://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html).
+
+Contribution from [Stanislav Anokhin](staslock@gmail.com) (migration to gradle build system) is used.
+
+[SpotBugs](https://spotbugs.github.io/) is the spiritual successor of [FindBugs](https://github.com/findbugsproject/findbugs), carrying on from the point where it left off with support of its community.
+
+SpotBugs is licensed under the [GNU LESSER GENERAL PUBLIC LICENSE](https://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html).
 
 ### FindBugs trademark and licenses
 
-Both the name FindBugs and the FindBugs bug mark are
-trademarked by the University of Maryland.
-
-This product includes software developed at
-[The Apache Software Foundation](http://www.apache.org/).
-
-FindBugs Copyright  2003-2007 University of Maryland and others. 
+FindBugs Copyright  2003-2015 University of Maryland and others. 
 The FindBugs name and logo are trademarked by the University of Maryland.
 Findbugs is written and maintained by the FindBugs development team, 
 with help from numerous contributors. GUI2 (which you are now using) 
@@ -28,5 +30,8 @@ JOR provides results both from FindBugs and from Fortify's static analysis for s
 Visit the FindBugs web page for more information at http://findbugs.sourceforge.net
 FindBugs is free software; see the License tab for details.
 
+This product includes software developed at
+[The Apache Software Foundation](http://www.apache.org/).
+
 Gui Resource Icons Copyright:
-Most Icons are taken from FindBugs and IntelliJ IDEA with slightly modifications.
+Most Icons are taken from IntelliJ IDEA with slightly modifications.
