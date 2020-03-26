@@ -25,8 +25,6 @@ public final class FindBugsPluginConstants {
 
 	public static final String PLUGIN_NAME = "SpotBugs-IDEA";
 	public static final String TOOL_WINDOW_ID = PLUGIN_NAME; // see plugin.xml
-	public static final String FINDBUGS_WEBCLOUD_CLIENT_JAR = "plugin/findbugsCommunalCloud.jar";
-	public static final String FINDBUGS_APP_ENGINE_PROPERTY_NAME = "findbugs.plugin.appengine";
 	public static final String DEFAULT_EXPORT_DIR = System.getProperty("user.home") + File.separatorChar + TOOL_WINDOW_ID;
 
 	public static final String PLUGIN_ID = "org.twodividedbyzero.idea.findbugs";

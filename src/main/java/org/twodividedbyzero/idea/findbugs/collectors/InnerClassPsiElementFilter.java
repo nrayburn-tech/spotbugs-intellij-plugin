@@ -48,10 +48,6 @@ class InnerClassPsiElementFilter implements PsiElementFilter {
 
 	@Override
 	public String toString() {
-		final StringBuilder sb = new StringBuilder();
-		sb.append("InnerClassPsiElementFilter");
-		sb.append("{_psiElement=").append(_psiElement);
-		sb.append('}');
-		return sb.toString();
+		return "InnerClassPsiElementFilter{psiElement=" + _psiElement + '}';
 	}
 }

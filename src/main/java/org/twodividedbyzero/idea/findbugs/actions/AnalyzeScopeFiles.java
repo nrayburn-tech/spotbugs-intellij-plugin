@@ -18,10 +18,7 @@
  */
 package org.twodividedbyzero.idea.findbugs.actions;
 
-import com.intellij.analysis.AnalysisScope;
-import com.intellij.analysis.AnalysisScopeBundle;
-import com.intellij.analysis.AnalysisUIOptions;
-import com.intellij.analysis.BaseAnalysisActionDialog;
+import com.intellij.analysis.*;
 import com.intellij.ide.highlighter.ArchiveFileType;
 import com.intellij.injected.editor.VirtualFileWindow;
 import com.intellij.openapi.actionSystem.ActionPlaces;
@@ -126,12 +123,11 @@ public final class AnalyzeScopeFiles extends AbstractAnalyzeAction {
 		uiOptions.ANALYZE_TEST_SOURCES = dlg.isInspectTestSources();
 		FileDocumentManager.getInstance().saveAllDocuments();
 
-		analyzeImpl(e, project, scope, dlg.isInspectTestSources());
+		analyzeImpl(project, scope, dlg.isInspectTestSources());
 	}
 
 
 	private void analyzeImpl(
-			@NotNull final AnActionEvent e,
 			@NotNull final Project project,
 			@NotNull final AnalysisScope scope,
 			final boolean includeTests
@@ -203,7 +199,7 @@ public final class AnalyzeScopeFiles extends AbstractAnalyzeAction {
 			return new AnalysisScope(projectContext);
 		}
 
-		final AnalysisScope analysisScope = AnalyzeUtil.KEY.getData(dataContext);
+		final AnalysisScope analysisScope = AnalysisScopeUtil.KEY.getData(dataContext);
 		if (analysisScope != null) {
 			return analysisScope;
 		}

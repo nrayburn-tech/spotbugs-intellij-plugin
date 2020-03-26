@@ -53,7 +53,6 @@ public class ExtendedProblemDescriptor implements ProblemDescriptor, ProblemGrou
 		this.bug = bug;
 		final int[] lines = BugInstanceUtil.getSourceLines(this.bug.getInstance());
 		lineStart = lines[0] - 1;
-		//_lineEnd = lines[1] - 1;
 	}
 
 	@Override

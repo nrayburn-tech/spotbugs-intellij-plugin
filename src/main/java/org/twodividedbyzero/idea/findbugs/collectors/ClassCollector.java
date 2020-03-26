@@ -39,7 +39,7 @@ public final class ClassCollector extends AbstractClassAdder {
 
 	public ClassCollector(@NotNull final Project project) {
 		super(project);
-		_classes = new HashMap<String, PsiElement>();
+		_classes = new HashMap<>();
 	}
 
 
