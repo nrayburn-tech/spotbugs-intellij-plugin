@@ -43,7 +43,7 @@ import org.twodividedbyzero.idea.findbugs.resources.ResourcesLoader;
 import java.io.File;
 
 public abstract class AnalyzeModuleFiles extends AbstractAnalyzeAction {
-	private boolean includeTests;
+	private final boolean includeTests;
 
 	public AnalyzeModuleFiles(boolean includeTests) {
 		this.includeTests = includeTests;

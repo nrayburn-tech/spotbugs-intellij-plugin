@@ -45,7 +45,7 @@ import java.io.File;
 import java.util.List;
 
 public abstract class AnalyzeProjectFiles extends AbstractAnalyzeAction {
-	private boolean includeTests;
+	private final boolean includeTests;
 
 	AnalyzeProjectFiles(boolean includeTests) {
 		this.includeTests = includeTests;
@@ -91,7 +91,7 @@ public abstract class AnalyzeProjectFiles extends AbstractAnalyzeAction {
 					}
 					final VirtualFile compilerOutputPath = extension.getCompilerOutputPath();
 					if (compilerOutputPath != null) {
-						/**
+						/*
 						 * Otherwise ignore it. Maybe this module is only used to contains fact (think of Android)
 						 * or to aggregate modules (think of maven).
 						 */

@@ -120,7 +120,7 @@ public abstract class AbstractClassAdder {
 			final String fqp = fullQualifiedPath + ANONYMOUS_CLASS_DELIMITER + innerClassName;
 
 			assert innerClassName != null;
-			if (findClass != null && innerClassName.equals(findClass)) {
+			if (innerClassName.equals(findClass)) {
 				put(fqp, innerPsiClass);
 				return;
 
@@ -150,7 +150,7 @@ public abstract class AbstractClassAdder {
 			if (!"null".equals(className)) {
 				final String fqp = fullQualifiedPath + ANONYMOUS_CLASS_DELIMITER + anonymousClassPrefix + className;
 
-				if (findClass != null && String.valueOf(anonymousClassPrefix).equals(findClass)) {
+				if (String.valueOf(anonymousClassPrefix).equals(findClass)) {
 					put(fqp, element);
 					return;
 
@@ -181,7 +181,7 @@ public abstract class AbstractClassAdder {
 			final int anonymousClassPrefix = i + 1;
 			final String fqp = fullQualifiedPath + ANONYMOUS_CLASS_DELIMITER + anonymousClassPrefix;
 
-			if (findClass != null && String.valueOf(anonymousClassPrefix).equals(findClass)) {
+			if (String.valueOf(anonymousClassPrefix).equals(findClass)) {
 				put(fqp, classes[i]);
 				return;
 

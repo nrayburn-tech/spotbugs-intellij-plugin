@@ -49,10 +49,6 @@ class AnonymousClassPsiElementFilter implements PsiElementFilter {
 
 	@Override
 	public String toString() {
-		final StringBuilder sb = new StringBuilder();
-		sb.append("AnonymousClassPsiElementFilter");
-		sb.append("{_psiElement=").append(_psiElement);
-		sb.append('}');
-		return sb.toString();
+		return "AnonymousClassPsiElementFilter{psiElement=" + _psiElement + '}';
 	}
 }

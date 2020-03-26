@@ -25,7 +25,7 @@ public final class AndroidUtil {
 	private AndroidUtil() {
 	}
 
-	public static boolean isAndroidFacetType(@Nullable final FacetTypeId type) {
+	public static boolean isAndroidFacetType(@Nullable final FacetTypeId<?> type) {
 		return type != null && (
 				"AndroidFacetType".equals(type.getClass().getSimpleName()) || "android".equalsIgnoreCase(type.toString()));
 	}

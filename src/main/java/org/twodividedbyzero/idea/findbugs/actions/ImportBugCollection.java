@@ -166,11 +166,11 @@ public final class ImportBugCollection extends AbstractAction {
 							Thread.currentThread().interrupt();
 							return;
 						}
-						final Integer bugCounter = bugCount++;
-						final double fraction = bugCounter.doubleValue() / projectStats.getTotalBugs();
+						final int bugCounter = bugCount++;
+						final double fraction = (double) bugCounter / projectStats.getTotalBugs();
 						indicator.setFraction(fraction);
 						indicator.setText2("Importing bug '" + bugCount + "' of '" + projectStats.getTotalBugs() + "' - " + bugInstance.getMessageWithoutPrefix());
-						/**
+						/*
 						 * Guarantee thread visibility *one* time.
 						 */
 						final AtomicReference<BugInstance> bugInstanceRef = New.atomicRef(bugInstance);
@@ -188,21 +188,14 @@ public final class ImportBugCollection extends AbstractAction {
 						});
 					}
 
-					EventDispatchThreadHelper.invokeLater(new Runnable() {
-						public void run() {
-							transferToEDTQueue.drain();
-							BalloonTipFactory.showToolWindowInfoNotifier(project, "Imported bug collection from '" + fileToImport + "'.");
-						}
+					EventDispatchThreadHelper.invokeLater(() -> {
+						transferToEDTQueue.drain();
+						BalloonTipFactory.showToolWindowInfoNotifier(project, "Imported bug collection from '" + fileToImport + "'.");
 					});
 
 					importBugCollection.setTimestamp(System.currentTimeMillis());
 					success = true;
-				} catch (final IOException e1) {
-					final String message = "Import failed";
-					showToolWindowErrorNotifier(project, message);
-					LOGGER.error(message, e1);
-
-				} catch (final DocumentException e1) {
+				} catch (final IOException | DocumentException e1) {
 					final String message = "Import failed";
 					showToolWindowErrorNotifier(project, message);
 					LOGGER.error(message, e1);

@@ -81,16 +81,13 @@ public final class HelpAction extends AbstractAction {
 				createHelpInfo().toString(),
 				PluginIcons.FINDBUGS_ICON,
 				MessageType.INFO.getPopupBackground(),
-				new HyperlinkListener() {
-					@Override
-					public void hyperlinkUpdate(@NotNull final HyperlinkEvent e) {
-						if (HyperlinkEvent.EventType.ACTIVATED.equals(e.getEventType())) {
-							if (A_HREF_COPY.equals(e.getDescription())) {
-								final String info = createProductInfo().toString();
-								CopyPasteManager.getInstance().setContents(new StringSelection(info));
-							} else {
-								BrowserUtil.browse(e.getURL());
-							}
+				evt -> {
+					if (HyperlinkEvent.EventType.ACTIVATED.equals(evt.getEventType())) {
+						if (A_HREF_COPY.equals(evt.getDescription())) {
+							final String info = createProductInfo().toString();
+							CopyPasteManager.getInstance().setContents(new StringSelection(info));
+						} else {
+							BrowserUtil.browse(evt.getURL());
 						}
 					}
 				}

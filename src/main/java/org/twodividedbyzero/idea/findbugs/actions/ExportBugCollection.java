@@ -21,51 +21,29 @@ package org.twodividedbyzero.idea.findbugs.actions;
 import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.progress.ProgressIndicator;
-import com.intellij.openapi.progress.Task;
+import com.intellij.openapi.progress.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.wm.ToolWindow;
-import edu.umd.cs.findbugs.BugCollection;
-import edu.umd.cs.findbugs.BugInstance;
-import edu.umd.cs.findbugs.HTMLBugReporter;
-import edu.umd.cs.findbugs.SortedBugCollection;
+import edu.umd.cs.findbugs.*;
 import org.dom4j.Document;
 import org.dom4j.io.DocumentSource;
 import org.jetbrains.annotations.NotNull;
 import org.twodividedbyzero.idea.findbugs.common.EventDispatchThreadHelper;
-import org.twodividedbyzero.idea.findbugs.common.util.ErrorUtil;
-import org.twodividedbyzero.idea.findbugs.common.util.FileUtilFb;
-import org.twodividedbyzero.idea.findbugs.common.util.IoUtil;
-import org.twodividedbyzero.idea.findbugs.core.FindBugsProject;
-import org.twodividedbyzero.idea.findbugs.core.FindBugsResult;
-import org.twodividedbyzero.idea.findbugs.core.FindBugsState;
-import org.twodividedbyzero.idea.findbugs.core.WorkspaceSettings;
+import org.twodividedbyzero.idea.findbugs.common.util.*;
+import org.twodividedbyzero.idea.findbugs.core.*;
 import org.twodividedbyzero.idea.findbugs.gui.export.ExportBugCollectionDialog;
 import org.twodividedbyzero.idea.findbugs.gui.toolwindow.view.ToolWindowPanel;
 import org.twodividedbyzero.idea.findbugs.resources.ResourcesLoader;
 
-import javax.xml.transform.Result;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStreamWriter;
+import javax.xml.transform.*;
+import javax.xml.transform.stream.*;
+import java.io.*;
 import java.net.URL;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 public final class ExportBugCollection extends AbstractAction {
 
@@ -222,7 +200,7 @@ public final class ExportBugCollection extends AbstractAction {
 			final Source source = new DocumentSource(document);
 
 			// Write result to output stream
-			final OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(file), Charset.forName("UTF-8").newEncoder());
+			final OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
 			try {
 				final Result result = new StreamResult(writer);
 				// Do the transformation
@@ -236,21 +214,13 @@ public final class ExportBugCollection extends AbstractAction {
 	}
 
 	private static void openInBrowser(@NotNull final File file) {
-		EventDispatchThreadHelper.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				BrowserUtil.browse(file);
-			}
-		});
+		EventDispatchThreadHelper.invokeLater(() -> BrowserUtil.browse(file));
 	}
 
 	private static void showError(@NotNull final String message) {
-		EventDispatchThreadHelper.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				Messages.showErrorDialog(message, StringUtil.capitalizeWords(ResourcesLoader.getString("export.title"), true));
-			}
-		});
+		EventDispatchThreadHelper.invokeLater(
+				() -> Messages.showErrorDialog(
+						message, StringUtil.capitalizeWords(ResourcesLoader.getString("export.title"), true)));
 	}
 
 	@NotNull

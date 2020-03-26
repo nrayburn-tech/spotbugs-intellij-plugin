@@ -51,7 +51,7 @@ public final class RFilerFilterSuggestion {
 		final ProjectSettings projectSettings = ProjectSettings.getInstance(project);
 		boolean projectShow = false;
 		for (final Module module : ModuleManager.getInstance(project).getModules()) {
-			for (final Facet facet : FacetManager.getInstance(module).getAllFacets()) {
+			for (final Facet<?> facet : FacetManager.getInstance(module).getAllFacets()) {
 				if (AndroidUtil.isAndroidFacetType(facet.getTypeId())) {
 					final ModuleSettings moduleSettings = ModuleSettings.getInstance(module);
 					if (moduleSettings.overrideProjectSettings) {

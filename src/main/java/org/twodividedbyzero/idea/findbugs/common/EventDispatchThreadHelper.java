@@ -75,17 +75,12 @@ public final class EventDispatchThreadHelper {
 		if (!EventQueue.isDispatchThread()) {
 			@SuppressWarnings({"ThrowableInstanceNeverThrown"})
 			final CallerStack caller = new CallerStack();
-			final Runnable wrapper = new Runnable() {
-				public void run() {
-					try {
-						runnable.run();
-					} catch (final RuntimeException e) {
-						CallerStack.initCallerStack(e, caller);
-						throw e;
-					} catch (final Error e) {
-						CallerStack.initCallerStack(e, caller);
-						throw e;
-					}
+			final Runnable wrapper = () -> {
+				try {
+					runnable.run();
+				} catch (final RuntimeException | Error e) {
+					CallerStack.initCallerStack(e, caller);
+					throw e;
 				}
 			};
 			EventQueue.invokeLater(wrapper);
@@ -146,24 +141,4 @@ public final class EventDispatchThreadHelper {
 	}
 
 
-	private static class NotInADTViolation extends Exception {
-
-		private static final long serialVersionUID = 1L;
-
-
-		NotInADTViolation(final String message) {
-			super(message);
-		}
-	}
-
-
-	private static class NotInEDTorADTViolation extends Exception {
-
-		private static final long serialVersionUID = 1L;
-
-
-		NotInEDTorADTViolation(final String message) {
-			super(message);
-		}
-	}
 }
