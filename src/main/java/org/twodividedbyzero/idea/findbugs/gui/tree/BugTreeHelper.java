@@ -159,11 +159,9 @@ public final class BugTreeHelper {
 	}
 
 	private void scrollPathToVisible(final TreePath path) {
-		EventDispatchThreadHelper.invokeLater(new Runnable() {
-			public void run() {
-				tree.scrollPathToVisible(path);
-				tree.setSelectionPath(path);
-			}
+		EventDispatchThreadHelper.invokeLater(() -> {
+			tree.scrollPathToVisible(path);
+			tree.setSelectionPath(path);
 		});
 	}
 
@@ -208,7 +206,7 @@ public final class BugTreeHelper {
 
 	@NotNull
 	public static TreePath getPath(@NotNull TreeNode node) {
-		final List<TreeNode> list = new ArrayList<TreeNode>();
+		final List<TreeNode> list = new ArrayList<>();
 
 		while (node != null) {
 			list.add(node);
