@@ -1,5 +1,7 @@
 # SpotBugs-IDEA
 
+[![team JetBrains project](http://jb.gg/badges/team.svg)](https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub)
+
 SpotBugs-IDEA provides static byte code analysis to look for bugs in Java code from within IntelliJ IDEA.
 The plugin uses [SpotBugs](https://spotbugs.github.io/) under the hood.
 
@@ -22,12 +24,10 @@ with help from numerous contributors. GUI2 (which you are now using)
 was written by University of Maryland undergraduates Daniel Hakim, 
 Reuven Lazarus and Kristin Stephens as part of the FindBugs Summer of Code 2006, 
 supported by Sun Microsystems.
+
 FindBugs is sponsored by Fortify Software.
-Fortify Software sells security tools, including Fortify Source Code Analysis, 
-which scans for security vulnerabilities. Fortify Software now provides JOR (Java Open Review),
-a free static analysis and on-line reviewing service to selected open source projects. 
-JOR provides results both from FindBugs and from Fortify's static analysis for security vulnerabilities.
-Visit the FindBugs web page for more information at http://findbugs.sourceforge.net
+
+Visit the FindBugs web page for more information at https://findbugs.sourceforge.net
 FindBugs is free software; see the License tab for details.
 
 This product includes software developed at
