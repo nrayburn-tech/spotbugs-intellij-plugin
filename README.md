@@ -1,8 +1,8 @@
-# SpotBugs-IDEA
+# IntelliJ SpotBugs plugin
 
 [![team JetBrains project](http://jb.gg/badges/team.svg)](https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub)
 
-SpotBugs-IDEA provides static byte code analysis to look for bugs in Java code from within IntelliJ IDEA.
+IntelliJ SpotBugs plugin provides static byte code analysis to look for bugs in Java code from within IntelliJ IDEA.
 The plugin uses [SpotBugs](https://spotbugs.github.io/) under the hood.
 
 The plugin is created by [Andrey Cherkasov](jqy@protonmail.com) and sponsored by JetBrains s.r.o.
