@@ -48,7 +48,7 @@ public class VersionManager {
 	
 	private static final String WEBSITE = "https://github.com/JetBrains/spotbugs-intellij-plugin/";
 
-	private static final String DOWNLOAD_WEBSITE = "http://plugins.intellij.net/plugin/?id=3847";
+	private static final String DOWNLOAD_WEBSITE = "https://plugins.jetbrains.com/plugin/14014-spotbugs";
 
 	private static final String ISSUE_TRACKER = "https://github.com/JetBrains/spotbugs-intellij-plugin/issues";
 
