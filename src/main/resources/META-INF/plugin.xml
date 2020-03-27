@@ -29,23 +29,19 @@
 		such as null pointer dereferences, infinite recursive loops, bad uses of the Java libraries and deadlocks.
 		SpotBugs can identify hundreds of serious defects in large applications (typically about 1 defect per 1000-2000
 		lines of non-commenting source statements).
-		SpotBugs-IDEA uses SpotBugs&trade; under the hood. For more information
+		<p>
+		IntelliJ SpotBugs uses SpotBugs under the hood. For more information
 		see <a href="https://github.com/spotbugs/spotbugs">https://github.com/spotbugs/spotbugs</a>.
+		</p>
 		<p>
 		..."We use IDEA inspections and SpotBugs complementary. SpotBugs is running in our continuous integration process and IDEA inspections are used during coding."
 		What about using both during coding from within IntelliJ IDEA?
 		</p>
 		<p>
-            <ul>
-                <li>for screenshots see <a href='http://andrepdo.github.io/findbugs-idea'>http://andrepdo.github.io/findbugs-idea</a></li>
-                <li>@see article at dzone: <a href='http://jetbrains.dzone.com/tips/intellij-idea-finds-bugs'>http://jetbrains.dzone.com/tips/intellij-idea-finds-bugs</a></li>
-            </ul>
-		</p>
-		<p>
-		SpotBugs-IDEA plugin features:
+		IntelliJ SpotBugs plugin features:
 		<ul>
             <li>SpotBugs 3 support</li>
-            <li>quickfix: annotate, suppress spotbugs patterns (GutterIcon and document markup (alt+enter))</li>
+            <li>quickfix: annotate, suppress SpotBugs patterns (GutterIcon and document markup (alt+enter))</li>
             <li>IntelliJ IDEA 2019.3+ compatibility</li>
             <li>configure SpotBugs on idea project and module level</li>
             <li>jump to source from results shown in toolwindow including anonymous classes</li>
@@ -66,7 +62,7 @@
             <li>Analyze actions (all actions are also available in the intellij project tree, toolbar menu, context menu):
                 <ul>
                     <li>analyze all modified files</li>
-                    <li>analyze all files on the active changelist (available from SpotBugs-IDEA main ToolWindow and the ChangelistToolWindow)</li>
+                    <li>analyze all files on the active changelist (available from IntelliJ SpotBugs main ToolWindow and the ChangelistToolWindow)</li>
                     <li>analyze class under cursor</li>
                     <li>analyze current editor file</li>
                     <li>analyze all files of an intellij project</li>
@@ -93,7 +89,7 @@
         </ul>
 		<html>]]>
     </change-notes>
-    <id>SpotBugs-IDEA</id>
+    <id>org.jetbrains.plugins.spotbugs</id>
     <version>@VERSION@</version>
     <vendor email="tagir.valeev@jetbrains.com" url="https://github.com/amaembo">Tagir Valeev
     </vendor>
@@ -116,13 +112,13 @@
         <projectService serviceImplementation="org.jetbrains.plugins.spotbugs.core.ProjectSettings"/>
         <projectService serviceImplementation="org.jetbrains.plugins.spotbugs.gui.preferences.LegacyProjectSettings"/>
         <projectConfigurable provider="org.jetbrains.plugins.spotbugs.core.ProjectConfigurableProvider"
-                             displayName="SpotBugs-IDEA"/>
+                             displayName="IntelliJ SpotBugs"/>
         <search.optionContributor implementation="org.jetbrains.plugins.spotbugs.gui.settings.SearchableOptionContributorImpl"/>
 
         <moduleService serviceImplementation="org.jetbrains.plugins.spotbugs.core.ModuleSettings"/>
         <moduleService serviceImplementation="org.jetbrains.plugins.spotbugs.gui.preferences.LegacyModuleSettings"/>
         <moduleConfigurable provider="org.jetbrains.plugins.spotbugs.core.ModuleConfigurableProvider"
-                            displayName="SpotBugs-IDEA"/>
+                            displayName="IntelliJ SpotBugs"/>
         <checkinHandlerFactory implementation="org.jetbrains.plugins.spotbugs.core.CheckinHandlerFactoryImpl"/>
     </extensions>
     <extensions defaultExtensionNs="com.intellij">
@@ -329,7 +325,7 @@
 
             <action id="SpotBugs.HelpAction"
                     class="org.jetbrains.plugins.spotbugs.actions.HelpAction"
-                    text="SpotBugs-IDEA Help"
+                    text="IntelliJ SpotBugs Plugin Help"
                     description="Show the IntelliJ SpotBugs plugin help."
                     icon="AllIcons.Actions.Help"/>
 
