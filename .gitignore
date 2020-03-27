@@ -1,8 +1,11 @@
 /.gradle/
-/.idea/
 /build/
 /tmp/
 /out/
 .directory
-*.iml
 
+/.idea/workspace.xml
+/.idea/misc.xml
+/.idea/scopes
+/.idea/gradle.xml
+/.idea/jarRepositories.xml
