@@ -20,7 +20,7 @@
   -->
 
 <idea-plugin url="https://github.com/JetBrains/spotbugs-intellij-plugin">
-    <name>SpotBugs-IDEA</name>
+    <name>SpotBugs</name>
     <description>
         <![CDATA[
 		The SpotBugs plugin for IntelliJ IDEA<br/>
@@ -89,7 +89,7 @@
         <h3>1.0.0</h3>
         <ul>
             <li>Initial release; based on https://github.com/scanban/findbugs-idea/commit/1bab9a9da436964ef82541c21c4a7fca193a79b2</li>
-            <li>Plugin compatibility: IDEA 2019</li>
+            <li>Plugin compatibility: IDEA 2019.3</li>
         </ul>
 		<html>]]>
     </change-notes>
