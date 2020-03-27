@@ -107,55 +107,55 @@
     <depends>com.intellij.modules.lang</depends>
     <depends>com.intellij.modules.java</depends>
 
-    <resource-bundle>org.twodividedbyzero.idea.findbugs.resources.i18n.Messages</resource-bundle>
+    <resource-bundle>org.jetbrains.plugins.spotbugs.resources.i18n.Messages</resource-bundle>
     <extensions defaultExtensionNs="com.intellij">
         <toolWindow anchor="bottom" id="SpotBugs-IDEA" icon="PluginIcons.FINDBUGS_ICON_13X13"
-                    factoryClass="org.twodividedbyzero.idea.findbugs.core.ToolWindowFactoryImpl"/>
+                    factoryClass="org.jetbrains.plugins.spotbugs.core.ToolWindowFactoryImpl"/>
 
-        <projectService serviceImplementation="org.twodividedbyzero.idea.findbugs.core.WorkspaceSettings"/>
-        <projectService serviceImplementation="org.twodividedbyzero.idea.findbugs.core.ProjectSettings"/>
-        <projectService serviceImplementation="org.twodividedbyzero.idea.findbugs.gui.preferences.LegacyProjectSettings"/>
-        <projectConfigurable provider="org.twodividedbyzero.idea.findbugs.core.ProjectConfigurableProvider"
+        <projectService serviceImplementation="org.jetbrains.plugins.spotbugs.core.WorkspaceSettings"/>
+        <projectService serviceImplementation="org.jetbrains.plugins.spotbugs.core.ProjectSettings"/>
+        <projectService serviceImplementation="org.jetbrains.plugins.spotbugs.gui.preferences.LegacyProjectSettings"/>
+        <projectConfigurable provider="org.jetbrains.plugins.spotbugs.core.ProjectConfigurableProvider"
                              displayName="SpotBugs-IDEA"/>
-        <search.optionContributor implementation="org.twodividedbyzero.idea.findbugs.gui.settings.SearchableOptionContributorImpl"/>
+        <search.optionContributor implementation="org.jetbrains.plugins.spotbugs.gui.settings.SearchableOptionContributorImpl"/>
 
-        <moduleService serviceImplementation="org.twodividedbyzero.idea.findbugs.core.ModuleSettings"/>
-        <moduleService serviceImplementation="org.twodividedbyzero.idea.findbugs.gui.preferences.LegacyModuleSettings"/>
-        <moduleConfigurable provider="org.twodividedbyzero.idea.findbugs.core.ModuleConfigurableProvider"
+        <moduleService serviceImplementation="org.jetbrains.plugins.spotbugs.core.ModuleSettings"/>
+        <moduleService serviceImplementation="org.jetbrains.plugins.spotbugs.gui.preferences.LegacyModuleSettings"/>
+        <moduleConfigurable provider="org.jetbrains.plugins.spotbugs.core.ModuleConfigurableProvider"
                             displayName="SpotBugs-IDEA"/>
-        <checkinHandlerFactory implementation="org.twodividedbyzero.idea.findbugs.core.CheckinHandlerFactoryImpl"/>
+        <checkinHandlerFactory implementation="org.jetbrains.plugins.spotbugs.core.CheckinHandlerFactoryImpl"/>
     </extensions>
     <extensions defaultExtensionNs="com.intellij">
-        <errorHandler implementation="org.twodividedbyzero.idea.findbugs.core.ErrorReportSubmitterImpl"/>
-        <annotator language="JAVA" implementationClass="org.twodividedbyzero.idea.findbugs.gui.editor.BugAnnotator"/>
-        <codeInsight.lineMarkerProvider language="JAVA" implementationClass="org.twodividedbyzero.idea.findbugs.gui.editor.BugsLineMarkerProvider"/>
+        <errorHandler implementation="org.jetbrains.plugins.spotbugs.core.ErrorReportSubmitterImpl"/>
+        <annotator language="JAVA" implementationClass="org.jetbrains.plugins.spotbugs.gui.editor.BugAnnotator"/>
+        <codeInsight.lineMarkerProvider language="JAVA" implementationClass="org.jetbrains.plugins.spotbugs.gui.editor.BugsLineMarkerProvider"/>
     </extensions>
     <extensions defaultExtensionNs="com.intellij">
-        <annotator language="Scala" implementationClass="org.twodividedbyzero.idea.findbugs.gui.editor.BugAnnotator"/>
-        <codeInsight.lineMarkerProvider language="Scala" implementationClass="org.twodividedbyzero.idea.findbugs.gui.editor.BugsLineMarkerProvider"/>
+        <annotator language="Scala" implementationClass="org.jetbrains.plugins.spotbugs.gui.editor.BugAnnotator"/>
+        <codeInsight.lineMarkerProvider language="Scala" implementationClass="org.jetbrains.plugins.spotbugs.gui.editor.BugsLineMarkerProvider"/>
     </extensions>
     <extensions defaultExtensionNs="com.intellij">
-        <annotator language="Groovy" implementationClass="org.twodividedbyzero.idea.findbugs.gui.editor.BugAnnotator"/>
-        <codeInsight.lineMarkerProvider language="Groovy" implementationClass="org.twodividedbyzero.idea.findbugs.gui.editor.BugsLineMarkerProvider"/>
+        <annotator language="Groovy" implementationClass="org.jetbrains.plugins.spotbugs.gui.editor.BugAnnotator"/>
+        <codeInsight.lineMarkerProvider language="Groovy" implementationClass="org.jetbrains.plugins.spotbugs.gui.editor.BugsLineMarkerProvider"/>
     </extensions>
     <project-components>
         <component>
-            <implementation-class>org.twodividedbyzero.idea.findbugs.core.FindBugsCompileAfterHook</implementation-class>
+            <implementation-class>org.jetbrains.plugins.spotbugs.core.FindBugsCompileAfterHook</implementation-class>
         </component>
     </project-components>
     <project-components>
         <component>
-            <implementation-class>org.twodividedbyzero.idea.findbugs.core.PluginSuggestion</implementation-class>
+            <implementation-class>org.jetbrains.plugins.spotbugs.core.PluginSuggestion</implementation-class>
         </component>
     </project-components>
     <project-components>
         <component>
-            <implementation-class>org.twodividedbyzero.idea.findbugs.gui.preferences.LegacyProjectSettingsConverter</implementation-class>
+            <implementation-class>org.jetbrains.plugins.spotbugs.gui.preferences.LegacyProjectSettingsConverter</implementation-class>
         </component>
     </project-components>
     <project-components>
         <component>
-            <implementation-class>org.twodividedbyzero.idea.findbugs.core.ProblemCache</implementation-class>
+            <implementation-class>org.jetbrains.plugins.spotbugs.core.ProblemCache</implementation-class>
         </component>
     </project-components>
 
@@ -173,7 +173,7 @@
         </group>
 
         <action id="SpotBugs.SelectedFilesAction"
-                class="org.twodividedbyzero.idea.findbugs.actions.AnalyzeSelectedFiles"
+                class="org.jetbrains.plugins.spotbugs.actions.AnalyzeSelectedFiles"
                 text="Analyze Selected File(S)"
                 description="Run SpotBugs analysis on the current selected file(s) in the project view."
                 icon="PluginIcons.ANALYZE_SELECTED_FILE_ICON">
@@ -188,7 +188,7 @@
             <!--<add-to-group group-id="SpotBugsEditorPopup" anchor="last"/>-->
 
             <action id="SpotBugs.CurrentFileAction"
-                    class="org.twodividedbyzero.idea.findbugs.actions.AnalyzeCurrentEditorFile"
+                    class="org.jetbrains.plugins.spotbugs.actions.AnalyzeCurrentEditorFile"
                     text="Analyze Current File"
                     description="Run SpotBugs analysis on the current editor file."
                     icon="PluginIcons.ANALYZE_SELECTED_FILE_ICON">
@@ -202,7 +202,7 @@
             </action>
 
             <action id="SpotBugs.ClassUnderCursorAction"
-                    class="org.twodividedbyzero.idea.findbugs.actions.AnalyzeClassUnderCursor"
+                    class="org.jetbrains.plugins.spotbugs.actions.AnalyzeClassUnderCursor"
                     text="Analyze Class (Non-Anonymous) Under Cursor"
                     description="Run SpotBugs analysis on the class (non-anonymous) under the editor cursor."
                     icon="PluginIcons.ANALYZE_CLASS_UNDER_CURSOR_ICON">
@@ -216,7 +216,7 @@
             </action>
 
             <action id="SpotBugs.AnalysePackage"
-                    class="org.twodividedbyzero.idea.findbugs.actions.AnalyzePackageFiles"
+                    class="org.jetbrains.plugins.spotbugs.actions.AnalyzePackageFiles"
                     text="Analyze Package(S) Files"
                     description="Run SpotBugs analysis on files off the selected package(s)."
                     icon="PluginIcons.ANALYZE_PACKAGE_FILES_ICON">
@@ -228,7 +228,7 @@
             </action>
 
             <action id="SpotBugs.ModuleFilesNotIncludingTestsAction"
-                    class="org.twodividedbyzero.idea.findbugs.actions.AnalyzeModuleFilesNotIncludingTests"
+                    class="org.jetbrains.plugins.spotbugs.actions.AnalyzeModuleFilesNotIncludingTests"
                     text="Analyze Module Files Not Including Test Sources"
                     description="Run SpotBugs analysis on all module files not including test sources."
                     icon="PluginIcons.ANALYZE_MODULE_FILES_NOT_INCLUDING_TESTS_ICON">
@@ -240,7 +240,7 @@
             </action>
 
             <action id="SpotBugs.ModuleFilesIncludingTestsAction"
-                    class="org.twodividedbyzero.idea.findbugs.actions.AnalyzeModuleFilesIncludingTests"
+                    class="org.jetbrains.plugins.spotbugs.actions.AnalyzeModuleFilesIncludingTests"
                     text="Analyze Module Files Including Test Sources"
                     description="Run SpotBugs analysis on all module files including test sources."
                     icon="PluginIcons.ANALYZE_MODULE_FILES_INCLUDING_TESTS_ICON">
@@ -252,7 +252,7 @@
             </action>
 
             <action id="SpotBugs.ProjectFilesNotIncludingTestsAction"
-                    class="org.twodividedbyzero.idea.findbugs.actions.AnalyzeProjectFilesNotIncludingTests"
+                    class="org.jetbrains.plugins.spotbugs.actions.AnalyzeProjectFilesNotIncludingTests"
                     text="Analyze Project Files Not Including Test Sources."
                     description="Run SpotBugs analysis on all project files not including test sources."
                     icon="PluginIcons.ANALYZE_PROJECT_FILES_NOT_INCLUDING_TESTS_ICON">
@@ -264,7 +264,7 @@
             </action>
 
             <action id="SpotBugs.ProjectFilesIncludingTestsAction"
-                    class="org.twodividedbyzero.idea.findbugs.actions.AnalyzeProjectFilesIncludingTests"
+                    class="org.jetbrains.plugins.spotbugs.actions.AnalyzeProjectFilesIncludingTests"
                     text="Analyze Project Files Including Test Sources."
                     description="Run SpotBugs analysis on all project files including test sources."
                     icon="PluginIcons.ANALYZE_PROJECT_FILES_INCLUDING_TESTS_ICON">
@@ -276,7 +276,7 @@
             </action>
 
             <action id="SpotBugs.AnalyseScope"
-                    class="org.twodividedbyzero.idea.findbugs.actions.AnalyzeScopeFiles"
+                    class="org.jetbrains.plugins.spotbugs.actions.AnalyzeScopeFiles"
                     text="Analyze Scope Files"
                     description="Run SpotBugs analysis on files of the specified scope."
                     icon="PluginIcons.ANALYZE_SCOPE_FILES_ICON">
@@ -286,7 +286,7 @@
             </action>
 
             <action id="SpotBugs.DefaultChangeListAction"
-                    class="org.twodividedbyzero.idea.findbugs.actions.AnalyzeAllModifiedFiles"
+                    class="org.jetbrains.plugins.spotbugs.actions.AnalyzeAllModifiedFiles"
                     text="Analyze All Modified Files"
                     description="Run SpotBugs analysis on all modified files. (Changelists)"
                     icon="PluginIcons.ANALYZE_ALL_MODIFIED_FILES_ICON">
@@ -300,7 +300,7 @@
             </action>
 
             <action id="SpotBugs.ActiveChangeListAction"
-                    class="org.twodividedbyzero.idea.findbugs.actions.AnalyzeChangelistFiles"
+                    class="org.jetbrains.plugins.spotbugs.actions.AnalyzeChangelistFiles"
                     text="Analyze Changelist Files"
                     description="Run SpotBugs analysis on selected changelist(s)."
                     icon="PluginIcons.ANALYZE_CHANGELIST_FILES_ICON">
@@ -317,19 +317,19 @@
             <separator/>
 
             <action id="SpotBugs.StopAction"
-                    class="org.twodividedbyzero.idea.findbugs.actions.StopAction"
+                    class="org.jetbrains.plugins.spotbugs.actions.StopAction"
                     text="Stop the Analysis Run"
                     description="Stop the currently running analysis."
                     icon="/actions/suspend.png"/>
 
             <action id="SpotBugs.CloseAction"
-                    class="org.twodividedbyzero.idea.findbugs.actions.ClearAndCloseToolWindow"
+                    class="org.jetbrains.plugins.spotbugs.actions.ClearAndCloseToolWindow"
                     text="Clear and Close SpotBugs Tool Window"
                     description="Clear and close the spotBugs tool window panel."
                     icon="/actions/cancel.png"/>
 
             <action id="SpotBugs.HelpAction"
-                    class="org.twodividedbyzero.idea.findbugs.actions.HelpAction"
+                    class="org.jetbrains.plugins.spotbugs.actions.HelpAction"
                     text="SpotBugs-IDEA Help"
                     description="Show the SpotBugs-IDEA plugin help."
                     icon="/actions/help.png"/>
@@ -338,7 +338,7 @@
 
 
         <action id="SpotBugs.ChangesViewToolbar.ActiveChangeListAction"
-                class="org.twodividedbyzero.idea.findbugs.actions.AnalyzeChangelistFiles"
+                class="org.jetbrains.plugins.spotbugs.actions.AnalyzeChangelistFiles"
                 text="SpotBugs - Analyze Changelist Files"
                 description="Run SpotBugs analysis on selected changelist(s)."
                 icon="PluginIcons.ANALYZE_SELECTED_FILE_ICON">
@@ -352,39 +352,39 @@
         <group id="SpotBugs.ToolBarActions.right" text="SpotBugsSubGroup" popup="true">
 
             <action id="SpotBugs.GroupByBugCategory"
-                    class="org.twodividedbyzero.idea.findbugs.actions.GroupByBugCategory"
+                    class="org.jetbrains.plugins.spotbugs.actions.GroupByBugCategory"
                     text="Group by Bug Category"
                     description="Group by bug category."
                     icon="PluginIcons.GROUP_BY_CATEGORY_ICON"/>
 
             <action id="SpotBugs.GroupByClass"
-                    class="org.twodividedbyzero.idea.findbugs.actions.GroupByClass"
+                    class="org.jetbrains.plugins.spotbugs.actions.GroupByClass"
                     text="Group by Class"
                     description="Group by class."
                     icon="PluginIcons.GROUP_BY_CLASS_ICON"/>
 
             <action id="SpotBugs.GroupByPackage"
-                    class="org.twodividedbyzero.idea.findbugs.actions.GroupByPackage"
+                    class="org.jetbrains.plugins.spotbugs.actions.GroupByPackage"
                     text="Group by Package"
                     description="Group by package."
                     icon="PluginIcons.GROUP_BY_PACKAGE_ICON"/>
 <!--
 
             <action id="SpotBugs.GroupByPriority"
-                    class="org.twodividedbyzero.idea.findbugs.actions.GroupByPriority"
+                    class="org.jetbrains.plugins.spotbugs.actions.GroupByPriority"
                     text="Group by priority"
                     description="Group by priority."
-                    icon="/org/twodividedbyzero/idea/findbugs/resources/icons/actions/groupByPriority.png"/>
+                    icon="/org/jetbrains/plugins/spotbugs/resources/icons/actions/groupByPriority.png"/>
 -->
 
             <action id="SpotBugs.GroupByRank"
-                    class="org.twodividedbyzero.idea.findbugs.actions.GroupByRank"
+                    class="org.jetbrains.plugins.spotbugs.actions.GroupByRank"
                     text="Group by Bug Rank"
                     description="Group by bug rank."
                     icon="PluginIcons.GROUP_BY_PRIORITY_ICON"/>
 
             <!-- <action id="SpotBugs.GroupByFilter"
-               class="org.twodividedbyzero.idea.findbugs.actions.GroupByFilter"
+               class="org.jetbrains.plugins.spotbugs.actions.GroupByFilter"
                text="Filter/Group bugs"
                description="Filter bugs."
                popup="true"
@@ -393,13 +393,13 @@
         <group id="SpotBugs.ToolBarActions.navigation" text="SpotBugsSubGroup" popup="true">
 
             <action id="SpotBugs.ScrollToSourceAction"
-                    class="org.twodividedbyzero.idea.findbugs.actions.ScrollToSource"
+                    class="org.jetbrains.plugins.spotbugs.actions.ScrollToSource"
                     text="Autoscroll to Source"
                     description="Autoscroll to the source location of possible bugs."
                     icon="/general/autoscrollToSource.png"/>
 
             <action id="SpotBugs.PreviewSelectBugInstance"
-                    class="org.twodividedbyzero.idea.findbugs.actions.PreviewSelectBugInstance"
+                    class="org.jetbrains.plugins.spotbugs.actions.PreviewSelectBugInstance"
                     text="Preview the Current Selected Bug."
                     description="Preview the current selected bug."
                     icon="/actions/preview.png">
@@ -409,7 +409,7 @@
             </action>
 
             <action id="SpotBugs.ShowQuickSearch"
-                    class="org.twodividedbyzero.idea.findbugs.actions.ShowQuickSearch"
+                    class="org.jetbrains.plugins.spotbugs.actions.ShowQuickSearch"
                     text="Find a Matching String in the Current Analysis Results."
                     description="Find a matching string in the current analysis results."
                     icon="/actions/find.png">
@@ -418,37 +418,37 @@
              </action>
 
             <action id="SpotBugs.ExpandAllAction"
-                    class="org.twodividedbyzero.idea.findbugs.actions.ExpandAll"
+                    class="org.jetbrains.plugins.spotbugs.actions.ExpandAll"
                     text="Expand All"
                     description="Expand all elements in the tool window."
                     icon="/actions/expandall.png"/>
 
             <action id="SpotBugs.CollapseAllAction"
-                    class="org.twodividedbyzero.idea.findbugs.actions.CollapseAll"
+                    class="org.jetbrains.plugins.spotbugs.actions.CollapseAll"
                     text="Collapse All"
                     description="Collapse all elements in the tool window"
                     icon="/actions/collapseall.png"/>
 
             <!--<action id="SpotBugs.TreePreviousOccurence"
-					class="org.twodividedbyzero.idea.findbugs.actions.TreePreviousOccurence"
+					class="org.jetbrains.plugins.spotbugs.actions.TreePreviousOccurence"
 					text="Next Bug"
 					description="Navigate to the previous occurence"
-					icon="/org/twodividedbyzero/idea/findbugs/resources/icons/actions/moveUp.png">
+					icon="/org/jetbrains/plugins/spotbugs/resources/icons/actions/moveUp.png">
                 <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt UP"/>
             </action>
 
             <action id="SpotBugs.TreeNextOccurence"
-					class="org.twodividedbyzero.idea.findbugs.actions.TreeNextOccurence"
+					class="org.jetbrains.plugins.spotbugs.actions.TreeNextOccurence"
 					text="Previous Bug"
 					description="Navigate to the next oocurence"
-					icon="/org/twodividedbyzero/idea/findbugs/resources/icons/actions/moveDown.png">
+					icon="/org/jetbrains/plugins/spotbugs/resources/icons/actions/moveDown.png">
                 <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt DOWN"/>
             </action>-->
 
             <separator/>
 
             <action id="SpotBugs.Preferences"
-                    class="org.twodividedbyzero.idea.findbugs.actions.ShowPreferencesPage"
+                    class="org.jetbrains.plugins.spotbugs.actions.ShowPreferencesPage"
                     text="Plugin Preferences"
                     description="SpotBugs plugin preferences page."
                     icon="/general/ideOptions.png"/>
@@ -458,13 +458,13 @@
         <group id="SpotBugs.ToolBarActions.utils" text="SpotBugsSubGroup" popup="true">
 
             <action id="SpotBugs.ExportBugCollection"
-                    class="org.twodividedbyzero.idea.findbugs.actions.ExportBugCollection"
+                    class="org.jetbrains.plugins.spotbugs.actions.ExportBugCollection"
                     text="Export Bug Collection to XML/HTML"
                     description="SpotBugs plugin Export to XML/HTML."
                     icon="/actions/export.png"/>
 
             <action id="SpotBugs.ImportBugCollection"
-                    class="org.twodividedbyzero.idea.findbugs.actions.ImportBugCollection"
+                    class="org.jetbrains.plugins.spotbugs.actions.ImportBugCollection"
                     text="Import Previous Saved Bug Collection"
                     description="SpotBugs plugin import previous saved bug collection."
                     icon="/actions/install.png"/>
@@ -474,7 +474,7 @@
 
         <group id="SpotBugs.GutterPopup.group" text="SpotBugsSubGroup" popup="true">
             <action id="SpotBugs.GutterPoup"
-                    class="org.twodividedbyzero.idea.findbugs.actions.ShowPreferencesPage"
+                    class="org.jetbrains.plugins.spotbugs.actions.ShowPreferencesPage"
                     text="Plugin Preferences"
                     description="SpotBugs plugin preferences page."
                     icon="/general/ideOptions.png"/>

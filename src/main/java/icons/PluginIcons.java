@@ -23,7 +23,7 @@ package icons;
 import com.intellij.icons.AllIcons;
 import com.intellij.ui.LayeredIcon;
 import com.intellij.util.IconUtil;
-import org.twodividedbyzero.idea.findbugs.resources.ResourcesLoader;
+import org.jetbrains.plugins.spotbugs.resources.ResourcesLoader;
 
 import javax.swing.*;
 import java.util.Map;
