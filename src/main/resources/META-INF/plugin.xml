@@ -17,8 +17,7 @@
   ~ along with SpotBugs-IDEA.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<!DOCTYPE idea-plugin PUBLIC "Plugin/DTD" "http://plugins.intellij.net/plugin.dtd">
-<idea-plugin url="http://andrepdo.github.io/findbugs-idea">
+<idea-plugin url="https://github.com/JetBrains/spotbugs-intellij-plugin">
     <name>SpotBugs-IDEA</name>
     <description>
         <![CDATA[
@@ -44,9 +43,9 @@
 		SpotBugs-IDEA plugin features:
 		<ul>
             <li>SpotBugs 3 support</li>
-            <li>Quickfix: annotate, suppress spotbugs patterns (GutterIcon and document markup (alt+enter))</li>
-            <li>idea 13.0 until the latest 15 EAP compatibility</li>
-            <li>configure findbugs on idea project and module level</li>
+            <li>quickfix: annotate, suppress spotbugs patterns (GutterIcon and document markup (alt+enter))</li>
+            <li>IntelliJ IDEA 2019.3+ compatibility</li>
+            <li>configure SpotBugs on idea project and module level</li>
             <li>jump to source from results shown in toolwindow including anonymous classes</li>
             <li>bug descriptions, solutions</li>
             <li>run analysis always in background</li>
@@ -94,19 +93,18 @@
     </change-notes>
     <id>SpotBugs-IDEA</id>
     <version>@VERSION@</version>
-    <vendor email="see@https://github.com/andrepdo" url="https://github.com/andrepdo">Andre Pfeiler
+    <vendor email="tagir.valeev@jetbrains.com" url="https://github.com/amaembo">Tagir Valeev
     </vendor>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html
          -->
-    <idea-version since-build="143"/>
+    <idea-version since-build="193"/>
 
     <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
          on how to target different products -->
     <depends>com.intellij.modules.lang</depends>
     <depends>com.intellij.modules.java</depends>
 
-    <!--<helpset file="your-help.jar" path="path-to-helpset.hs"/>-->
     <resource-bundle>org.twodividedbyzero.idea.findbugs.resources.i18n.Messages</resource-bundle>
     <extensions defaultExtensionNs="com.intellij">
         <toolWindow anchor="bottom" id="SpotBugs-IDEA" icon="PluginIcons.FINDBUGS_ICON_13X13"
