@@ -291,7 +291,6 @@
                     description="Run SpotBugs analysis on all modified files. (Changelists)"
                     icon="PluginIcons.ANALYZE_ALL_MODIFIED_FILES_ICON">
 
-                <!--<add-to-group group-id="EditorPopupMenu" anchor="last"/>-->
                 <add-to-group group-id="SpotBugs.EditorPopup" anchor="last"/>
                 <add-to-group group-id="SpotBugs.ProjectViewPopupMenu" anchor="last"/>
                 <add-to-group group-id="SpotBugs.AnalyzeMenu" anchor="last"/>
@@ -320,19 +319,19 @@
                     class="org.jetbrains.plugins.spotbugs.actions.StopAction"
                     text="Stop the Analysis Run"
                     description="Stop the currently running analysis."
-                    icon="/actions/suspend.png"/>
+                    icon="AllIcons.Actions.Suspend"/>
 
             <action id="SpotBugs.CloseAction"
                     class="org.jetbrains.plugins.spotbugs.actions.ClearAndCloseToolWindow"
                     text="Clear and Close SpotBugs Tool Window"
-                    description="Clear and close the spotBugs tool window panel."
-                    icon="/actions/cancel.png"/>
+                    description="Clear and close the SpotBugs tool window panel."
+                    icon="AllIcons.Actions.Cancel"/>
 
             <action id="SpotBugs.HelpAction"
                     class="org.jetbrains.plugins.spotbugs.actions.HelpAction"
                     text="SpotBugs-IDEA Help"
-                    description="Show the SpotBugs-IDEA plugin help."
-                    icon="/actions/help.png"/>
+                    description="Show the IntelliJ SpotBugs plugin help."
+                    icon="AllIcons.Actions.Help"/>
 
         </group>
 
@@ -396,13 +395,13 @@
                     class="org.jetbrains.plugins.spotbugs.actions.ScrollToSource"
                     text="Autoscroll to Source"
                     description="Autoscroll to the source location of possible bugs."
-                    icon="/general/autoscrollToSource.png"/>
+                    icon="AllIcons.General.AutoscrollToSource"/>
 
             <action id="SpotBugs.PreviewSelectBugInstance"
                     class="org.jetbrains.plugins.spotbugs.actions.PreviewSelectBugInstance"
                     text="Preview the Current Selected Bug."
                     description="Preview the current selected bug."
-                    icon="/actions/preview.png">
+                    icon="AllIcons.Actions.Preview">
 
                 <keyboard-shortcut keymap="$default" first-keystroke="alt Q"/>
                 <mouse-shortcut keymap="$default" keystroke="alt button1"/>
@@ -412,7 +411,7 @@
                     class="org.jetbrains.plugins.spotbugs.actions.ShowQuickSearch"
                     text="Find a Matching String in the Current Analysis Results."
                     description="Find a matching string in the current analysis results."
-                    icon="/actions/find.png">
+                    icon="AllIcons.Actions.Find">
 
                 <keyboard-shortcut keymap="$default" first-keystroke="ctrl F"/>
              </action>
@@ -421,13 +420,13 @@
                     class="org.jetbrains.plugins.spotbugs.actions.ExpandAll"
                     text="Expand All"
                     description="Expand all elements in the tool window."
-                    icon="/actions/expandall.png"/>
+                    icon="AllIcons.Actions.Expandall"/>
 
             <action id="SpotBugs.CollapseAllAction"
                     class="org.jetbrains.plugins.spotbugs.actions.CollapseAll"
                     text="Collapse All"
                     description="Collapse all elements in the tool window"
-                    icon="/actions/collapseall.png"/>
+                    icon="AllIcons.Actions.Collapseall"/>
 
             <!--<action id="SpotBugs.TreePreviousOccurence"
 					class="org.jetbrains.plugins.spotbugs.actions.TreePreviousOccurence"
@@ -451,7 +450,7 @@
                     class="org.jetbrains.plugins.spotbugs.actions.ShowPreferencesPage"
                     text="Plugin Preferences"
                     description="SpotBugs plugin preferences page."
-                    icon="/general/ideOptions.png"/>
+                    icon="AllIcons.General.Settings"/>
 
         </group>
 
@@ -461,13 +460,13 @@
                     class="org.jetbrains.plugins.spotbugs.actions.ExportBugCollection"
                     text="Export Bug Collection to XML/HTML"
                     description="SpotBugs plugin Export to XML/HTML."
-                    icon="/actions/export.png"/>
+                    icon="AllIcons.ToolbarDecorator.Export"/>
 
             <action id="SpotBugs.ImportBugCollection"
                     class="org.jetbrains.plugins.spotbugs.actions.ImportBugCollection"
                     text="Import Previous Saved Bug Collection"
                     description="SpotBugs plugin import previous saved bug collection."
-                    icon="/actions/install.png"/>
+                    icon="AllIcons.ToolbarDecorator.Import"/>
 
         </group>
 
@@ -477,7 +476,7 @@
                     class="org.jetbrains.plugins.spotbugs.actions.ShowPreferencesPage"
                     text="Plugin Preferences"
                     description="SpotBugs plugin preferences page."
-                    icon="/general/ideOptions.png"/>
+                    icon="AllIcons.General.Settings"/>
         </group>
 
     </actions>
