@@ -105,7 +105,7 @@
 
     <resource-bundle>org.jetbrains.plugins.spotbugs.resources.i18n.Messages</resource-bundle>
     <extensions defaultExtensionNs="com.intellij">
-        <toolWindow anchor="bottom" id="SpotBugs-IDEA" icon="PluginIcons.FINDBUGS_ICON_13X13"
+        <toolWindow anchor="bottom" id="SpotBugs" icon="PluginIcons.FINDBUGS_ICON_13X13"
                     factoryClass="org.jetbrains.plugins.spotbugs.core.ToolWindowFactoryImpl"/>
 
         <projectService serviceImplementation="org.jetbrains.plugins.spotbugs.core.WorkspaceSettings"/>

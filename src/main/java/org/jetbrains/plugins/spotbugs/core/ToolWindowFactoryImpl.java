@@ -29,7 +29,7 @@ import org.jetbrains.plugins.spotbugs.gui.toolwindow.view.ToolWindowPanel;
 public final class ToolWindowFactoryImpl implements ToolWindowFactory {
 	@Override
 	public void createToolWindowContent(@NotNull final Project project, @NotNull final ToolWindow toolWindow) {
-		final ToolWindowPanel win = new ToolWindowPanel(project, toolWindow);
+		final ToolWindowPanel win = new ToolWindowPanel(project);
 		toolWindow.getContentManager().addContent(ContentFactory.SERVICE.getInstance().createContent(win, "", false));
 	}
 }

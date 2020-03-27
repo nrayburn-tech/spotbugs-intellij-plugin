@@ -127,7 +127,7 @@ public class MultiSplitLayout implements LayoutManager {
 
 
 	private void firePCS(final String propertyName, final Object oldValue, final Object newValue) {
-		if (!(oldValue != null && newValue != null && oldValue.equals(newValue))) {
+		if (!(oldValue != null && oldValue.equals(newValue))) {
 			pcs.firePropertyChange(propertyName, oldValue, newValue);
 		}
 	}

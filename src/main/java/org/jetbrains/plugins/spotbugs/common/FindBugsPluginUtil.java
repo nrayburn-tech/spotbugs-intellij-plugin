@@ -31,9 +31,9 @@ public class FindBugsPluginUtil {
 
 	@NotNull
 	public static IdeaPluginDescriptor getIdeaPluginDescriptor() {
-		final IdeaPluginDescriptor plugin = PluginManager.getPlugin(PluginId.getId(FindBugsPluginConstants.PLUGIN_NAME));
+		final IdeaPluginDescriptor plugin = PluginManager.getPlugin(PluginId.getId(FindBugsPluginConstants.PLUGIN_ID));
 		if (plugin == null) {
-			throw new IllegalStateException(FindBugsPluginConstants.PLUGIN_NAME + " could not be instantiated! PluginManager returned null!");
+			throw new IllegalStateException(FindBugsPluginConstants.PLUGIN_ID + " could not be instantiated! PluginManager returned null!");
 		}
 		return plugin;
 	}

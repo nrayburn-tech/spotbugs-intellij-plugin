@@ -52,7 +52,6 @@ import java.util.Properties;
 public final class HelpAction extends AbstractAction {
 	// TODO: fill proper values
 	private static final String DOWNLOADS_WEBSITE = "www.google.com";
-	private static final String SUPPORT_EMAIL = "s@s.com";
 
 	private static final String A_HREF_COPY = "#copy";
 
@@ -108,15 +107,13 @@ public final class HelpAction extends AbstractAction {
 		ret.append("<br>");
 		ret.append("Download: <a href='").append(VersionManager.getDownloadWebsite()).append("'>").append(VersionManager.getDownloadWebsite()).append("</a>");
 		ret.append("<br>");
-		ret.append("Email: ").append(VersionManager.getSupportEmail());
+		ret.append("Issue tracker: ").append(VersionManager.getIssueTracker());
 		ret.append("</p>");
 		ret.append("<p>");
 		ret.append("<h3>Findbugs ").append(FindBugsUtil.getFindBugsFullVersion()).append("</h3>");
 		ret.append("Website: <a href='").append(Version.WEBSITE).append("'>").append(Version.WEBSITE).append("</a>");
 		ret.append("<br>");
 		ret.append("Download: <a href='").append(DOWNLOADS_WEBSITE).append("'>").append(DOWNLOADS_WEBSITE).append("</a>");
-		ret.append("<br>");
-		ret.append("Email: ").append(SUPPORT_EMAIL);
 		ret.append("</p>");
 		ret.append("<p>");
 		ret.append("The name FindBugs&trade; and the FindBugs logo are trademarked by The University of Maryland.");

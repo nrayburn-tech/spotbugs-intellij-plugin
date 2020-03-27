@@ -22,63 +22,31 @@ package org.jetbrains.plugins.spotbugs.gui.toolwindow.view;
 import com.intellij.CommonBundle;
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
 import com.intellij.diagnostic.IdeMessagePanel;
-import com.intellij.notification.Notification;
-import com.intellij.notification.NotificationDisplayType;
-import com.intellij.notification.NotificationGroup;
-import com.intellij.notification.NotificationListener;
-import com.intellij.notification.NotificationType;
+import com.intellij.notification.*;
 import com.intellij.openapi.Disposable;
-import com.intellij.openapi.actionSystem.ActionGroup;
-import com.intellij.openapi.actionSystem.ActionManager;
-import com.intellij.openapi.actionSystem.ActionToolbar;
+import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.EditorFactory;
+import com.intellij.openapi.editor.*;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.DialogBuilder;
-import com.intellij.openapi.ui.Messages;
+import com.intellij.openapi.ui.*;
 import com.intellij.openapi.util.Disposer;
-import com.intellij.openapi.wm.StatusBar;
-import com.intellij.openapi.wm.StatusBarWidget;
-import com.intellij.openapi.wm.ToolWindow;
-import com.intellij.openapi.wm.ToolWindowManager;
-import com.intellij.openapi.wm.WindowManager;
+import com.intellij.openapi.wm.*;
 import com.intellij.psi.PsiFile;
-import com.intellij.ui.content.Content;
-import com.intellij.ui.content.ContentManager;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.plugins.spotbugs.common.EventDispatchThreadHelper;
-import org.jetbrains.plugins.spotbugs.common.ExtendedProblemDescriptor;
-import org.jetbrains.plugins.spotbugs.common.FindBugsPluginConstants;
-import org.jetbrains.plugins.spotbugs.common.VersionManager;
+import com.intellij.ui.content.*;
+import com.intellij.util.ui.JBUI;
+import org.jetbrains.annotations.*;
+import org.jetbrains.plugins.spotbugs.common.*;
 import org.jetbrains.plugins.spotbugs.common.util.FindBugsUtil;
-import org.jetbrains.plugins.spotbugs.core.Bug;
 import org.jetbrains.plugins.spotbugs.core.FindBugsResult;
-import org.jetbrains.plugins.spotbugs.gui.common.ActionToolbarContainer;
-import org.jetbrains.plugins.spotbugs.gui.common.AnalysisRunDetailsDialog;
-import org.jetbrains.plugins.spotbugs.gui.common.BalloonTipFactory;
-import org.jetbrains.plugins.spotbugs.gui.common.MultiSplitLayout;
-import org.jetbrains.plugins.spotbugs.gui.common.MultiSplitPane;
-import org.jetbrains.plugins.spotbugs.gui.common.NDockLayout;
-import org.jetbrains.plugins.spotbugs.gui.common.NotificationUtil;
-import org.jetbrains.plugins.spotbugs.messages.AnalysisStateListener;
-import org.jetbrains.plugins.spotbugs.messages.ClearListener;
-import org.jetbrains.plugins.spotbugs.messages.MessageBusManager;
-import org.jetbrains.plugins.spotbugs.messages.NewBugListener;
+import org.jetbrains.plugins.spotbugs.gui.common.*;
+import org.jetbrains.plugins.spotbugs.messages.*;
 
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
-import javax.swing.border.EmptyBorder;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
-import java.awt.Component;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
+import javax.swing.*;
+import javax.swing.event.*;
+import java.awt.*;
+import java.awt.event.*;
 import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @SuppressWarnings({"HardCodedStringLiteral", "AnonymousInnerClass", "AnonymousInnerClassMayBeStatic"})
 @edu.umd.cs.findbugs.annotations.SuppressFBWarnings({"SE_BAD_FIELD"})
@@ -111,34 +79,26 @@ public final class ToolWindowPanel extends JPanel implements AnalysisStateListen
 	private boolean _previewEnabled;
 	private boolean _isPreviewLayoutEnabled;
 	private transient PreviewPanel _previewPanel;
-	private final transient ToolWindow _parent;
 	private FindBugsResult result;
 
-	public ToolWindowPanel(@NotNull final Project project, final ToolWindow parent) {
+	public ToolWindowPanel(@NotNull final Project project) {
 		_project = project;
-		_parent = parent;
 		installListeners();
 		initGui();
 		MessageBusManager.subscribeAnalysisState(project, this, this);
-		MessageBusManager.subscribe(project, this, ClearListener.TOPIC, new ClearListener() {
-			@Override
-			public void clear() {
-				ToolWindowPanel.this.clear();
-				DaemonCodeAnalyzer.getInstance(_project).restart();
-			}
+		MessageBusManager.subscribe(project, this, ClearListener.TOPIC, () -> {
+			ToolWindowPanel.this.clear();
+			DaemonCodeAnalyzer.getInstance(_project).restart();
 		});
-		MessageBusManager.subscribe(project, this, NewBugListener.TOPIC, new NewBugListener() {
-			@Override
-			public void newBug(@NotNull final Bug bug, final int analyzedClassCount) {
-				_bugTreePanel.addNode(bug);
-				_bugTreePanel.updateRootNode(analyzedClassCount);
-			}
+		MessageBusManager.subscribe(project, this, NewBugListener.TOPIC, (bug, analyzedClassCount) -> {
+			_bugTreePanel.addNode(bug);
+			_bugTreePanel.updateRootNode(analyzedClassCount);
 		});
 	}
 
 	private void initGui() {
 		setLayout(new NDockLayout());
-		setBorder(new EmptyBorder(1, 1, 1, 1));
+		setBorder(JBUI.Borders.empty(1));
 
 		// Create the toolbars
 		//final DefaultActionGroup actionGroupLeft = new DefaultActionGroup();
@@ -183,7 +143,7 @@ public final class ToolWindowPanel extends JPanel implements AnalysisStateListen
 	private void _updateMultiSplitLayout(final String layoutDef) {
 		final MultiSplitLayout.Node modelRoot = MultiSplitLayout.parseModel(layoutDef);
 		final MultiSplitLayout multiSplitLayout = getMultiSplitPane().getMultiSplitLayout();
-		multiSplitLayout.setDividerSize(5);
+		multiSplitLayout.setDividerSize(3);
 		multiSplitLayout.setModel(modelRoot);
 		multiSplitLayout.setFloatingDividers(true);
 	}
@@ -303,15 +263,15 @@ public final class ToolWindowPanel extends JPanel implements AnalysisStateListen
 			notificationType = NotificationType.INFORMATION;
 			message.append("&nbsp;<a href='").append(A_HREF_MORE_ANCHOR).append("'>more...</a><br/>");
 		}
-		message.append("<font size='10px'>using ").append(VersionManager.getFullVersion()).append(" with Findbugs version ").append(FindBugsUtil.getFindBugsFullVersion()).append("</font><br/><br/>");
+		message.append("<font size='10px'>using ").append(VersionManager.getFullVersion()).append(" with SpotBugs version ").append(FindBugsUtil.getFindBugsFullVersion()).append("</font><br/><br/>");
 
 		if (error != null) {
 			final boolean findBugsError = FindBugsUtil.isFindBugsError(error);
 			final String impl;
 			if (findBugsError) {
-				impl = "FindBugs";
+				impl = "SpotBugs";
 			} else {
-				impl = "FindBugs-IDEA Plugin";
+				impl = FindBugsPluginConstants.PLUGIN_NAME;
 			}
 			String errorText = "An " + impl + " error occurred.";
 
@@ -536,8 +496,8 @@ public final class ToolWindowPanel extends JPanel implements AnalysisStateListen
 				final String desc = e.getDescription();
 				if (desc.equals(A_HREF_MORE_ANCHOR)) {
 					openAnalysisRunDetailsDialog();
-				} else if (desc.equals(A_HREF_ERROR_ANCHOR)) {
-					_ideMessagePanel.openFatals(null);
+				} else if (desc.equals(A_HREF_ERROR_ANCHOR) && _ideMessagePanel != null) {
+					_ideMessagePanel.openErrorsDialog(null);
 				}
 			}
 		}

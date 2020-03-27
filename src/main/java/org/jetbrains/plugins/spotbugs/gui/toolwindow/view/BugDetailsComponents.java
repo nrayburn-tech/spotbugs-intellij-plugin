@@ -22,57 +22,26 @@ package org.jetbrains.plugins.spotbugs.gui.toolwindow.view;
 import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.SystemInfo;
-import com.intellij.ui.JBColor;
 import com.intellij.ui.components.JBTabbedPane;
-import com.intellij.util.ui.UIUtil;
-import edu.umd.cs.findbugs.BugAnnotation;
-import edu.umd.cs.findbugs.BugInstance;
-import edu.umd.cs.findbugs.BugPattern;
-import edu.umd.cs.findbugs.DetectorFactory;
-import edu.umd.cs.findbugs.FieldAnnotation;
-import edu.umd.cs.findbugs.MethodAnnotation;
-import edu.umd.cs.findbugs.Plugin;
-import edu.umd.cs.findbugs.SortedBugCollection;
+import com.intellij.util.ui.*;
+import edu.umd.cs.findbugs.*;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import icons.PluginIcons;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.plugins.spotbugs.common.util.BugInstanceUtil;
-import org.jetbrains.plugins.spotbugs.gui.common.CustomLineBorder;
-import org.jetbrains.plugins.spotbugs.gui.common.MultiSplitLayout;
-import org.jetbrains.plugins.spotbugs.gui.common.MultiSplitPane;
-import org.jetbrains.plugins.spotbugs.gui.common.ScrollPaneFacade;
-import org.jetbrains.plugins.spotbugs.gui.common.VerticalTextIcon;
+import org.jetbrains.plugins.spotbugs.gui.common.*;
 import org.jetbrains.plugins.spotbugs.gui.tree.view.BugTree;
 import org.jetbrains.plugins.spotbugs.resources.GuiResources;
 
-import javax.swing.BorderFactory;
-import javax.swing.JEditorPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.border.EmptyBorder;
+import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
 import javax.swing.text.html.HTMLEditorKit;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.RenderingHints;
+import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.io.IOException;
-import java.io.StringReader;
+import java.io.*;
 import java.net.URL;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("MagicNumber")
 public final class BugDetailsComponents {
@@ -108,6 +77,7 @@ public final class BugDetailsComponents {
 				_jTabbedPane = new JTabbedPane(SwingConstants.RIGHT);
 			} else {
 				_jTabbedPane = new JBTabbedPane(SwingConstants.RIGHT);
+				((JBTabbedPane) _jTabbedPane).setTabComponentInsets(JBUI.insets(0, 0, 0, 5));
 			}
 
 			_jTabbedPane.setFocusable(false);
@@ -144,7 +114,7 @@ public final class BugDetailsComponents {
 			final String layoutDef = "(ROW weight=1.0 (COLUMN weight=1.0 top bottom))";
 			final MultiSplitLayout.Node modelRoot = MultiSplitLayout.parseModel(layoutDef);
 			final MultiSplitLayout multiSplitLayout = _bugDetailsSplitPane.getMultiSplitLayout();
-			multiSplitLayout.setDividerSize(6);
+			multiSplitLayout.setDividerSize(3);
 			multiSplitLayout.setModel(modelRoot);
 			multiSplitLayout.setFloatingDividers(true);
 			_bugDetailsSplitPane.add(getBugDetailsPanel(), "top");
@@ -155,17 +125,13 @@ public final class BugDetailsComponents {
 		return _bugDetailsSplitPane;
 	}
 
-	@SuppressWarnings("MagicNumber")
 	private JPanel getBugDetailsPanel() {
 		if (_bugDetailsPanel == null) {
 			final JScrollPane scrollPane = ScrollPaneFacade.createScrollPane(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 			scrollPane.setViewportView(getBugDetailsPane());
-			//scrollPane.setBorder(BorderFactory.createCompoundBorder(new EmptyBorder(0, 0, 0, 3), new CustomLineBorder(new Color(98, 95, 89), 0, 0, 1, 1)));
-			scrollPane.setBorder(new CustomLineBorder(new JBColor(new Color(98, 95, 89), new Color(53, 51, 48)), 0, 0, 1, 0));
-			//scrollPane.setBorder(new EmptyBorder(0, 0, 0, 0));
 
 			_bugDetailsPanel = new JPanel();
-			_bugDetailsPanel.setBorder(new EmptyBorder(3, 2, 0, 3));
+			_bugDetailsPanel.setBorder(JBUI.Borders.empty());
 			_bugDetailsPanel.setLayout(new BorderLayout());
 			_bugDetailsPanel.add(scrollPane, BorderLayout.CENTER);
 		}
@@ -176,16 +142,13 @@ public final class BugDetailsComponents {
 	private JEditorPane getBugDetailsPane() {
 		if (_bugDetailsPane == null) {
 			_bugDetailsPane = new BugDetailsEditorPane();
-			_bugDetailsPane.setBorder(new EmptyBorder(10, 10, 10, 10));
+			_bugDetailsPane.setBorder(JBUI.Borders.empty(5));
 			_bugDetailsPane.setEditable(false);
 			_bugDetailsPane.setContentType(UIUtil.HTML_MIME);
 			_bugDetailsPane.setEditorKit(_htmlEditorKit);
-			_bugDetailsPane.addHyperlinkListener(new HyperlinkListener() {
-				@Override
-				public void hyperlinkUpdate(final HyperlinkEvent evt) {
-					if (_parent != null) {
-						handleDetailsClick(evt);
-					}
+			_bugDetailsPane.addHyperlinkListener(evt -> {
+				if (_parent != null) {
+					handleDetailsClick(evt);
 				}
 			});
 		}
@@ -197,10 +160,10 @@ public final class BugDetailsComponents {
 		if (_explanationPanel == null) {
 			final JScrollPane scrollPane = ScrollPaneFacade.createScrollPane(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 			scrollPane.setViewportView(getExplanationPane());
-			scrollPane.setBorder(BorderFactory.createCompoundBorder(new CustomLineBorder(new JBColor(new Color(208, 206, 203), new Color(170, 168, 165)), 1, 0, 0, 0), new CustomLineBorder(new JBColor(new Color(98, 95, 89), new Color(71, 68, 62)), 1, 0, 0, 0)));
+			//scrollPane.setBorder(BorderFactory.createCompoundBorder(new CustomLineBorder(new JBColor(new Color(208, 206, 203), new Color(170, 168, 165)), 1, 0, 0, 0), new CustomLineBorder(new JBColor(new Color(98, 95, 89), new Color(71, 68, 62)), 1, 0, 0, 0)));
 
 			_explanationPanel = new JPanel();
-			_explanationPanel.setBorder(new EmptyBorder(0, 2, 0, 3));
+			_explanationPanel.setBorder(JBUI.Borders.empty());
 			_explanationPanel.setLayout(new BorderLayout());
 			_explanationPanel.add(scrollPane, BorderLayout.CENTER);
 		}
@@ -212,16 +175,11 @@ public final class BugDetailsComponents {
 	private JEditorPane getExplanationPane() {
 		if (_explanationPane == null) {
 			_explanationPane = new ExplanationEditorPane();
-			_explanationPane.setBorder(new EmptyBorder(10, 10, 10, 10));
+			_explanationPane.setBorder(JBUI.Borders.empty(10));
 			_explanationPane.setEditable(false);
 			_explanationPane.setContentType("text/html");
 			_explanationPane.setEditorKit(_htmlEditorKit);
-			_explanationPane.addHyperlinkListener(new HyperlinkListener() {
-				@Override
-				public void hyperlinkUpdate(final HyperlinkEvent evt) {
-					editorPaneHyperlinkUpdate(evt);
-				}
-			});
+			_explanationPane.addHyperlinkListener(this::editorPaneHyperlinkUpdate);
 		}
 
 		return _explanationPane;
@@ -389,27 +347,22 @@ public final class BugDetailsComponents {
 
 	private void refreshDetailsShown() {
 		final String html = BugInstanceUtil.getDetailHtml(_lastBugInstance);
-		final StringReader reader = new StringReader(html); // no need for BufferedReader
-		try {
-			_explanationPane.setToolTipText(edu.umd.cs.findbugs.L10N.getLocalString("tooltip.longer_description", "This gives a longer description of the detected bug pattern"));
+		// no need for BufferedReader
+		try (StringReader reader = new StringReader(html)) {
+			_explanationPane.setToolTipText(edu.umd.cs.findbugs.L10N
+					.getLocalString("tooltip.longer_description", "This gives a longer description of the detected bug " +
+																												"pattern"));
 			_explanationPane.read(reader, "html bug description");
 		} catch (final IOException e) {
 			_explanationPane.setText("Could not find bug description: " + e.getMessage());
 			LOGGER.warn(e.getMessage(), e);
-		} finally {
-			reader.close(); // polite, but doesn't do much in StringReader
 		}
 		scrollRectToVisible(_bugDetailsPane);
 	}
 
 	@SuppressWarnings({"AnonymousInnerClass"})
 	private static void scrollRectToVisible(final JEditorPane pane) {
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				pane.scrollRectToVisible(new Rectangle(0, 0, 0, 0));
-			}
-		});
+		SwingUtilities.invokeLater(() -> pane.scrollRectToVisible(new Rectangle(0, 0, 0, 0)));
 	}
 
 	void adaptSize(final int width, final int height) {
@@ -460,22 +413,9 @@ public final class BugDetailsComponents {
 	}
 
 	public static String createBugsAbbreviation(final DetectorFactory factory) {
-		final StringBuilder sb = new StringBuilder();
 		final Collection<BugPattern> patterns = factory.getReportedBugPatterns();
-		final HashSet<String> abbrs = new LinkedHashSet<String>();
-		for (final BugPattern pattern : patterns) {
-			final String abbr = pattern.getAbbrev();
-			abbrs.add(abbr);
-		}
-		//noinspection ForLoopWithMissingComponent
-		for (final Iterator<String> iter = abbrs.iterator(); iter.hasNext(); ) {
-			final String element = iter.next();
-			sb.append(element);
-			if (iter.hasNext()) {
-				sb.append('|');
-			}
-		}
-		return sb.toString();
+		return patterns.stream().map(BugPattern::getAbbrev)
+				.distinct().collect(Collectors.joining("|"));
 	}
 
 	private static class BugDetailsEditorPane extends JEditorPane {

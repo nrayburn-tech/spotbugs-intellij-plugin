@@ -25,7 +25,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.nio.charset.Charset;
+import java.nio.charset.*;
 
 
 /**
@@ -42,18 +42,15 @@ public class VersionManager {
 
 	private static final long _major = 1;
 	private static final long _minor = 0;
-	private static final long _build = 1;
-
-	private static final String _branch = "trunk";
-
+	private static final long _build = 0;
 
 	private static final String NAME = FindBugsPluginConstants.PLUGIN_NAME;
-
-	private static final String WEBSITE = "http://andrepdo.github.io/findbugs-idea";
+	
+	private static final String WEBSITE = "https://github.com/JetBrains/spotbugs-intellij-plugin/";
 
 	private static final String DOWNLOAD_WEBSITE = "http://plugins.intellij.net/plugin/?id=3847";
 
-	private static final String SUPPORT_EMAIL = "andre.pfeiler@gmail.com";
+	private static final String ISSUE_TRACKER = "https://github.com/JetBrains/spotbugs-intellij-plugin/issues";
 
 	private static final long REVISION;
 
@@ -74,20 +71,15 @@ public class VersionManager {
 			}
 		}
 		REVISION = parsedRevision;
-		//noinspection StringEqualsEmptyString,SingleCharacterStringConcatenation
 		FULL_VERSION = NAME + ' ' + MAJOR_MINOR_BUILD;
 	}
 
 
-	/** e.g. "0.9.21".
-	 * @return*/
+	/**
+	 * @return version number, e.g. "1.0.0"
+	 */
 	public static String getVersion() {
 		return MAJOR_MINOR_BUILD;
-	}
-
-
-	public static String getBranch() {
-		return _branch;
 	}
 
 
@@ -116,8 +108,8 @@ public class VersionManager {
 	}
 
 
-	public static String getSupportEmail() {
-		return SUPPORT_EMAIL;
+	public static String getIssueTracker() {
+		return ISSUE_TRACKER;
 	}
 
 
@@ -129,7 +121,7 @@ public class VersionManager {
 			OutputStreamWriter writer = null;
 			try {
 				//noinspection IOResourceOpenedButNotSafelyClosed
-				writer = new OutputStreamWriter(new FileOutputStream(file), Charset.forName("UTF-8").newEncoder());
+				writer = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
 				writer.write(getVersion());
 				writer.flush();
 			} catch (final IOException e) {
