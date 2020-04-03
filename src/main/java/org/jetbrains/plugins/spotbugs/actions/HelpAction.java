@@ -51,7 +51,7 @@ import java.util.Properties;
 
 public final class HelpAction extends AbstractAction {
 	// TODO: fill proper values
-	private static final String DOWNLOADS_WEBSITE = "www.google.com";
+	private static final String DOWNLOADS_WEBSITE = "https://spotbugs.readthedocs.io/en/stable/installing.html";
 
 	private static final String A_HREF_COPY = "#copy";
 
@@ -101,23 +101,17 @@ public final class HelpAction extends AbstractAction {
 	@NotNull
 	private static StringBuilder createHelpInfo() {
 		final StringBuilder ret = new StringBuilder();
-		ret.append("<p>");
 		ret.append("<h2>").append(VersionManager.getFullVersion()).append("</h2>");
 		ret.append("Website: <a href='").append(VersionManager.getWebsite()).append("'>").append(VersionManager.getWebsite()).append("</a>");
 		ret.append("<br>");
 		ret.append("Download: <a href='").append(VersionManager.getDownloadWebsite()).append("'>").append(VersionManager.getDownloadWebsite()).append("</a>");
 		ret.append("<br>");
-		ret.append("Issue tracker: ").append(VersionManager.getIssueTracker());
-		ret.append("</p>");
-		ret.append("<p>");
-		ret.append("<h3>Findbugs ").append(FindBugsUtil.getFindBugsFullVersion()).append("</h3>");
+		ret.append("Issue tracker: <a href='").append(VersionManager.getIssueTracker()).append("'>").append(VersionManager.getIssueTracker()).append("</a>");
+		ret.append("<h3>SpotBugs ").append(FindBugsUtil.getFindBugsFullVersion()).append("</h3>");
 		ret.append("Website: <a href='").append(Version.WEBSITE).append("'>").append(Version.WEBSITE).append("</a>");
 		ret.append("<br>");
 		ret.append("Download: <a href='").append(DOWNLOADS_WEBSITE).append("'>").append(DOWNLOADS_WEBSITE).append("</a>");
-		ret.append("</p>");
-		ret.append("<p>");
-		ret.append("The name FindBugs&trade; and the FindBugs logo are trademarked by The University of Maryland.");
-		ret.append("</p>");
+		ret.append("<br><br>");
 		ret.append("<p>");
 		ret.append("<a href='").append(A_HREF_COPY).append("'>").append(ResourcesLoader.getString("help.copyInfos")).append("</a>");
 		ret.append("</p>");
@@ -133,8 +127,8 @@ public final class HelpAction extends AbstractAction {
 
 		final StringBuilder ret = new StringBuilder("\n");
 		ret.append("Product Infos");
-		ret.append("\n    FindBugs: ").append(FindBugsUtil.getFindBugsFullVersion());
-		ret.append("\n    FindBugs-IDEA: ").append(VersionManager.getFullVersion());
+		ret.append("\n    SpotBugs: ").append(FindBugsUtil.getFindBugsFullVersion());
+		ret.append("\n    IntelliJ SpotBugs plugin: ").append(VersionManager.getVersion());
 
 		boolean ideaVersionAvailable = false;
 		try {
