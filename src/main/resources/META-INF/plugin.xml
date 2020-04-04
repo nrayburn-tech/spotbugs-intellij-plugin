@@ -40,7 +40,7 @@
 		<p>
 		IntelliJ SpotBugs plugin features:
 		<ul>
-            <li>SpotBugs 3 support</li>
+            <li>SpotBugs 4 support</li>
             <li>quickfix: annotate, suppress SpotBugs patterns (GutterIcon and document markup (alt+enter))</li>
             <li>IntelliJ IDEA 2019.3+ compatibility</li>
             <li>configure SpotBugs on idea project and module level</li>
