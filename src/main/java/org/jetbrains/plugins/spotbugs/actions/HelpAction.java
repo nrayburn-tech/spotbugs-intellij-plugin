@@ -24,15 +24,9 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.application.ex.ApplicationInfoEx;
 import com.intellij.openapi.ide.CopyPasteManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.MessageType;
-import com.intellij.openapi.ui.popup.Balloon;
-import com.intellij.openapi.ui.popup.BalloonBuilder;
-import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.wm.ToolWindow;
-import com.intellij.ui.awt.RelativePoint;
 import com.intellij.util.text.DateFormatUtil;
 import edu.umd.cs.findbugs.Version;
-import icons.PluginIcons;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.plugins.spotbugs.common.VersionManager;
@@ -42,8 +36,6 @@ import org.jetbrains.plugins.spotbugs.gui.common.BalloonTipFactory;
 import org.jetbrains.plugins.spotbugs.resources.ResourcesLoader;
 
 import javax.swing.event.HyperlinkEvent;
-import java.awt.Component;
-import java.awt.Point;
 import java.awt.datatransfer.StringSelection;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -75,11 +67,11 @@ public final class HelpAction extends AbstractAction {
 			@NotNull final FindBugsState state
 	) {
 
-		final Component parent = e.getInputEvent().getComponent();
-		final BalloonBuilder builder = JBPopupFactory.getInstance().createHtmlTextBalloonBuilder(
+		toolWindow.setShowStripeButton(true);
+
+		BalloonTipFactory.showToolWindowInfoNotifier(
+				project,
 				createHelpInfo().toString(),
-				PluginIcons.FINDBUGS_ICON,
-				MessageType.INFO.getPopupBackground(),
 				evt -> {
 					if (HyperlinkEvent.EventType.ACTIVATED.equals(evt.getEventType())) {
 						if (A_HREF_COPY.equals(evt.getDescription())) {
@@ -91,10 +83,6 @@ public final class HelpAction extends AbstractAction {
 					}
 				}
 		);
-		builder.setHideOnClickOutside(true);
-		builder.setHideOnKeyOutside(true);
-		final Balloon balloon = builder.createBalloon();
-		balloon.show(new RelativePoint(parent, new Point(parent.getWidth() / 2, parent.getHeight() / 2)), BalloonTipFactory.Orientation.RIGHT.getOrientation());
 	}
 
 	@NonNls
