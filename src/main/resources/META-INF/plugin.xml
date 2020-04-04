@@ -23,14 +23,13 @@
     <name>SpotBugs</name>
     <description>
         <![CDATA[
-		The SpotBugs plugin for IntelliJ IDEA<br/>
-		Provides static byte code analysis to look for bugs in Java code from within IntelliJ IDEA.
-		SpotBugs is a defect detection tool for Java that uses static analysis to look for more than 200 bug patterns,
+		IntelliJ SpotBugs plugin provides static byte code analysis to look for bugs in Java code from within IntelliJ IDEA.
+		SpotBugs is a defect detection tool for Java that uses static analysis to look for more than 400 bug patterns,
 		such as null pointer dereferences, infinite recursive loops, bad uses of the Java libraries and deadlocks.
 		SpotBugs can identify hundreds of serious defects in large applications (typically about 1 defect per 1000-2000
 		lines of non-commenting source statements).
 		<p>
-		IntelliJ SpotBugs uses SpotBugs under the hood. For more information
+		The plugin uses SpotBugs under the hood. For more information
 		see <a href="https://github.com/spotbugs/spotbugs">https://github.com/spotbugs/spotbugs</a>.
 		</p>
 		<p>
