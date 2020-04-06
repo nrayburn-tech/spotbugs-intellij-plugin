@@ -20,42 +20,26 @@
 package org.jetbrains.plugins.spotbugs.gui.settings;
 
 import com.intellij.icons.AllIcons;
-import com.intellij.ide.actions.ShowFilePathAction;
+import com.intellij.ide.actions.RevealFileAction;
 import com.intellij.ide.highlighter.XmlFileType;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.DefaultActionGroup;
-import com.intellij.openapi.fileChooser.FileChooser;
-import com.intellij.openapi.fileChooser.FileChooserDescriptor;
-import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
-import com.intellij.openapi.fileChooser.FileChooserFactory;
-import com.intellij.openapi.fileChooser.FileSaverDescriptor;
+import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.fileChooser.*;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.openapi.project.DumbAware;
-import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.*;
 import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.JDOMUtil;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFileWrapper;
+import com.intellij.openapi.vfs.*;
 import com.intellij.util.xmlb.SmartSerializer;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.plugins.spotbugs.common.util.ErrorUtil;
-import org.jetbrains.plugins.spotbugs.common.util.IdeaUtilImpl;
-import org.jetbrains.plugins.spotbugs.common.util.IoUtil;
-import org.jetbrains.plugins.spotbugs.core.ProjectSettings;
-import org.jetbrains.plugins.spotbugs.core.WorkspaceSettings;
+import org.jdom.*;
+import org.jetbrains.annotations.*;
+import org.jetbrains.plugins.spotbugs.common.util.*;
+import org.jetbrains.plugins.spotbugs.core.*;
 import org.jetbrains.plugins.spotbugs.resources.ResourcesLoader;
 
-import javax.swing.Icon;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import javax.swing.*;
+import java.io.*;
 
 final class AdvancedSettingsAction extends DefaultActionGroup {
 
@@ -123,12 +107,8 @@ final class AdvancedSettingsAction extends DefaultActionGroup {
 			final FileChooserDescriptor descriptor = FileChooserDescriptorFactory.createSingleFileNoJarsDescriptor();
 			descriptor.setTitle(ResourcesLoader.getString("settings.choose.title"));
 			descriptor.setDescription(ResourcesLoader.getString("settings.choose.description"));
-			descriptor.withFileFilter(new Condition<VirtualFile>() {
-				@Override
-				public boolean value(final VirtualFile virtualFile) {
-					return XmlFileType.DEFAULT_EXTENSION.equalsIgnoreCase(virtualFile.getExtension());
-				}
-			});
+			descriptor.withFileFilter(
+					virtualFile -> XmlFileType.DEFAULT_EXTENSION.equalsIgnoreCase(virtualFile.getExtension()));
 
 			final VirtualFile file = FileChooser.chooseFile(descriptor, settingsPane, project, null);
 			if (file != null) {
@@ -198,7 +178,7 @@ final class AdvancedSettingsAction extends DefaultActionGroup {
 			try {
 				final File file = wrapper.getFile();
 				JDOMUtil.writeDocument(new Document(root), file, "\n");
-				ShowFilePathAction.showDialog(
+				RevealFileAction.showDialog(
 						project,
 						ResourcesLoader.getString("settings.export.success.text"),
 						StringUtil.capitalizeWords(ResourcesLoader.getString("settings.export.success.title"), true),

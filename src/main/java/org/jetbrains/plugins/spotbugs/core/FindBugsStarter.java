@@ -19,56 +19,38 @@
  */
 package org.jetbrains.plugins.spotbugs.core;
 
-import com.intellij.compiler.options.CompileStepBeforeRun;
-import com.intellij.execution.RunManager;
-import com.intellij.execution.RunnerAndConfigurationSettings;
+import com.intellij.execution.*;
 import com.intellij.execution.configurations.RunConfiguration;
 import com.intellij.facet.FacetManager;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.compiler.CompileContext;
-import com.intellij.openapi.compiler.CompileScope;
-import com.intellij.openapi.compiler.CompileStatusNotification;
-import com.intellij.openapi.compiler.CompilerManager;
+import com.intellij.openapi.compiler.*;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.progress.ProcessCanceledException;
-import com.intellij.openapi.progress.ProgressIndicator;
-import com.intellij.openapi.progress.Task;
-import com.intellij.openapi.project.DumbService;
+import com.intellij.openapi.module.*;
+import com.intellij.openapi.progress.*;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ProjectFileIndex;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.util.Computable;
-import com.intellij.openapi.util.Pair;
+import com.intellij.openapi.project.*;
+import com.intellij.openapi.roots.*;
+import com.intellij.openapi.util.*;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.impl.ToolWindowImpl;
 import com.intellij.util.Consumer;
-import edu.umd.cs.findbugs.DetectorFactory;
-import edu.umd.cs.findbugs.DetectorFactoryCollection;
-import edu.umd.cs.findbugs.FindBugs2;
-import edu.umd.cs.findbugs.SortedBugCollection;
-import edu.umd.cs.findbugs.config.ProjectFilterSettings;
-import edu.umd.cs.findbugs.config.UserPreferences;
+import edu.umd.cs.findbugs.*;
+import edu.umd.cs.findbugs.config.*;
 import org.dom4j.DocumentException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.*;
 import org.jetbrains.plugins.spotbugs.common.EventDispatchThreadHelper;
 import org.jetbrains.plugins.spotbugs.common.util.New;
 import org.jetbrains.plugins.spotbugs.gui.common.BalloonTipFactory;
 import org.jetbrains.plugins.spotbugs.gui.toolwindow.view.ToolWindowPanel;
-import org.jetbrains.plugins.spotbugs.messages.AnalysisAbortingListener;
-import org.jetbrains.plugins.spotbugs.messages.MessageBusManager;
+import org.jetbrains.plugins.spotbugs.messages.*;
 import org.jetbrains.plugins.spotbugs.plugins.PluginLoader;
 import org.jetbrains.plugins.spotbugs.resources.ResourcesLoader;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class FindBugsStarter implements AnalysisAbortingListener {
@@ -140,29 +122,20 @@ public abstract class FindBugsStarter implements AnalysisAbortingListener {
 		if (isCompileBeforeAnalyze()) {
 			final boolean isAnalyzeAfterCompile = workspaceSettings.analyzeAfterCompile;
 			final CompilerManager compilerManager = CompilerManager.getInstance(project);
-			createCompileScope(compilerManager, new Consumer<CompileScope>() {
-				@Override
-				public void consume(@Nullable final CompileScope compileScope) {
-					if (compileScope != null) {
-						finalizeCompileScope(compileScope);
-						compilerManager.make(compileScope, new CompileStatusNotification() {
-							@Override
-							public void finished(final boolean aborted, final int errors, final int warnings, final CompileContext compileContext) {
-								if (!aborted && errors == 0 && !isAnalyzeAfterCompile) {
-									EventDispatchThreadHelper.checkEDT(); // see javadoc of CompileStatusNotification
-									// Compiler can cause dumb mode, and finished() is invoked inside.
-									// We need to continue outside dumb mode to make activateToolWindow work f. e.
-									DumbService.getInstance(project).runWhenSmart(new Runnable() {
-										@Override
-										public void run() {
-											EventDispatchThreadHelper.checkEDT();
-											startImpl(true);
-										}
-									});
-								}
-							}
-						});
-					}
+			createCompileScope(compilerManager, compileScope -> {
+				if (compileScope != null) {
+					finalizeCompileScope(compileScope);
+					compilerManager.make(compileScope, (aborted, errors, warnings, compileContext) -> {
+						if (!aborted && errors == 0 && !isAnalyzeAfterCompile) {
+							EventDispatchThreadHelper.checkEDT(); // see javadoc of CompileStatusNotification
+							// Compiler can cause dumb mode, and finished() is invoked inside.
+							// We need to continue outside dumb mode to make activateToolWindow work f. e.
+							DumbService.getInstance(project).runWhenSmart(() -> {
+								EventDispatchThreadHelper.checkEDT();
+								startImpl(true);
+							});
+						}
+					});
 				}
 			});
 		} else {
@@ -177,7 +150,7 @@ public abstract class FindBugsStarter implements AnalysisAbortingListener {
 		if (toolWindow == null) {
 			throw new IllegalStateException("No FindBugs ToolWindow");
 		}
-		/**
+		/*
 		 * Important: Make sure the tool window is initialized.
 		 * This call is to important to make it just in case of false = toolWindowToFront
 		 * because we have no guarantee that activateToolWindow works.
@@ -225,12 +198,8 @@ public abstract class FindBugsStarter implements AnalysisAbortingListener {
 
 		final FindBugsProjects projects = new FindBugsProjects(project);
 
-		boolean canceled = !ApplicationManager.getApplication().runReadAction(new Computable<Boolean>() {
-			@Override
-			public Boolean compute() {
-				return configure(indicator, projects, justCompiled);
-			}
-		});
+		boolean canceled = !ApplicationManager.getApplication().runReadAction(
+				(Computable<Boolean>) () -> configure(indicator, projects, justCompiled));
 
 		final FindBugsResult result = new FindBugsResult();
 		Throwable error = null;
@@ -283,7 +252,7 @@ public abstract class FindBugsStarter implements AnalysisAbortingListener {
 		final String importFilePath = WorkspaceSettings.getInstance(project).importFilePath.get(importFilePathKey);
 		if (!StringUtil.isEmptyOrSpaces(importFilePath)) {
 			final boolean success = RuntimeSettingsImporter.importSettings(project, module, settings, importFilePath, importFilePathKey);
-			/**
+			/*
 			 * Do continue analysis on import settings failure, but invalidate plugin state
 			 * on success because the plugins settings can change anytime.
 			 */
@@ -314,9 +283,9 @@ public abstract class FindBugsStarter implements AnalysisAbortingListener {
 				projectFilterSettings.removeCategory(category);
 			}
 
-			userPrefs.setIncludeFilterFiles(new HashMap<String, Boolean>(settings.includeFilterFiles));
-			userPrefs.setExcludeBugsFiles(new HashMap<String, Boolean>(settings.excludeBugsFiles));
-			userPrefs.setExcludeFilterFiles(new HashMap<String, Boolean>(settings.excludeFilterFiles));
+			userPrefs.setIncludeFilterFiles(new HashMap<>(settings.includeFilterFiles));
+			userPrefs.setExcludeBugsFiles(new HashMap<>(settings.excludeBugsFiles));
+			userPrefs.setExcludeFilterFiles(new HashMap<>(settings.excludeFilterFiles));
 
 			configureDetectors(settings.detectors, detectorFactoryCollection, userPrefs);
 			for (final PluginSettings pluginSettings : settings.plugins) {
@@ -413,10 +382,8 @@ public abstract class FindBugsStarter implements AnalysisAbortingListener {
 		final RunnerAndConfigurationSettings runnerAndConfigurationSettings = RunManager.getInstance(project).getSelectedConfiguration();
 		if (runnerAndConfigurationSettings != null) {
 			final RunConfiguration runConfiguration = runnerAndConfigurationSettings.getConfiguration();
-			if (runConfiguration != null) {
-				compileScope.putUserData(CompileStepBeforeRun.RUN_CONFIGURATION, runConfiguration);
-				compileScope.putUserData(CompileStepBeforeRun.RUN_CONFIGURATION_TYPE_ID, runConfiguration.getType().getId());
-			}
+			compileScope.putUserData(CompilerManager.RUN_CONFIGURATION_KEY, runConfiguration);
+			compileScope.putUserData(CompilerManager.RUN_CONFIGURATION_TYPE_ID_KEY, runConfiguration.getType().getId());
 		}
 	}
 
@@ -481,9 +448,7 @@ public abstract class FindBugsStarter implements AnalysisAbortingListener {
 				final String filePath = excludeBugFile.getKey();
 				try {
 					engine.excludeBaselineBugs(filePath);
-				} catch (final IOException e) {
-					LOGGER.error("ExcludeBaseLineBug files configuration failed.", e);
-				} catch (final DocumentException e) {
+				} catch (final IOException | DocumentException e) {
 					LOGGER.error("ExcludeBaseLineBug files configuration failed.", e);
 				}
 			}
@@ -491,12 +456,8 @@ public abstract class FindBugsStarter implements AnalysisAbortingListener {
 	}
 
 	protected final void showWarning(@NotNull final String message) {
-		EventDispatchThreadHelper.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				BalloonTipFactory.showToolWindowWarnNotifier(project, message + " " + ResourcesLoader.getString("analysis.aborted"));
-			}
-		});
+		EventDispatchThreadHelper.invokeLater(() -> BalloonTipFactory.showToolWindowWarnNotifier(
+				project, message + " " + ResourcesLoader.getString("analysis.aborted")));
 	}
 
 	protected final boolean hasTests(@NotNull final Iterable<VirtualFile> virtualFiles) {
