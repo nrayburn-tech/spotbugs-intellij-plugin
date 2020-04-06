@@ -161,7 +161,7 @@
             <add-to-group anchor="after" group-id="ProjectViewPopupMenu" relative-to-action="AnalyzeMenu"/>
         </group>
 
-        <group id="SpotBugs.ToolBarActions.left" text="SpotBugsSubGroup" popup="true">
+        <group id="SpotBugs.ToolBarActions.left" text="SpotBugs Analyze Actions" popup="true">
             <!--<add-to-group anchor="last" group-id="EditorPopupMenu"/>-->
             <!--<add-to-group group-id="SpotBugsEditorPopup" anchor="last"/>-->
 
@@ -309,7 +309,7 @@
             <keyboard-shortcut keymap="$default" first-keystroke="alt shift C"/>
         </action>
 
-        <group id="SpotBugs.ToolBarActions.right" text="SpotBugsSubGroup" popup="true">
+        <group id="SpotBugs.ToolBarActions.right" text="SpotBugs Group By Actions" popup="true">
 
             <action id="SpotBugs.GroupByBugCategory"
                     class="org.jetbrains.plugins.spotbugs.actions.GroupByBugCategory"
@@ -350,7 +350,7 @@
                popup="true"
                icon="/icons/inspector/useFilter.png"/>-->
         </group>
-        <group id="SpotBugs.ToolBarActions.navigation" text="SpotBugsSubGroup" popup="true">
+        <group id="SpotBugs.ToolBarActions.navigation" text="SpotBugs Navigation Actions" popup="true">
 
             <action id="SpotBugs.ScrollToSourceAction"
                     class="org.jetbrains.plugins.spotbugs.actions.ScrollToSource"
@@ -415,7 +415,7 @@
 
         </group>
 
-        <group id="SpotBugs.ToolBarActions.utils" text="SpotBugsSubGroup" popup="true">
+        <group id="SpotBugs.ToolBarActions.utils" text="SpotBugs Export/Import Actions" popup="true">
 
             <action id="SpotBugs.ExportBugCollection"
                     class="org.jetbrains.plugins.spotbugs.actions.ExportBugCollection"
