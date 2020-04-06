@@ -20,34 +20,25 @@
 package org.jetbrains.plugins.spotbugs.core;
 
 import com.intellij.ide.BrowserUtil;
-import com.intellij.openapi.diagnostic.ErrorReportSubmitter;
-import com.intellij.openapi.diagnostic.IdeaLoggingEvent;
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.diagnostic.SubmittedReportInfo;
+import com.intellij.openapi.diagnostic.*;
 import com.intellij.openapi.ide.CopyPasteManager;
-import com.intellij.openapi.progress.ProgressIndicator;
-import com.intellij.openapi.progress.Task;
+import com.intellij.openapi.progress.*;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.util.Consumer;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.*;
 import org.jetbrains.plugins.spotbugs.actions.HelpAction;
 import org.jetbrains.plugins.spotbugs.common.VersionManager;
-import org.jetbrains.plugins.spotbugs.common.util.ErrorUtil;
-import org.jetbrains.plugins.spotbugs.common.util.FindBugsUtil;
-import org.jetbrains.plugins.spotbugs.common.util.New;
+import org.jetbrains.plugins.spotbugs.common.util.*;
 import org.jetbrains.plugins.spotbugs.resources.ResourcesLoader;
 
-import java.awt.Component;
+import java.awt.*;
 import java.awt.datatransfer.StringSelection;
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 public final class ErrorReportSubmitterImpl extends ErrorReportSubmitter {
@@ -124,7 +115,7 @@ public final class ErrorReportSubmitterImpl extends ErrorReportSubmitter {
 		if (errors.isEmpty()) {
 			throw new IllegalStateException("No error to report");
 		}
-		final List<Error> sorted = new ArrayList<Error>(errors);
+		final List<Error> sorted = new ArrayList<>(errors);
 		Collections.sort(sorted);
 
 		for (final Error error : sorted) {
@@ -151,14 +142,12 @@ public final class ErrorReportSubmitterImpl extends ErrorReportSubmitter {
 
 		final String baseUrl;
 		if (isFindBugsError) {
-			// http://sourceforge.net/p/findbugs/bugs/
-			// is locked - assume we should report on github - 19.9.2015
-			baseUrl = "https://github.com/findbugsproject/findbugs/issues";
+			baseUrl = "https://github.com/spotbugs/spotbugs/issues/";
 		} else {
-			baseUrl = "https://github.com/andrepdo/findbugs-idea/issues";
+			baseUrl = "https://github.com/JetBrains/spotbugs-intellij-plugin/issues";
 		}
 
-		/**
+		/*
 		 * Note: set errorText as body does not work:
 		 *   - can cause HTTP 414 Request URI too long
 		 *   - if user is not yet logged in github login page will show an error
@@ -174,11 +163,7 @@ public final class ErrorReportSubmitterImpl extends ErrorReportSubmitter {
 
 	@NotNull
 	private static String encode(@NotNull final String value) {
-		try {
-			return URLEncoder.encode(value, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			throw ErrorUtil.toUnchecked(e); // all system support UTF-8
-		}
+		return URLEncoder.encode(value, StandardCharsets.UTF_8);
 	}
 
 	@NotNull
