@@ -81,6 +81,12 @@
     </description>
     <change-notes>
         <![CDATA[<html>
+        <h3>1.1.0</h3>
+        <ul>
+            <li>Updated bundled third-party SpotBugs plugins: FB-Contrib (7.4.7) and Find Security Bugs (1.10.1)</li>
+            <li>Fixed Help action</li>
+            <li>Cosmetic changes</li>
+        </ul>
         <h3>1.0.0</h3>
         <ul>
             <li>Initial release; based on https://github.com/scanban/findbugs-idea/commit/1bab9a9da436964ef82541c21c4a7fca193a79b2</li>
