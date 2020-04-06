@@ -41,7 +41,7 @@ import java.nio.charset.*;
 public class VersionManager {
 
 	private static final long _major = 1;
-	private static final long _minor = 0;
+	private static final long _minor = 1;
 	private static final long _build = 0;
 
 	private static final String NAME = FindBugsPluginConstants.PLUGIN_NAME;
