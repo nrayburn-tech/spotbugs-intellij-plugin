@@ -116,14 +116,14 @@
         <projectService serviceImplementation="org.jetbrains.plugins.spotbugs.core.WorkspaceSettings"/>
         <projectService serviceImplementation="org.jetbrains.plugins.spotbugs.core.ProjectSettings"/>
         <projectService serviceImplementation="org.jetbrains.plugins.spotbugs.gui.preferences.LegacyProjectSettings"/>
-        <projectConfigurable provider="org.jetbrains.plugins.spotbugs.core.ProjectConfigurableProvider"
-                             displayName="IntelliJ SpotBugs"/>
+        <projectConfigurable groupId="tools" provider="org.jetbrains.plugins.spotbugs.core.ProjectConfigurableProvider"
+                             displayName="SpotBugs"/>
         <search.optionContributor implementation="org.jetbrains.plugins.spotbugs.gui.settings.SearchableOptionContributorImpl"/>
 
         <moduleService serviceImplementation="org.jetbrains.plugins.spotbugs.core.ModuleSettings"/>
         <moduleService serviceImplementation="org.jetbrains.plugins.spotbugs.gui.preferences.LegacyModuleSettings"/>
         <moduleConfigurable provider="org.jetbrains.plugins.spotbugs.core.ModuleConfigurableProvider"
-                            displayName="IntelliJ SpotBugs"/>
+                            displayName="SpotBugs"/>
         <checkinHandlerFactory implementation="org.jetbrains.plugins.spotbugs.core.CheckinHandlerFactoryImpl"/>
     </extensions>
     <extensions defaultExtensionNs="com.intellij">

@@ -160,7 +160,7 @@ final class AdvancedSettingsAction extends DefaultActionGroup {
 							ResourcesLoader.getString("settings.export.title"),
 							ResourcesLoader.getString("settings.export.description"),
 							XmlFileType.DEFAULT_EXTENSION
-					), settingsPane).save(null, "FindBugs-IDEA");
+					), settingsPane).save(null, "SpotBugs");
 			if (wrapper == null) {
 				return;
 			}

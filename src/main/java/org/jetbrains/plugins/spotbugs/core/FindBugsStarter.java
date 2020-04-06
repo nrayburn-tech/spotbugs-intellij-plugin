@@ -148,7 +148,7 @@ public abstract class FindBugsStarter implements AnalysisAbortingListener {
 
 		final ToolWindow toolWindow = ToolWindowPanel.getWindow(project);
 		if (toolWindow == null) {
-			throw new IllegalStateException("No FindBugs ToolWindow");
+			throw new IllegalStateException("No SpotBugs ToolWindow");
 		}
 		/*
 		 * Important: Make sure the tool window is initialized.
