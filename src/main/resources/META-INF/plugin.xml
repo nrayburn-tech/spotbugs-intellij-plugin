@@ -155,43 +155,25 @@
     </project-components>
 
     <actions>
-        <group id="SpotBugs.EditorPopup" text="SpotBugs" popup="true">
-            <add-to-group anchor="after" group-id="EditorPopupMenu" relative-to-action="AnalyzeMenu"/>
-        </group>
-
-        <group id="SpotBugs.ProjectViewPopupMenu" text="SpotBugs" popup="true">
-            <add-to-group anchor="after" group-id="ProjectViewPopupMenu" relative-to-action="AnalyzeMenu"/>
-        </group>
-
         <group id="SpotBugs.AnalyzeMenu" text="SpotBugs" popup="true">
             <add-to-group anchor="last" group-id="AnalyzeMenu"/>
+            <add-to-group anchor="after" group-id="EditorPopupMenu" relative-to-action="AnalyzeMenu"/>
+            <add-to-group anchor="after" group-id="ProjectViewPopupMenu" relative-to-action="AnalyzeMenu"/>
         </group>
-
-        <action id="SpotBugs.SelectedFilesAction"
-                class="org.jetbrains.plugins.spotbugs.actions.AnalyzeSelectedFiles"
-                text="Analyze Selected File(S)"
-                description="Run SpotBugs analysis on the current selected file(s) in the project view."
-                icon="PluginIcons.ANALYZE_SELECTED_FILE_ICON">
-            <!--<add-to-group group-id="EditorPopupMenu" anchor="last"/>-->
-            <!--<add-to-group group-id="SpotBugsEditorPopup" anchor="last"/>-->
-            <add-to-group group-id="SpotBugs.ProjectViewPopupMenu" anchor="last"/>
-            <!--<add-to-group group-id="SpotBugsAnalyzeMenu" anchor="last"/>-->
-        </action>
 
         <group id="SpotBugs.ToolBarActions.left" text="SpotBugsSubGroup" popup="true">
             <!--<add-to-group anchor="last" group-id="EditorPopupMenu"/>-->
             <!--<add-to-group group-id="SpotBugsEditorPopup" anchor="last"/>-->
 
-            <action id="SpotBugs.CurrentFileAction"
-                    class="org.jetbrains.plugins.spotbugs.actions.AnalyzeCurrentEditorFile"
-                    text="Analyze Current File"
+            <action id="SpotBugs.SelectedFilesAction"
+                    class="org.jetbrains.plugins.spotbugs.actions.AnalyzeSelectedFiles"
+                    text="Analyze Selected Files"
                     description="Run SpotBugs analysis on the current editor file."
                     icon="PluginIcons.ANALYZE_SELECTED_FILE_ICON">
 
                 <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt F"/>
 
                 <!--<add-to-group group-id="EditorPopupMenu" anchor="last"/>-->
-                <add-to-group group-id="SpotBugs.EditorPopup" anchor="last"/>
                 <!--<add-to-group group-id="SpotBugsProjectViewPopupMenu" anchor="last"/>-->
                 <add-to-group group-id="SpotBugs.AnalyzeMenu" anchor="last"/>
             </action>
@@ -205,7 +187,6 @@
                 <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt C"/>
 
                 <!--<add-to-group group-id="EditorPopupMenu" anchor="last"/>-->
-                <add-to-group group-id="SpotBugs.EditorPopup" anchor="last"/>
                 <!--<add-to-group group-id="SpotBugsProjectViewPopupMenu" anchor="last"/>-->
                 <add-to-group group-id="SpotBugs.AnalyzeMenu" anchor="last"/>
             </action>
@@ -217,9 +198,7 @@
                     icon="PluginIcons.ANALYZE_PACKAGE_FILES_ICON">
 
                 <!--<add-to-group group-id="EditorPopupMenu" anchor="last"/>-->
-                <add-to-group group-id="SpotBugs.EditorPopup" anchor="last"/>
-                <add-to-group group-id="SpotBugs.ProjectViewPopupMenu" anchor="last"/>
-                <!--<add-to-group group-id="SpotBugs.AnalyzeMenu" anchor="last"/>-->
+                <add-to-group group-id="SpotBugs.AnalyzeMenu" anchor="last"/>
             </action>
 
             <action id="SpotBugs.ModuleFilesNotIncludingTestsAction"
@@ -229,8 +208,6 @@
                     icon="PluginIcons.ANALYZE_MODULE_FILES_NOT_INCLUDING_TESTS_ICON">
 
                 <!--<add-to-group group-id="EditorPopupMenu" anchor="last"/>-->
-                <add-to-group group-id="SpotBugs.EditorPopup" anchor="last"/>
-                <add-to-group group-id="SpotBugs.ProjectViewPopupMenu" anchor="last"/>
                 <add-to-group group-id="SpotBugs.AnalyzeMenu" anchor="last"/>
             </action>
 
@@ -241,8 +218,6 @@
                     icon="PluginIcons.ANALYZE_MODULE_FILES_INCLUDING_TESTS_ICON">
 
                 <!--<add-to-group group-id="EditorPopupMenu" anchor="last"/>-->
-                <add-to-group group-id="SpotBugs.EditorPopup" anchor="last"/>
-                <add-to-group group-id="SpotBugs.ProjectViewPopupMenu" anchor="last"/>
                 <add-to-group group-id="SpotBugs.AnalyzeMenu" anchor="last"/>
             </action>
 
@@ -253,8 +228,6 @@
                     icon="PluginIcons.ANALYZE_PROJECT_FILES_NOT_INCLUDING_TESTS_ICON">
 
                 <!--<add-to-group group-id="EditorPopupMenu" anchor="last"/>-->
-                <add-to-group group-id="SpotBugs.EditorPopup" anchor="last"/>
-                <add-to-group group-id="SpotBugs.ProjectViewPopupMenu" anchor="last"/>
                 <add-to-group group-id="SpotBugs.AnalyzeMenu" anchor="last"/>
             </action>
 
@@ -265,8 +238,6 @@
                     icon="PluginIcons.ANALYZE_PROJECT_FILES_INCLUDING_TESTS_ICON">
 
                 <!--<add-to-group group-id="EditorPopupMenu" anchor="last"/>-->
-                <add-to-group group-id="SpotBugs.EditorPopup" anchor="last"/>
-                <add-to-group group-id="SpotBugs.ProjectViewPopupMenu" anchor="last"/>
                 <add-to-group group-id="SpotBugs.AnalyzeMenu" anchor="last"/>
             </action>
 
@@ -276,8 +247,7 @@
                     description="Run SpotBugs analysis on files of the specified scope."
                     icon="PluginIcons.ANALYZE_SCOPE_FILES_ICON">
 
-                <add-to-group group-id="SpotBugs.EditorPopup" anchor="last"/>
-                <add-to-group group-id="SpotBugs.ProjectViewPopupMenu" anchor="last"/>
+                <add-to-group group-id="SpotBugs.AnalyzeMenu" anchor="last"/>
             </action>
 
             <action id="SpotBugs.DefaultChangeListAction"
@@ -286,8 +256,6 @@
                     description="Run SpotBugs analysis on all modified files. (Changelists)"
                     icon="PluginIcons.ANALYZE_ALL_MODIFIED_FILES_ICON">
 
-                <add-to-group group-id="SpotBugs.EditorPopup" anchor="last"/>
-                <add-to-group group-id="SpotBugs.ProjectViewPopupMenu" anchor="last"/>
                 <add-to-group group-id="SpotBugs.AnalyzeMenu" anchor="last"/>
 
                 <keyboard-shortcut keymap="$default" first-keystroke="alt shift C"/>
@@ -300,8 +268,6 @@
                     icon="PluginIcons.ANALYZE_CHANGELIST_FILES_ICON">
 
                 <!--<add-to-group group-id="EditorPopupMenu" anchor="last"/>-->
-                <add-to-group group-id="SpotBugs.EditorPopup" anchor="last"/>
-                <add-to-group group-id="SpotBugs.ProjectViewPopupMenu" anchor="last"/>
                 <add-to-group group-id="SpotBugs.AnalyzeMenu" anchor="last"/>
 
                 <keyboard-shortcut keymap="$default" first-keystroke="alt shift A"/>
@@ -466,13 +432,11 @@
         </group>
 
 
-        <group id="SpotBugs.GutterPopup.group" text="SpotBugsSubGroup" popup="true">
-            <action id="SpotBugs.GutterPoup"
-                    class="org.jetbrains.plugins.spotbugs.actions.ShowPreferencesPage"
-                    text="Plugin Preferences"
-                    description="SpotBugs plugin preferences page."
-                    icon="AllIcons.General.Settings"/>
-        </group>
+        <action id="SpotBugs.GutterPoup"
+                class="org.jetbrains.plugins.spotbugs.actions.ShowPreferencesPage"
+                text="Plugin Preferences"
+                description="SpotBugs plugin preferences page."
+                icon="AllIcons.General.Settings"/>
 
     </actions>
 </idea-plugin>
