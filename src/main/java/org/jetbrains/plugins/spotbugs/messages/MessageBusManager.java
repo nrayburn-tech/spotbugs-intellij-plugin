@@ -90,12 +90,9 @@ public final class MessageBusManager {
 
 	public static void publishAnalysisStartedToEDT(@NotNull final Project project) {
 		EventDispatchThreadHelper.checkNotEDT();
-		EventDispatchThreadHelper.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				FindBugsState.set(project, FindBugsState.Started);
-				publish(project, AnalysisStartedListener.TOPIC).analysisStarted();
-			}
+		EventDispatchThreadHelper.invokeLater(() -> {
+			FindBugsState.set(project, FindBugsState.Started);
+			publish(project, AnalysisStartedListener.TOPIC).analysisStarted();
 		});
 	}
 
@@ -107,28 +104,22 @@ public final class MessageBusManager {
 
 	public static void publishAnalysisAbortedToEDT(@NotNull final Project project) {
 		EventDispatchThreadHelper.checkNotEDT();
-		EventDispatchThreadHelper.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				FindBugsState.set(project, FindBugsState.Aborted);
-				publish(project, AnalysisAbortedListener.TOPIC).analysisAborted();
-			}
+		EventDispatchThreadHelper.invokeLater(() -> {
+			FindBugsState.set(project, FindBugsState.Aborted);
+			publish(project, AnalysisAbortedListener.TOPIC).analysisAborted();
 		});
 	}
 
 	public static void publishAnalysisFinishedToEDT(@NotNull final Project project, @NotNull final FindBugsResult result, @Nullable final Throwable error) {
 		EventDispatchThreadHelper.checkNotEDT();
-		/**
+		/*
 		 * Guarantee thread visibility *one* time.
 		 */
 		final AtomicReference<FindBugsResult> resultRef = New.atomicRef(result);
 		final AtomicReference<Throwable> errorRef = New.atomicRef(error);
-		EventDispatchThreadHelper.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				FindBugsState.set(project, FindBugsState.Finished);
-				publish(project, AnalysisFinishedListener.TOPIC).analysisFinished(resultRef.get(), errorRef.get());
-			}
+		EventDispatchThreadHelper.invokeLater(() -> {
+			FindBugsState.set(project, FindBugsState.Finished);
+			publish(project, AnalysisFinishedListener.TOPIC).analysisFinished(resultRef.get(), errorRef.get());
 		});
 	}
 
