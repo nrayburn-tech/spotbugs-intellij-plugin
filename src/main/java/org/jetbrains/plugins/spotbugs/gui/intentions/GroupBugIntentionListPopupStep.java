@@ -45,7 +45,7 @@ public class GroupBugIntentionListPopupStep extends BaseListPopupStep<SuppressRe
 	public GroupBugIntentionListPopupStep(final PsiElement psiElement, final List<SuppressReportBugIntentionAction> intentionActions) {
 		super(intentionActions.get(0).getText(), intentionActions);
 		_psiElement = psiElement;
-		_intentionActions = new ArrayList<SuppressReportBugIntentionAction>(intentionActions);
+		_intentionActions = new ArrayList<>(intentionActions);
 	}
 
 
@@ -63,7 +63,7 @@ public class GroupBugIntentionListPopupStep extends BaseListPopupStep<SuppressRe
 		new WriteCommandAction.Simple/*<Object>*/(project, "Add findbugs-idea Suppress warning", _psiElement.getContainingFile()) {
 
 			@Override
-			protected void run() throws Throwable {
+			protected void run() {
 				final Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
 				selectedValue.invoke(project, editor, _psiElement);
 			}

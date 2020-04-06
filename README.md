@@ -1,6 +1,7 @@
 # IntelliJ SpotBugs plugin
 
-[![team JetBrains project](http://jb.gg/badges/team.svg)](https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub)
+[![team JetBrains project](https://jb.gg/badges/team.svg)](https://confluence.jetbrains.com/display/ALL/JetBrains+on
++GitHub)
 
 IntelliJ SpotBugs plugin provides static byte code analysis to look for bugs in Java code from within IntelliJ IDEA.
 The plugin uses [SpotBugs](https://spotbugs.github.io/) under the hood.
@@ -31,7 +32,7 @@ Visit the FindBugs web page for more information at https://findbugs.sourceforge
 FindBugs is free software; see the License tab for details.
 
 This product includes software developed at
-[The Apache Software Foundation](http://www.apache.org/).
+[The Apache Software Foundation](https://www.apache.org/).
 
 Gui Resource Icons Copyright:
 Most Icons are taken from IntelliJ IDEA with slightly modifications.

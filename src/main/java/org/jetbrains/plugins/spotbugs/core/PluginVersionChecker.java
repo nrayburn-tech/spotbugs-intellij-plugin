@@ -40,19 +40,16 @@ final class PluginVersionChecker {
 	static String getLatestVersion(@NotNull final ProgressIndicator indicator) throws IOException {
 		final String url = getLatestReleaseUrl();
 		indicator.setText(ResourcesLoader.getString("error.submitReport.retrieve", url));
-		final RequestBuilder request = HttpRequests
+		final RequestBuilder builder = HttpRequests
 				.request(url)
 				.accept("application/vnd.github.v2+json");
-		return request.connect(new HttpRequests.RequestProcessor<String>() {
-			@Override
-			public String process(@NotNull final HttpRequests.Request request) throws IOException {
-				final Reader reader = request.getReader();
-				try {
-					LatestRelease latestRelease = new GsonBuilder().create().fromJson(reader, LatestRelease.class);
-					return latestRelease.name;
-				} finally {
-					IoUtil.safeClose(reader);
-				}
+		return builder.connect(request -> {
+			final Reader reader = request.getReader();
+			try {
+				LatestRelease latestRelease = new GsonBuilder().create().fromJson(reader, LatestRelease.class);
+				return latestRelease.name;
+			} finally {
+				IoUtil.safeClose(reader);
 			}
 		});
 	}
@@ -60,7 +57,7 @@ final class PluginVersionChecker {
 	@NotNull
 	private static String getLatestReleaseUrl() {
 		// https support only
-		return "https://api.github.com/repos/andrepdo/findbugs-idea/releases/latest";
+		return "https://api.github.com/repos/JetBrains/spotbugs-intellij-plugin/releases/latest";
 	}
 
 	private static class LatestRelease {

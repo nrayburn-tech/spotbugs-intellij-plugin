@@ -82,7 +82,7 @@ public class ExtendedProblemDescriptor implements ProblemDescriptor, ProblemGrou
 
 	@Override
 	public String getProblemName() {
-		return "FindBugs-IDEA";
+		return "SpotBugs";
 	}
 
 	@Override

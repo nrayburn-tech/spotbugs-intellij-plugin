@@ -133,7 +133,7 @@ final class GeneralTab extends JPanel {
 				Plugins.fb_contrib.id,
 				"fb-contrib plugin",
 				"This plugin contains FindBugs detectors from the fb-contrib project",
-				"http://fb-contrib.sourceforge.net",
+				"https://github.com/mebigfatguy/fb-contrib",
 
 				Plugins.findsecbugs_plugin.id,
 				"Find Security Bugs",
