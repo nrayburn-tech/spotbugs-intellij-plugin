@@ -187,8 +187,9 @@ public class GroupTreeModel extends AbstractTreeModel<VisitableTreeNode, RootNod
 				addToGroup(depth, member, member);
 			}
 		} else {
-			//noinspection ThrowableInstanceNeverThrown
-			LOGGER.error(new NullPointerException("parentGroup can not be null."));
+			String message =
+					"parentGroup can not be null: groupName = " + groupName + "; depth = " + depth + "; parent = " + parent;
+			LOGGER.error(new NullPointerException(message));
 		}
 
 
