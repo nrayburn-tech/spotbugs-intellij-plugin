@@ -30,8 +30,8 @@ import java.util.Map;
 
 public interface PluginIcons {
 
-    Icon FINDBUGS_ICON = ResourcesLoader.loadIcon("bug.png");
-    Icon FINDBUGS_ICON_13X13 = ResourcesLoader.loadIcon("bug13x13.png");
+    Icon FINDBUGS_ICON = ResourcesLoader.loadIcon("bug.svg");
+    Icon FINDBUGS_ICON_13X13 = ResourcesLoader.loadIcon("bug13x13.svg");
     Icon FINDBUGS_CLOUD_ICON = ResourcesLoader.loadIcon("bug_cloud.png");
 
     Icon CLOSE_EDITOR_ICON = AllIcons.Actions.Close;
@@ -44,7 +44,7 @@ public interface PluginIcons {
      * Analyzing icons
      */
     Icon ANALYZE_SELECTED_FILE_ICON = LayeredIcon.create(
-            ResourcesLoader.loadIcon("actions/analyzeSelectedFile.png"),
+            ResourcesLoader.loadIcon("actions/analyzeSelectedFile.svg"),
             AllIcons.Nodes.RunnableMark
     );
     Icon ANALYZE_CLASS_UNDER_CURSOR_ICON = LayeredIcon.create(AllIcons.Nodes.Class, AllIcons.Nodes.RunnableMark);
@@ -67,28 +67,28 @@ public interface PluginIcons {
      * Grouping icons
      */
     Icon GROUP_BY_CATEGORY_ICON = LayeredIcon.create(
-            ResourcesLoader.loadIcon("actions/groupByBugCategory.png"),
-            ResourcesLoader.loadIcon("actions/groupByTemplate.png")
+            ResourcesLoader.loadIcon("actions/groupByBugCategory.svg"),
+            ResourcesLoader.loadIcon("actions/groupByTemplate.svg")
     );
     Icon GROUP_BY_CLASS_ICON = AllIcons.Actions.GroupByClass;
     Icon GROUP_BY_PRIORITY_ICON = AllIcons.Nodes.SortBySeverity;
     Icon GROUP_BY_PACKAGE_ICON = AllIcons.Actions.GroupByPackage;
 
     Icon GROUP_BY_RANK_SCARIEST_ICON = LayeredIcon.create(
-            ResourcesLoader.loadIcon("priority/rankScariest.png"),
-            ResourcesLoader.loadIcon("actions/groupByTemplate.png")
+            ResourcesLoader.loadIcon("priority/rankScariest.svg"),
+            ResourcesLoader.loadIcon("actions/groupByTemplate.svg")
     );
     Icon GROUP_BY_RANK_SCARY_ICON = LayeredIcon.create(
-            ResourcesLoader.loadIcon("priority/rankScary.png"),
-            ResourcesLoader.loadIcon("actions/groupByTemplate.png")
+            ResourcesLoader.loadIcon("priority/rankScary.svg"),
+            ResourcesLoader.loadIcon("actions/groupByTemplate.svg")
     );
     Icon GROUP_BY_RANK_TROUBLING_ICON = LayeredIcon.create(
-            ResourcesLoader.loadIcon("priority/rankTroubling.png"),
-            ResourcesLoader.loadIcon("actions/groupByTemplate.png")
+            ResourcesLoader.loadIcon("priority/rankTroubling.svg"),
+            ResourcesLoader.loadIcon("actions/groupByTemplate.svg")
     );
     Icon GROUP_BY_RANK_OF_CONCERN_ICON = LayeredIcon.create(
-            ResourcesLoader.loadIcon("priority/rankOfConcern.png"),
-            ResourcesLoader.loadIcon("actions/groupByTemplate.png")
+            ResourcesLoader.loadIcon("priority/rankOfConcern.svg"),
+            ResourcesLoader.loadIcon("actions/groupByTemplate.svg")
     );
 
     Map<String, Icon> GROUP_BY_RANK_ICONS = Map.of(
@@ -117,10 +117,10 @@ public interface PluginIcons {
      * --------------------------------------------------------------------------------------------------
      * Priority icons
      */
-    Icon HIGH_PRIORITY_ICON = ResourcesLoader.loadIcon("priority/bugHigh.png");
-    Icon NORMAL_PRIORITY_ICON = ResourcesLoader.loadIcon("priority/bugNormal.png");
-	Icon LOW_PRIORITY_ICON = ResourcesLoader.loadIcon("priority/bugLow.png");
-    Icon EXP_PRIORITY_ICON = ResourcesLoader.loadIcon("priority/bugExp.png");
+    Icon HIGH_PRIORITY_ICON = ResourcesLoader.loadIcon("priority/bugHigh.svg");
+    Icon NORMAL_PRIORITY_ICON = ResourcesLoader.loadIcon("priority/bugNormal.svg");
+	Icon LOW_PRIORITY_ICON = ResourcesLoader.loadIcon("priority/bugLow.svg");
+    Icon EXP_PRIORITY_ICON = ResourcesLoader.loadIcon("priority/bugExp.svg");
 
     /**
      * --------------------------------------------------------------------------------------------------

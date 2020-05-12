@@ -193,20 +193,20 @@ public final class GuiUtil {
 		final Icon icon;
 		switch (priority) {
 			case Detector.HIGH_PRIORITY:
-				icon = ResourcesLoader.loadIcon("intentions/bugBulbHigh.png");
+				icon = ResourcesLoader.loadIcon("intentions/bugBulbHigh.svg");
 				break;
 			case Detector.NORMAL_PRIORITY:
-				icon = ResourcesLoader.loadIcon("intentions/bugBulbNormal.png");
+				icon = ResourcesLoader.loadIcon("intentions/bugBulbNormal.svg");
 				break;
 			case Detector.LOW_PRIORITY:
-				icon = ResourcesLoader.loadIcon("intentions/bugBulbLow.png");
+				icon = ResourcesLoader.loadIcon("intentions/bugBulbLow.svg");
 				break;
 			case Detector.EXP_PRIORITY:
-				icon = ResourcesLoader.loadIcon("intentions/bugBulbExt.png");
+				icon = ResourcesLoader.loadIcon("intentions/bugBulbExt.svg");
 				break;
 			case Detector.IGNORE_PRIORITY:
 			default:
-				icon = ResourcesLoader.loadIcon("intentions/bugBulbHigh.png");
+				icon = ResourcesLoader.loadIcon("intentions/bugBulbHigh.svg");
 				break;
 
 		}
