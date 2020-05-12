@@ -19,13 +19,13 @@
  */
 package org.jetbrains.plugins.spotbugs.actions;
 
+import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.ActionPopupMenu;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.wm.ToolWindow;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.plugins.spotbugs.core.FindBugsState;
@@ -91,7 +91,7 @@ public final class GroupByFilter extends AbstractAction {
 	private static class FilterApplyAction extends AnAction {
 
 		private FilterApplyAction() {
-			super("test1", "test description", IconLoader.getIcon("/general/ideOptions.png"));
+			super("test1", "test description", AllIcons.General.Settings);
 		}
 
 		@Override
