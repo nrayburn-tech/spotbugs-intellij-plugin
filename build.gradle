@@ -72,7 +72,7 @@ configurations {
 }
 
 dependencies {
-    compile ('com.github.spotbugs:spotbugs:4.0.0') {
+    compile ('com.github.spotbugs:spotbugs:4.0.3') {
         exclude group: 'xml-apis', module: 'xml-apis'
     }
     compile 'org.jsoup:jsoup:1.8.3'
