@@ -20,11 +20,11 @@
  */
 
 plugins {
-    id "org.jetbrains.intellij" version "0.4.16"
+    id "org.jetbrains.intellij" version "0.4.21"
 }
 
 apply plugin: 'org.jetbrains.intellij'
-apply plugin: 'maven'
+apply plugin: 'maven-publish'
 apply plugin: 'java'
 
 sourceCompatibility = 1.11
@@ -72,14 +72,14 @@ configurations {
 }
 
 dependencies {
-    compile ('com.github.spotbugs:spotbugs:4.0.3') {
+    implementation ('com.github.spotbugs:spotbugs:4.0.3') {
         exclude group: 'xml-apis', module: 'xml-apis'
     }
-    compile 'org.jsoup:jsoup:1.8.3'
-    compile fileTree(dir: "$project.rootDir/lib", include: "TableLayout-bin-*.jar")
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.assertj:assertj-core:3.6.2'
-    testCompile 'org.mockito:mockito-core:2.7.6'
+    implementation 'org.jsoup:jsoup:1.8.3'
+    implementation fileTree(dir: "$project.rootDir/lib", include: "TableLayout-bin-*.jar")
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.assertj:assertj-core:3.6.2'
+    testImplementation 'org.mockito:mockito-core:2.7.6'
     thirdPartyPlugins 'com.mebigfatguy.fb-contrib:fb-contrib:7.4.7'
     thirdPartyPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.10.1'
     fbContribJava6 'com.mebigfatguy.fb-contrib:fb-contrib:6.2.1'
@@ -94,6 +94,6 @@ task downloadThirdPartyPlugins(type: Copy) {
 
 tasks.jar.dependsOn(downloadThirdPartyPlugins)
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '4.4.1'
+wrapper {
+    gradleVersion = '6.3'
 }
