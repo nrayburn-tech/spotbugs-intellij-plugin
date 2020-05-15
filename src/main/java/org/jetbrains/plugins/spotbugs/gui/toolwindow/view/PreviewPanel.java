@@ -23,6 +23,7 @@ import com.intellij.openapi.Disposable;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.EditorFactory;
 import com.intellij.psi.PsiFile;
+import com.intellij.ui.JBColor;
 import icons.PluginIcons;
 import info.clearthought.layout.TableLayout;
 import org.jetbrains.annotations.Nullable;
@@ -51,7 +52,8 @@ final class PreviewPanel implements Disposable {
 	private static final JLabel NO_BUG_SELECTED_LABEL;
 
 	static {
-		NO_BUG_SELECTED_LABEL = new JLabel("Select a bug to preview", PluginIcons.FINDBUGS_ICON, SwingConstants.CENTER);
+		NO_BUG_SELECTED_LABEL = new JLabel("Select a bug to preview", SwingConstants.CENTER);
+		NO_BUG_SELECTED_LABEL.setForeground(JBColor.GRAY);
 	}
 
 
