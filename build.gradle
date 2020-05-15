@@ -36,11 +36,7 @@ repositories {
 }
 
 intellij {
-    if (project.hasProperty("ijVersion")) {
-        version ijVersion
-    } else {
-        version '2019.3'
-    }
+    version ijVersion
 
     pluginName 'spotbugs-idea'
     updateSinceUntilBuild false
@@ -87,6 +83,13 @@ dependencies {
     tableLayout 'info.clearthought:table-layout:4.3.0'
 }
 
+task copyGradleProperties(type: Copy) {
+    description 'Copy gradle.properties to project resources.'
+    from 'gradle.properties'
+    into 'build/resources/main/org/jetbrains/plugins/spotbugs/common'
+    rename { _ -> 'version.properties' }
+}
+
 task downloadThirdPartyPlugins(type: Copy) {
     description 'Downloads third-party plugins Find Security Bugs and FB-Contrib.'
     from configurations.thirdPartyPlugins
@@ -101,7 +104,7 @@ task copyThirdPartyPlugins(type: Copy) {
     into 'build/idea-sandbox/plugins/spotbugs-idea/customPlugins'
 }
 
-tasks.compileJava.dependsOn(downloadThirdPartyPlugins)
+tasks.compileJava.dependsOn(downloadThirdPartyPlugins, copyGradleProperties)
 tasks.buildPlugin.dependsOn(copyThirdPartyPlugins)
 
 task downloadTableLayoutLib(type: Copy) {

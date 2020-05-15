@@ -21,28 +21,46 @@ package org.jetbrains.plugins.spotbugs.common;
 
 import org.jetbrains.plugins.spotbugs.common.util.IoUtil;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.nio.charset.*;
+import java.util.Properties;
 
 
 /**
- * $Date$
- *
- * $Id$
- *
  * @author Andre Pfeiler<andrep@twodividedbyzero.org>
- * @version $Revision$
- * @since 0.0.1
  */
 @SuppressWarnings({"HardCodedStringLiteral", "UseOfSystemOutOrSystemErr", "StringConcatenation", "CallToPrintStackTrace", "CallToPrintStackTrace"})
 public class VersionManager {
 
-	private static final long _major = 1;
-	private static final long _minor = 1;
-	private static final long _build = 0;
+	private static final long _major;
+	private static final long _minor;
+	private static final long _build;
+
+	private static final String PROPERTIES_FILE = "version.properties";
+
+	static {
+		Properties properties = new Properties();
+		try (InputStream stream = VersionManager.class.getResourceAsStream(PROPERTIES_FILE)) {
+			properties.load(stream);
+		} catch (IOException e) {
+			throw new RuntimeException("Unable to read '"+PROPERTIES_FILE+"': build corrupted", e);
+		}
+		String version = properties.getProperty("version");
+		if (version == null) {
+			throw new RuntimeException("Unable to read version from '"+PROPERTIES_FILE+"': build corrupted");
+		}
+		String[] components = version.split("\\.");
+		if (components.length != 3) {
+			throw new RuntimeException("Invalid version: "+version);
+		}
+		try {
+			_major = Long.parseLong(components[0]);
+			_minor = Long.parseLong(components[1]);
+			_build = Long.parseLong(components[2]);
+		} catch (NumberFormatException e) {
+			throw new RuntimeException("Invalid version: "+version);
+		}
+	}
 
 	private static final String NAME = FindBugsPluginConstants.PLUGIN_NAME;
 	
@@ -50,7 +68,7 @@ public class VersionManager {
 
 	private static final String DOWNLOAD_WEBSITE = "https://plugins.jetbrains.com/plugin/14014-spotbugs";
 
-	private static final String ISSUE_TRACKER = "https://github.com/JetBrains/spotbugs-intellij-plugin/issues";
+	private static final String ISSUE_TRACKER = WEBSITE + "issues";
 
 	private static final long REVISION;
 
