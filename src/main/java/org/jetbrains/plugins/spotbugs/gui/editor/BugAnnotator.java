@@ -38,7 +38,7 @@ import org.jetbrains.plugins.spotbugs.common.ExtendedProblemDescriptor;
 import org.jetbrains.plugins.spotbugs.common.util.BugInstanceUtil;
 import org.jetbrains.plugins.spotbugs.common.util.StringUtilFb;
 import org.jetbrains.plugins.spotbugs.core.FindBugsState;
-import org.jetbrains.plugins.spotbugs.core.ProblemCache;
+import org.jetbrains.plugins.spotbugs.core.ProblemCacheService;
 import org.jetbrains.plugins.spotbugs.core.WorkspaceSettings;
 import org.jetbrains.plugins.spotbugs.intentions.ClearAndSuppressBugIntentionAction;
 import org.jetbrains.plugins.spotbugs.intentions.ClearBugIntentionAction;
@@ -66,11 +66,11 @@ public final class BugAnnotator implements Annotator {
 		if (!FindBugsState.get(project).isIdle()) {
 			return;
 		}
-		final ProblemCache cache = psiElement.getProject().getComponent(ProblemCache.class);
-		if (cache == null) {
+		final ProblemCacheService cacheService = psiElement.getProject().getService(ProblemCacheService.class);
+		if (cacheService == null) {
 			return;
 		}
-		final Map<PsiFile, List<ExtendedProblemDescriptor>> problems = cache.getProblems();
+		final Map<PsiFile, List<ExtendedProblemDescriptor>> problems = cacheService.getProblems();
 
 		final PsiFile psiFile = psiElement.getContainingFile();
 		if (problems.containsKey(psiFile)) {

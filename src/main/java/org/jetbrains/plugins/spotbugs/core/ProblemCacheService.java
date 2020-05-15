@@ -19,7 +19,7 @@
  */
 package org.jetbrains.plugins.spotbugs.core;
 
-import com.intellij.openapi.components.AbstractProjectComponent;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
@@ -30,17 +30,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
 
-public final class ProblemCache extends AbstractProjectComponent {
+public class ProblemCacheService {
 
-	private final ConcurrentMap<PsiFile, List<ExtendedProblemDescriptor>> problems;
+    private final ConcurrentMap<PsiFile, List<ExtendedProblemDescriptor>> problems;
 
-	public ProblemCache(@NotNull final Project project) {
-		super(project);
-		problems = New.concurrentMap();
-	}
+    public ProblemCacheService() {
+        problems = New.concurrentMap();
+    }
 
-	@NotNull
-	public Map<PsiFile, List<ExtendedProblemDescriptor>> getProblems() {
-		return problems;
-	}
+    @NotNull
+    public Map<PsiFile, List<ExtendedProblemDescriptor>> getProblems() {
+        return problems;
+    }
+
+    public static ProblemCacheService getInstance(@NotNull Project project) {
+        return ServiceManager.getService(project, ProblemCacheService.class);
+    }
 }

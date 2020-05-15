@@ -37,7 +37,7 @@ import org.jetbrains.plugins.spotbugs.common.util.BugInstanceUtil;
 import org.jetbrains.plugins.spotbugs.common.util.GuiUtil;
 import org.jetbrains.plugins.spotbugs.common.util.IdeaUtilImpl;
 import org.jetbrains.plugins.spotbugs.core.FindBugsState;
-import org.jetbrains.plugins.spotbugs.core.ProblemCache;
+import org.jetbrains.plugins.spotbugs.core.ProblemCacheService;
 import org.jetbrains.plugins.spotbugs.core.WorkspaceSettings;
 import org.jetbrains.plugins.spotbugs.gui.intentions.GroupBugIntentionListPopupStep;
 import org.jetbrains.plugins.spotbugs.gui.intentions.RootGroupBugIntentionListPopupStep;
@@ -73,12 +73,12 @@ public final class BugsLineMarkerProvider implements LineMarkerProvider {
 		if (!FindBugsState.get(project).isIdle()) {
 			return null;
 		}
-		final ProblemCache cache = psiElement.getProject().getComponent(ProblemCache.class);
-		if (cache == null) {
+		final ProblemCacheService cacheService = psiElement.getProject().getService(ProblemCacheService.class);
+		if (cacheService == null) {
 			return null;
 		}
 		final PsiFile psiFile = IdeaUtilImpl.getPsiFile(psiElement);
-		final Map<PsiFile, List<ExtendedProblemDescriptor>> problemCache = cache.getProblems();
+		final Map<PsiFile, List<ExtendedProblemDescriptor>> problemCache = cacheService.getProblems();
 
 		if (problemCache.containsKey(psiFile)) {
 			final List<ExtendedProblemDescriptor> matchingDescriptors = new ArrayList<ExtendedProblemDescriptor>();

@@ -125,6 +125,7 @@
         <moduleConfigurable provider="org.jetbrains.plugins.spotbugs.core.ModuleConfigurableProvider"
                             displayName="SpotBugs"/>
         <checkinHandlerFactory implementation="org.jetbrains.plugins.spotbugs.core.CheckinHandlerFactoryImpl"/>
+        <projectService serviceImplementation="org.jetbrains.plugins.spotbugs.core.ProblemCacheService"/>
     </extensions>
     <extensions defaultExtensionNs="com.intellij">
         <errorHandler implementation="org.jetbrains.plugins.spotbugs.core.ErrorReportSubmitterImpl"/>
@@ -152,11 +153,6 @@
     <project-components>
         <component>
             <implementation-class>org.jetbrains.plugins.spotbugs.gui.preferences.LegacyProjectSettingsConverter</implementation-class>
-        </component>
-    </project-components>
-    <project-components>
-        <component>
-            <implementation-class>org.jetbrains.plugins.spotbugs.core.ProblemCache</implementation-class>
         </component>
     </project-components>
 

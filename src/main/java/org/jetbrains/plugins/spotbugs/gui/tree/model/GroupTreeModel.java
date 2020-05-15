@@ -28,7 +28,7 @@ import org.jetbrains.plugins.spotbugs.common.ExtendedProblemDescriptor;
 import org.jetbrains.plugins.spotbugs.common.util.BugInstanceUtil;
 import org.jetbrains.plugins.spotbugs.common.util.New;
 import org.jetbrains.plugins.spotbugs.core.Bug;
-import org.jetbrains.plugins.spotbugs.core.ProblemCache;
+import org.jetbrains.plugins.spotbugs.core.ProblemCacheService;
 import org.jetbrains.plugins.spotbugs.gui.tree.BugInstanceComparator;
 import org.jetbrains.plugins.spotbugs.gui.tree.GroupBy;
 
@@ -61,7 +61,7 @@ public class GroupTreeModel extends AbstractTreeModel<VisitableTreeNode, RootNod
 		_project = project;
 		_groupBy = groupBy.clone();
 		_groups = new HashMap<String, Map<Integer, List<BugInstanceGroupNode>>>();
-		_problems = project.getComponent(ProblemCache.class).getProblems();
+		_problems = project.getService(ProblemCacheService.class).getProblems();
 	}
 
 	Project getProject() {
