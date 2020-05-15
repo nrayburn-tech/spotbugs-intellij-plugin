@@ -69,6 +69,7 @@ runIdea {
 configurations {
     thirdPartyPlugins
     fbContribJava6
+    tableLayout
 }
 
 dependencies {
@@ -76,13 +77,14 @@ dependencies {
         exclude group: 'xml-apis', module: 'xml-apis'
     }
     implementation 'org.jsoup:jsoup:1.8.3'
-    implementation fileTree(dir: "$project.rootDir/lib", include: "TableLayout-bin-*.jar")
+    implementation fileTree(dir: "lib", include: "table-layout-*.jar")
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.assertj:assertj-core:3.6.2'
     testImplementation 'org.mockito:mockito-core:2.7.6'
     thirdPartyPlugins 'com.mebigfatguy.fb-contrib:fb-contrib:7.4.7'
     thirdPartyPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.10.1'
     fbContribJava6 'com.mebigfatguy.fb-contrib:fb-contrib:6.2.1'
+    tableLayout 'info.clearthought:table-layout:4.3.0'
 }
 
 task downloadThirdPartyPlugins(type: Copy) {
@@ -93,6 +95,14 @@ task downloadThirdPartyPlugins(type: Copy) {
 }
 
 tasks.jar.dependsOn(downloadThirdPartyPlugins)
+
+task downloadTableLayoutLib(type: Copy) {
+    description 'Downloads TableLayout library.'
+    from configurations.tableLayout
+    into 'lib'
+}
+
+tasks.compileJava.dependsOn(downloadTableLayoutLib)
 
 wrapper {
     gradleVersion = '6.3'
