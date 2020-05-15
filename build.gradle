@@ -91,10 +91,18 @@ task downloadThirdPartyPlugins(type: Copy) {
     description 'Downloads third-party plugins Find Security Bugs and FB-Contrib.'
     from configurations.thirdPartyPlugins
     from configurations.fbContribJava6
-    into 'src/main/resources/org/jetbrains/plugins/spotbugs/plugins'
+    into 'build/resources/main/org/jetbrains/plugins/spotbugs/plugins'
 }
 
-tasks.jar.dependsOn(downloadThirdPartyPlugins)
+task copyThirdPartyPlugins(type: Copy) {
+    dependsOn(downloadThirdPartyPlugins, prepareSandbox)
+    description 'Copy plugins into sandbox.'
+    from 'build/resources/main/org/jetbrains/plugins/spotbugs/plugins'
+    into 'build/idea-sandbox/plugins/spotbugs-idea/customPlugins'
+}
+
+tasks.compileJava.dependsOn(downloadThirdPartyPlugins)
+tasks.buildPlugin.dependsOn(copyThirdPartyPlugins)
 
 task downloadTableLayoutLib(type: Copy) {
     description 'Downloads TableLayout library.'
