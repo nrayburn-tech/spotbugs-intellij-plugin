@@ -389,7 +389,7 @@ final class PluginTablePane extends JPanel {
 		}
 	}
 
-	private class PluginLoaderImpl extends AbstractPluginLoader {
+	private static class PluginLoaderImpl extends AbstractPluginLoader {
 
 		@NotNull
 		private final List<PluginInfo> configured;

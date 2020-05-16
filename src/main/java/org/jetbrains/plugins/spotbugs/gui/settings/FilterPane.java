@@ -229,7 +229,7 @@ final class FilterPane extends JPanel {
 		getModel().fireTableDataChanged();
 	}
 
-	private class Item {
+	private static class Item {
 		@NotNull
 		private final String path;
 		private boolean enabled;
@@ -240,7 +240,7 @@ final class FilterPane extends JPanel {
 		}
 	}
 
-	private class Model extends AbstractTableModel {
+	private static class Model extends AbstractTableModel {
 		private static final int IS_ENABLED_COLUMN = 0;
 		private static final int NAME_COLUMN = 1;
 		@NotNull
