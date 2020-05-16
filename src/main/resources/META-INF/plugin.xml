@@ -81,6 +81,12 @@
     </description>
     <change-notes>
         <![CDATA[<html>
+        <h3>1.1.1</h3>
+        <ul>
+            <li>Updated SpotBugs to version 4.0.3 to avoid installing SecurityManager during analysis.
+                Fixes issue #10: After running the plugin I can't compile or run anything in IDEA</li>
+            <li>Cosmetic changes</li>
+        </ul>
         <h3>1.1.0</h3>
         <ul>
             <li>Updated bundled third-party SpotBugs plugins: FB-Contrib (7.4.7) and Find Security Bugs (1.10.1)</li>
