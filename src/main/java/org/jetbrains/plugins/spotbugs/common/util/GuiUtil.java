@@ -91,7 +91,7 @@ public final class GuiUtil {
 
 	public static void navigateToElement(final PsiElement psiElement) {
 		final PsiElement navigationElement = psiElement.getNavigationElement();
-		if (navigationElement != null && navigationElement instanceof Navigatable && ((Navigatable) navigationElement).canNavigate()) {
+		if (navigationElement instanceof Navigatable && ((Navigatable) navigationElement).canNavigate()) {
 			((Navigatable) navigationElement).navigate(true);
 		}
 	}

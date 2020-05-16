@@ -74,7 +74,7 @@ public final class BugAnnotator implements Annotator {
 
 		final PsiFile psiFile = psiElement.getContainingFile();
 		if (problems.containsKey(psiFile)) {
-			addAnnotation(psiElement, new ArrayList<ExtendedProblemDescriptor>(problems.get(psiFile)), annotationHolder);
+			addAnnotation(psiElement, new ArrayList<>(problems.get(psiFile)), annotationHolder);
 		}
 	}
 

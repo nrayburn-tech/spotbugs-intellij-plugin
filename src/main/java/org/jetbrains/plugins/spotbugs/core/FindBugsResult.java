@@ -31,7 +31,7 @@ import java.util.Map;
 
 public final class FindBugsResult {
 	@NotNull
-	private Map<Project, SortedBugCollection> results;
+	private final Map<Project, SortedBugCollection> results;
 
 	public FindBugsResult() {
 		this.results = New.map();

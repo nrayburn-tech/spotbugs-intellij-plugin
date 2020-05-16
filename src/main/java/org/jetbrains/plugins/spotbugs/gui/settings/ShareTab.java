@@ -66,9 +66,9 @@ final class ShareTab extends JPanel implements SettingsOwner<WorkspaceSettings>,
 	@Nullable
 	private final String importFilePathKey;
 
-	private JLabel description;
-	private HyperlinkLabel link;
-	private LabeledComponent<TextFieldWithBrowseButton> importPathLabel;
+	private final JLabel description;
+	private final HyperlinkLabel link;
+	private final LabeledComponent<TextFieldWithBrowseButton> importPathLabel;
 
 	ShareTab(@NotNull final Project project, @Nullable final Module module) {
 		super(new VerticalFlowLayout(HAlignment.Left, VAlignment.Top, 0, 0, true, false));
@@ -97,7 +97,7 @@ final class ShareTab extends JPanel implements SettingsOwner<WorkspaceSettings>,
 				null,
 				descriptor
 		);
-		importPathLabel = new LabeledComponent<TextFieldWithBrowseButton>();
+		importPathLabel = new LabeledComponent<>();
 		importPathLabel.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
 		importPathLabel.setComponent(importPath);
 		importPathLabel.setLabelLocation(BorderLayout.WEST);
@@ -163,11 +163,12 @@ final class ShareTab extends JPanel implements SettingsOwner<WorkspaceSettings>,
 		for (final Module module : ModuleManager.getInstance(project).getModules()) {
 			moduleNames.add(module.getName());
 		}
-		for (final String moduleName : new HashSet<String>(importFilePath.keySet())) {
+		for (final String moduleName : new HashSet<>(importFilePath.keySet())) {
 			if (!StringUtil.equals(WorkspaceSettings.PROJECT_IMPORT_FILE_PATH_KEY, moduleName)) {
 				if (!moduleNames.contains(moduleName)) {
-					LOGGER.warn(String.format("Remove importFilePath (%s) from settings because module with name '%s' does not exist", importFilePath.get(moduleName), moduleName));
-					importFilePath.remove(moduleName);
+					String path = importFilePath.remove(moduleName);
+					LOGGER.warn(String.format(
+							"Remove importFilePath (%s) from settings because module with name '%s' does not exist", path, moduleName));
 				}
 			}
 		}
@@ -178,12 +179,8 @@ final class ShareTab extends JPanel implements SettingsOwner<WorkspaceSettings>,
 	}
 
 	void requestFocusOnImportFile() {
-		IdeFocusManager.findInstance().doWhenFocusSettlesDown(new Runnable() {
-			@Override
-			public void run() {
-				IdeFocusManager.findInstance().requestFocus(importPathLabel.getComponent().getTextField(), true);
-			}
-		});
+		IdeFocusManager.findInstance().doWhenFocusSettlesDown(
+				() -> IdeFocusManager.findInstance().requestFocus(importPathLabel.getComponent().getTextField(), true));
 	}
 
 	@NotNull

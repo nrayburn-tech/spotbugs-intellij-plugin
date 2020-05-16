@@ -433,7 +433,7 @@ public final class IdeaUtilImpl {
 	@Nullable
 	private static PsiFile getPsiFile(@NotNull final Project project, @NotNull final ExtendedProblemDescriptor problem) {
 		final PsiFile file = problem.getPsiFile();
-		return file == null ? null : PsiManager.getInstance(project).findFile(file.getVirtualFile());
+		return PsiManager.getInstance(project).findFile(file.getVirtualFile());
 	}
 
 
@@ -466,7 +466,7 @@ public final class IdeaUtilImpl {
 	@Nullable
 	public static String getFirstProjectRootPath(final Project project) {
 		final ProjectRootManager projectManager = ProjectRootManager.getInstance(project);
-		final VirtualFile rootFiles[] = projectManager.getContentRoots();
+		final VirtualFile[] rootFiles = projectManager.getContentRoots();
 		if (rootFiles.length == 0) {
 			return null;
 		}

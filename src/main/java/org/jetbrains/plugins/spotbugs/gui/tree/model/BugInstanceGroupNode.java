@@ -86,10 +86,10 @@ public final class BugInstanceGroupNode extends AbstractTreeNode<VisitableTreeNo
 	public void addChild(final VisitableTreeNode node) {
 		_childs.add(node);
 		if (node instanceof BugInstanceNode && node.isLeaf()) {
-			Collections.sort(_childs, new ChildComparator());
+			_childs.sort(new ChildComparator());
 			incrementMemberCount();
 			TreeNode treeNode = getParent();
-			while (treeNode != null && treeNode instanceof BugInstanceGroupNode) {
+			while (treeNode instanceof BugInstanceGroupNode) {
 				((BugInstanceGroupNode) treeNode).incrementMemberCount();
 				treeNode = treeNode.getParent();
 			}

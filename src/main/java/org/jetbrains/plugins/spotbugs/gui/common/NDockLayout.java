@@ -29,18 +29,9 @@ package org.jetbrains.plugins.spotbugs.gui.common;
  * @since 0.9.29-dev
  */
 
-import javax.swing.JSeparator;
-import javax.swing.JToolBar;
-import javax.swing.SwingConstants;
-import java.awt.AWTError;
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.Insets;
-import java.awt.Rectangle;
+import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
-import java.util.Collection;
 
 
 public class NDockLayout extends BorderLayout {
@@ -256,7 +247,7 @@ public class NDockLayout extends BorderLayout {
 
 
 	private static void flipSeparators(final Component c, final int orientation) {
-		if (c != null && c instanceof JToolBar/* && UIManager.getLookAndFeel().getName().toLowerCase().contains("windows")*/) {
+		if (c instanceof JToolBar) {
 			final JToolBar jtb = (JToolBar) c;
 
 			final Component[] comps = jtb.getComponents();
@@ -264,27 +255,25 @@ public class NDockLayout extends BorderLayout {
 				for (int i = 0; i < comps.length; i++) {
 					try {
 						final Component component = comps[i];
-						if (component != null) {
-							if (component instanceof JSeparator) {
-								final boolean isVisible = component.isVisible();
-								jtb.remove(component);
-								final JSeparator separ = new JSeparator();
-								separ.setVisible(isVisible);
-								if (orientation == SwingConstants.VERTICAL) {
-									jtb.setOrientation(SwingConstants.VERTICAL);
-									separ.setOrientation(SwingConstants.VERTICAL);
-									separ.setMinimumSize(new Dimension(2, 6));
-									separ.setPreferredSize(new Dimension(2, 6));
-									separ.setMaximumSize(new Dimension(2, 100));
-								} else {
-									jtb.setOrientation(SwingConstants.HORIZONTAL);
-									separ.setOrientation(SwingConstants.HORIZONTAL);
-									separ.setMinimumSize(new Dimension(6, 20));
-									separ.setPreferredSize(new Dimension(6, 20));
-									separ.setMaximumSize(new Dimension(100, 20));
-								}
-								jtb.add(separ, i);
+						if (component instanceof JSeparator) {
+							final boolean isVisible = component.isVisible();
+							jtb.remove(component);
+							final JSeparator separ = new JSeparator();
+							separ.setVisible(isVisible);
+							if (orientation == SwingConstants.VERTICAL) {
+								jtb.setOrientation(SwingConstants.VERTICAL);
+								separ.setOrientation(SwingConstants.VERTICAL);
+								separ.setMinimumSize(new Dimension(2, 6));
+								separ.setPreferredSize(new Dimension(2, 6));
+								separ.setMaximumSize(new Dimension(2, 100));
+							} else {
+								jtb.setOrientation(SwingConstants.HORIZONTAL);
+								separ.setOrientation(SwingConstants.HORIZONTAL);
+								separ.setMinimumSize(new Dimension(6, 20));
+								separ.setPreferredSize(new Dimension(6, 20));
+								separ.setMaximumSize(new Dimension(100, 20));
 							}
+							jtb.add(separ, i);
 						}
 					} catch (final Exception e) {
 						throw new AWTError(e.getMessage());
@@ -293,31 +282,4 @@ public class NDockLayout extends BorderLayout {
 			}
 		}
 	}
-
-
-	public boolean containsImbeddedComp(final Component component) {
-		for (final Object curImbeddedTBR : _embeddedComponents) {
-			//noinspection unchecked
-			if (((Collection<Component>) curImbeddedTBR).contains(component)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-
-	/**
-	 * Description:
-	 * (SwingConstants top,left,bottom,right):
-	 * top:1, left:2, bottom:3, right:4
-	 *
-	 * @param component
-	 * @param inx
-	 * @return
-	 */
-	public boolean containsEmbeddedComp(final Component component, final int inx) {
-		//noinspection unchecked
-		return inx > 0 && inx < 5 && ((Collection<Component>) _embeddedComponents[inx + 1]).contains(component);
-	}
-
 }

@@ -101,7 +101,7 @@ public final class FindBugsProjects {
 				return false;
 			}
 			final PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
-			if (psiFile != null && psiFile instanceof PsiJavaFile) { // think of scala, groovy, aj etc
+			if (psiFile instanceof PsiJavaFile) { // think of scala, groovy, aj etc
 				final PsiJavaFile javaFile = (PsiJavaFile) psiFile;
 				String fileName = javaFile.getName();
 				if (fileName.endsWith(".java")) {
