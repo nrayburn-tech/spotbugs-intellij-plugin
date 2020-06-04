@@ -21,8 +21,7 @@ package org.jetbrains.plugins.spotbugs.common.util;
 
 import com.intellij.lang.Language;
 import com.intellij.lang.java.JavaLanguage;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.actionSystem.DataKeys;
+import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.components.ComponentManager;
 import com.intellij.openapi.components.PathMacroManager;
 import com.intellij.openapi.editor.Document;
@@ -62,16 +61,12 @@ import java.util.Set;
 @SuppressWarnings({"HardcodedFileSeparator"})
 public final class IdeaUtilImpl {
 
-	@NotNull
-	private static final VirtualFile[] EMPTY_VIRTUAL_FILE = new VirtualFile[0];
-	@NotNull
-	private static final String IDEA_PROJECT_DIR_VAR = "$PROJECT_DIR$";
-
-	private static final Set<String> SUPPORTED_FILE_TYPES_EXT = new THashSet<String>(Arrays.asList("java", "scala", "groovy", "gradle", "aj"));
+	private static final Set<String> SUPPORTED_FILE_TYPES_EXT = new THashSet<>(Arrays
+			.asList("java", "scala", "groovy", "gradle", "aj"));
 	public static final Set<FileType> SUPPORTED_FILE_TYPES;
 
 	static {
-		final THashSet<FileType> supported = new THashSet<FileType>(4);
+		final THashSet<FileType> supported = new THashSet<>(4);
 		supported.add(StdFileTypes.JAVA);
 		supported.add(StdFileTypes.CLASS);
 		final FileType scala = FileTypeManager.getInstance().getFileTypeByExtension("SCALA");
@@ -92,7 +87,7 @@ public final class IdeaUtilImpl {
 	private static final Set<Language> SUPPORTED_LANGUAGES;
 
 	static {
-		final THashSet<Language> supported = new THashSet<Language>(3);
+		final THashSet<Language> supported = new THashSet<>(3);
 		supported.add(JavaLanguage.INSTANCE);
 		final Language scala = Language.findLanguageByID("Scala");
 		if (scala != null) {
@@ -140,7 +135,7 @@ public final class IdeaUtilImpl {
 
 	@Nullable
 	public static Project getProject(@NotNull final DataContext dataContext) {
-		return DataKeys.PROJECT.getData(dataContext);
+		return PlatformDataKeys.PROJECT.getData(dataContext);
 	}
 
 
@@ -157,7 +152,7 @@ public final class IdeaUtilImpl {
 	 */
 	@Nullable
 	private static PsiFile getPsiFile(@NotNull final DataContext dataContext) {
-		return DataKeys.PSI_FILE.getData(dataContext);
+		return PlatformDataKeys.PSI_FILE.getData(dataContext);
 	}
 
 
@@ -197,13 +192,13 @@ public final class IdeaUtilImpl {
 
 	@Nullable
 	public static VirtualFile[] getVirtualFiles(@NotNull final DataContext dataContext) {
-		return DataKeys.VIRTUAL_FILE_ARRAY.getData(dataContext);
+		return PlatformDataKeys.VIRTUAL_FILE_ARRAY.getData(dataContext);
 	}
 
 
 	@Nullable
 	public static VirtualFile getVirtualFile(@NotNull final DataContext dataContext) {
-		return DataKeys.VIRTUAL_FILE.getData(dataContext);
+		return PlatformDataKeys.VIRTUAL_FILE.getData(dataContext);
 	}
 
 	@NotNull
@@ -226,7 +221,7 @@ public final class IdeaUtilImpl {
 		}
 
 		if (module == null) {
-			module = DataKeys.MODULE.getData(dataContext);
+			module = LangDataKeys.MODULE.getData(dataContext);
 		}
 
 		if (module == null) {
@@ -256,12 +251,12 @@ public final class IdeaUtilImpl {
 	@Nullable
 	private static PsiElement getCurrentElement(@NotNull final DataContext dataContext) {
 
-		/**
+		/*
 		 * Do not use "psi.Element" because this element could be contextless.
 		 */
 		//final PsiElement psiElement = (PsiElement) dataContext.getData("psi.Element");
 
-		final Editor editor = DataKeys.EDITOR.getData(dataContext);
+		final Editor editor = CommonDataKeys.EDITOR.getData(dataContext);
 		if (editor != null) {
 			final PsiFile psiFile = getPsiFile(dataContext);
 			if (psiFile != null) {
@@ -363,7 +358,7 @@ public final class IdeaUtilImpl {
 
 	@Nullable
 	private static PsiClass findJavaPsiClass(final Project project, @NotNull final String dottedFqClassName, @NotNull final GlobalSearchScope searchScope) {
-		/**
+		/*
 		 * Do not use findClass(), the returned class is "random" (eg: could be ClsClassImpl or PsiClassImpl), see javadoc
 		 */
 		final PsiClass[] classes = JavaPsiFacade.getInstance(project).findClasses(dottedFqClassName, searchScope);

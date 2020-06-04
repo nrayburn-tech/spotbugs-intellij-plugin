@@ -153,8 +153,8 @@ public class SuppressReportBugIntentionAction extends SuppressIntentionAction im
 	public void invoke(@NotNull final Project project, final Editor editor, @NotNull final PsiElement element) throws IncorrectOperationException {
 
 		if (!element.getLanguage().isKindOf(JavaLanguage.INSTANCE)) {
-			new Notification("SpotBugs Missing Feature", "Not Supported", "Sorry, insert annotation not supported for this language.", NotificationType.INFORMATION).notify(project);
-			/**
+			new Notification("SpotBugs Missing Feature", "Not supported", "Sorry, insert annotation not supported for this language.", NotificationType.INFORMATION).notify(project);
+			/*
 			 * FIXME Scala Plugin:
 			 * org.jetbrains.plugins.scala.lang.psi.impl.ScalaPsiElementFactory
 			 * crash with PsiManager and ScalaPsiManager#instance always return null
@@ -170,7 +170,6 @@ public class SuppressReportBugIntentionAction extends SuppressIntentionAction im
 		if (!FileModificationServiceUtil.preparePsiElementForWrite(container)) {
 			return;
 		}
-		@SuppressWarnings({"ConstantConditions"})
 		final ReadonlyStatusHandler.OperationStatus status = ReadonlyStatusHandler.getInstance(project).ensureFilesWritable(container.getContainingFile().getVirtualFile());
 		if (status.hasReadonlyFiles()) {
 			return;

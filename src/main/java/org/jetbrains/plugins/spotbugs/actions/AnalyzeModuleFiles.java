@@ -19,26 +19,19 @@
  */
 package org.jetbrains.plugins.spotbugs.actions;
 
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.DataKeys;
-import com.intellij.openapi.compiler.CompileScope;
-import com.intellij.openapi.compiler.CompilerManager;
+import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.compiler.*;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.CompilerModuleExtension;
-import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.util.Consumer;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.*;
 import org.jetbrains.plugins.spotbugs.collectors.RecurseFileCollector;
-import org.jetbrains.plugins.spotbugs.core.FindBugsProject;
-import org.jetbrains.plugins.spotbugs.core.FindBugsProjects;
-import org.jetbrains.plugins.spotbugs.core.FindBugsStarter;
-import org.jetbrains.plugins.spotbugs.core.FindBugsState;
+import org.jetbrains.plugins.spotbugs.core.*;
 import org.jetbrains.plugins.spotbugs.resources.ResourcesLoader;
 
 import java.io.File;
@@ -117,6 +110,6 @@ public abstract class AnalyzeModuleFiles extends AbstractAnalyzeAction {
 
 	@Nullable
 	private static Module getModule(@NotNull final AnActionEvent e) {
-		return DataKeys.MODULE.getData(e.getDataContext());
+		return LangDataKeys.MODULE.getData(e.getDataContext());
 	}
 }

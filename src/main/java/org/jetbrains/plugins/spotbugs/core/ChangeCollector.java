@@ -28,15 +28,7 @@ import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.project.ProjectUtil;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VfsUtilCore;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFileAdapter;
-import com.intellij.openapi.vfs.VirtualFileCopyEvent;
-import com.intellij.openapi.vfs.VirtualFileEvent;
-import com.intellij.openapi.vfs.VirtualFileMoveEvent;
-import com.intellij.openapi.vfs.VirtualFilePropertyEvent;
-import com.intellij.openapi.vfs.VirtualFileVisitor;
+import com.intellij.openapi.vfs.*;
 import com.intellij.openapi.vfs.newvfs.NewVirtualFile;
 import com.intellij.util.Function;
 import gnu.trove.THashSet;
@@ -57,7 +49,7 @@ import java.util.Set;
  * @version $Revision: 343 $
  * @since 0.9.995
  */
-final class ChangeCollector extends VirtualFileAdapter {
+final class ChangeCollector implements VirtualFileListener {
 
 
 	ChangeCollector() {
@@ -109,7 +101,7 @@ final class ChangeCollector extends VirtualFileAdapter {
 			return;
 		}
 
-		VfsUtilCore.visitChildrenRecursively(fromFile, new VirtualFileVisitor() {
+		VfsUtilCore.visitChildrenRecursively(fromFile, new VirtualFileVisitor<VirtualFile>() {
 			@NotNull @Override
 			public Result visitFileEx(@NotNull VirtualFile file) {
 				if (isIgnoredByBuild(file)) {
@@ -152,23 +144,17 @@ final class ChangeCollector extends VirtualFileAdapter {
 	}
 
 
-	private static final Function<Collection<File>, Void> NOTIFY_CHANGED = new Function<Collection<File>, Void>() {
-		public Void fun(Collection<File> files) {
-			notifyFilesChanged(files);
-			return null;
-		}
+	private static final Function<Collection<File>, Void> NOTIFY_CHANGED = files -> {
+		notifyFilesChanged(files);
+		return null;
 	};
 
 
 	private static void collectPathsAndNotify(final VirtualFile file, final Function<Collection<File>, Void> notification) {
-		final Set<File> pathsToMark = new THashSet<File>(FileUtil.FILE_HASHING_STRATEGY);
+		final Set<File> pathsToMark = new THashSet<>(FileUtil.FILE_HASHING_STRATEGY);
 		if (!isIgnoredOrUnderIgnoredDirectory(file)) {
 			final boolean inContent = isInContentOfOpenedProject(file);
-			processRecursively(file, !inContent, new FileProcessor() {
-				public void execute(final VirtualFile file) {
-					pathsToMark.add(new File(file.getPath()));
-				}
-			});
+			processRecursively(file, !inContent, file1 -> pathsToMark.add(new File(file1.getPath())));
 		}
 		if (!pathsToMark.isEmpty()) {
 			notification.fun(pathsToMark);

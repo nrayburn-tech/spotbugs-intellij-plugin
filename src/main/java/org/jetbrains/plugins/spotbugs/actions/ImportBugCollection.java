@@ -23,40 +23,25 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.DialogBuilder;
-import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.Condition;
+import com.intellij.openapi.ui.*;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.wm.ToolWindow;
-import com.intellij.util.Processor;
 import com.intellij.util.containers.TransferToEDTQueue;
-import edu.umd.cs.findbugs.BugInstance;
-import edu.umd.cs.findbugs.Plugin;
-import edu.umd.cs.findbugs.ProjectStats;
-import edu.umd.cs.findbugs.SortedBugCollection;
+import edu.umd.cs.findbugs.*;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.dom4j.DocumentException;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.plugins.spotbugs.common.EventDispatchThreadHelper;
-import org.jetbrains.plugins.spotbugs.common.FindBugsPluginConstants;
+import org.jetbrains.plugins.spotbugs.common.*;
 import org.jetbrains.plugins.spotbugs.common.util.New;
-import org.jetbrains.plugins.spotbugs.core.Bug;
-import org.jetbrains.plugins.spotbugs.core.FindBugsResult;
-import org.jetbrains.plugins.spotbugs.core.FindBugsState;
-import org.jetbrains.plugins.spotbugs.core.PluginSettings;
-import org.jetbrains.plugins.spotbugs.core.ProjectSettings;
-import org.jetbrains.plugins.spotbugs.core.WorkspaceSettings;
-import org.jetbrains.plugins.spotbugs.gui.common.BalloonTipFactory;
-import org.jetbrains.plugins.spotbugs.gui.common.ImportFileDialog;
+import org.jetbrains.plugins.spotbugs.core.*;
+import org.jetbrains.plugins.spotbugs.gui.common.*;
 import org.jetbrains.plugins.spotbugs.gui.toolwindow.view.ToolWindowPanel;
 import org.jetbrains.plugins.spotbugs.messages.MessageBusManager;
 import org.jetbrains.plugins.spotbugs.tasks.BackgroundableTask;
 
 import java.io.IOException;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.atomic.*;
 
 public final class ImportBugCollection extends AbstractAction {
 
@@ -119,18 +104,10 @@ public final class ImportBugCollection extends AbstractAction {
 		}
 
 		final AtomicBoolean taskCanceled = new AtomicBoolean();
-		final TransferToEDTQueue<Runnable> transferToEDTQueue = new TransferToEDTQueue<Runnable>("Add New Bug Instance", new Processor<Runnable>() {
-			@Override
-			public boolean process(Runnable runnable) {
-				runnable.run();
-				return true;
-			}
-		}, new Condition<Object>() {
-			@Override
-			public boolean value(Object o) {
-				return project.isDisposed() || taskCanceled.get();
-			}
-		}, 500);
+		final TransferToEDTQueue<Runnable> transferToEDTQueue = new TransferToEDTQueue<>("Add New Bug Instance", runnable -> {
+			runnable.run();
+			return true;
+		}, o -> project.isDisposed() || taskCanceled.get(), 500);
 
 		//Create a task to import the bug collection from XML
 		final BackgroundableTask task = new BackgroundableTask(project, "Importing Findbugs Result", true) {
@@ -232,10 +209,6 @@ public final class ImportBugCollection extends AbstractAction {
 	}
 
 	private static void showToolWindowErrorNotifier(@NotNull final Project project, final String message) {
-		EventDispatchThreadHelper.invokeLater(new Runnable() {
-			public void run() {
-				BalloonTipFactory.showToolWindowErrorNotifier(project, message);
-			}
-		});
+		EventDispatchThreadHelper.invokeLater(() -> BalloonTipFactory.showToolWindowErrorNotifier(project, message));
 	}
 }

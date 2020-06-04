@@ -60,7 +60,7 @@ public class FindBugsCompileAfterHook implements CompilationStatusListener, Proj
 	private static ChangeCollector CHANGE_COLLECTOR; // EDT thread confinement
 
 	static {
-		/**
+		/*
 		 * Note that ProjectData is cleared before BuildManagerListener#buildStarted is invoked,
 		 * so we can not use BuildManager.getInstance().getFilesChangedSinceLastCompilation(project).
 		 * There is no way to get the affect/compiled files (check with source of IC-140.2285.5).
@@ -69,11 +69,11 @@ public class FindBugsCompileAfterHook implements CompilationStatusListener, Proj
 		ApplicationManager.getApplication().getMessageBus().connect().subscribe(BuildManagerListener.TOPIC, new BuildManagerListener() {
 
 			//@Override // introduced with IDEA 15 EA
-			public void beforeBuildProcessStarted(final Project project, final UUID sessionId) {
+			public void beforeBuildProcessStarted(final @NotNull Project project, final @NotNull UUID sessionId) {
 			}
 
 			@Override
-			public void buildStarted(final Project project, final UUID sessionId, final boolean isAutomake) {
+			public void buildStarted(final @NotNull Project project, final @NotNull UUID sessionId, final boolean isAutomake) {
 				if (isAutomake && isAfterAutoMakeEnabled(project)) {
 					final Set<VirtualFile> changed = Changes.INSTANCE.getAndRemoveChanged(project);
 					if (changed != null) {
@@ -83,7 +83,7 @@ public class FindBugsCompileAfterHook implements CompilationStatusListener, Proj
 			}
 
 			@Override
-			public void buildFinished(final Project project, final UUID sessionId, final boolean isAutomake) {
+			public void buildFinished(final @NotNull Project project, final @NotNull UUID sessionId, final boolean isAutomake) {
 				if (isAutomake) {
 					final Set<VirtualFile> changed = CHANGED_BY_SESSION_ID.remove(sessionId);
 					if (changed != null) {
@@ -112,7 +112,7 @@ public class FindBugsCompileAfterHook implements CompilationStatusListener, Proj
 	}
 
 	@Override
-	public void compilationFinished(final boolean aborted, final int errors, final int warnings, final CompileContext compileContext) {
+	public void compilationFinished(final boolean aborted, final int errors, final int warnings, final @NotNull CompileContext compileContext) {
 		// note that this is not invoked when auto make trigger compilation
 		if (!aborted && errors == 0) {
 			initWorker(compileContext);
@@ -120,14 +120,13 @@ public class FindBugsCompileAfterHook implements CompilationStatusListener, Proj
 	}
 
 	@Override
-	public void fileGenerated(final String s, final String s1) {
+	public void fileGenerated(final @NotNull String s, final @NotNull String s1) {
 	}
 
 	@SuppressWarnings("UnusedDeclaration")
 	public void fileGenerated(final String s) {
 	}
 
-	@SuppressFBWarnings("RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE")
 	@NotNull
 	@Override
 	public String getComponentName() {
@@ -242,41 +241,31 @@ public class FindBugsCompileAfterHook implements CompilationStatusListener, Proj
 	}
 
 	private static void initWorkerForAutoMake(@NotNull final Project project, @NotNull final Collection<VirtualFile> changed) {
-		ApplicationManager.getApplication().runReadAction(new Runnable() {
-			@Override
-			public void run() {
-				initWorkerForAutoMakeImpl(project, changed);
-			}
-		});
+		ApplicationManager.getApplication().runReadAction(() -> initWorkerForAutoMakeImpl(project, changed));
 	}
 
 	private static void initWorkerForAutoMakeImpl(@NotNull final Project project, @NotNull final Collection<VirtualFile> changed) {
-		EventDispatchThreadHelper.invokeLater(new Runnable() {
+		EventDispatchThreadHelper.invokeLater(() -> new FindBugsStarter(
+				project,
+				"Running SpotBugs analysis for affected files...",
+				ProgressStartType.RunInBackground
+		) {
 			@Override
-			public void run() {
-				new FindBugsStarter(
-						project,
-						"Running SpotBugs analysis for affected files...",
-						ProgressStartType.RunInBackground
-				) {
-					@Override
-					protected boolean isCompileBeforeAnalyze() {
-						return false;
-					}
-
-					@Override
-					protected void createCompileScope(@NotNull final CompilerManager compilerManager, @NotNull final Consumer<CompileScope> consumer) {
-						throw new UnsupportedOperationException();
-					}
-
-					@Override
-					protected boolean configure(@NotNull final ProgressIndicator indicator, @NotNull final FindBugsProjects projects, final boolean justCompiled) {
-						projects.addFiles(changed, false, hasTests(changed));
-						return true;
-					}
-				}.start();
+			protected boolean isCompileBeforeAnalyze() {
+				return false;
 			}
-		});
+
+			@Override
+			protected void createCompileScope(@NotNull final CompilerManager compilerManager, @NotNull final Consumer<CompileScope> consumer) {
+				throw new UnsupportedOperationException();
+			}
+
+			@Override
+			protected boolean configure(@NotNull final ProgressIndicator indicator, @NotNull final FindBugsProjects projects, final boolean justCompiled) {
+				projects.addFiles(changed, false, hasTests(changed));
+				return true;
+			}
+		}.start());
 	}
 
 	private static class DelayedExecutor {
@@ -286,7 +275,7 @@ public class FindBugsCompileAfterHook implements CompilationStatusListener, Proj
 
 		DelayedExecutor(@NotNull final Project project) {
 			_project = project;
-			_alarm = new Alarm(Alarm.ThreadToUse.SHARED_THREAD);
+			_alarm = new Alarm(Alarm.ThreadToUse.POOLED_THREAD);
 		}
 
 		void schedule(@NotNull final Set<VirtualFile> changed) {
@@ -302,19 +291,16 @@ public class FindBugsCompileAfterHook implements CompilationStatusListener, Proj
 		}
 
 		private void addRequest() {
-			_alarm.addRequest(new Runnable() {
-				@Override
-				public void run() {
-					if (HeavyProcessLatch.INSTANCE.isRunning()) {
-						addRequest();
-					} else {
-						final Set<VirtualFile> changed;
-						synchronized (DelayedExecutor.this) {
-							changed = _changed;
-							_changed = null;
-						}
-						initWorkerForAutoMake(_project, changed);
+			_alarm.addRequest(() -> {
+				if (HeavyProcessLatch.INSTANCE.isRunning()) {
+					addRequest();
+				} else {
+					final Set<VirtualFile> changed;
+					synchronized (DelayedExecutor.this) {
+						changed = _changed;
+						_changed = null;
 					}
+					initWorkerForAutoMake(_project, changed);
 				}
 			}, DELAY_MS);
 		}
