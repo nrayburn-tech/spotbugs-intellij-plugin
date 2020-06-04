@@ -81,6 +81,11 @@
     </description>
     <change-notes>
         <![CDATA[<html>
+        <h3>1.2.0</h3>
+        <ul>
+            <li>Fixes issue #13: SpotBugs plugin cannot start on Java 8 boot JDK</li>
+            <li>Cosmetic changes</li>
+        </ul>
         <h3>1.1.1</h3>
         <ul>
             <li>Updated SpotBugs to version 4.0.3 to avoid installing SecurityManager during analysis.

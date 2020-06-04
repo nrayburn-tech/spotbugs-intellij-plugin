@@ -35,8 +35,8 @@ import org.jetbrains.plugins.spotbugs.resources.ResourcesLoader;
 
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
@@ -163,7 +163,11 @@ public final class ErrorReportSubmitterImpl extends ErrorReportSubmitter {
 
 	@NotNull
 	private static String encode(@NotNull final String value) {
-		return URLEncoder.encode(value, StandardCharsets.UTF_8);
+		try {
+			return URLEncoder.encode(value, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			throw new InternalError("UTF-8 is not available");
+		}
 	}
 
 	@NotNull

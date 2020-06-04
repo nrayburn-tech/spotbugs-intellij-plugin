@@ -26,7 +26,7 @@ import com.intellij.util.IconUtil;
 import org.jetbrains.plugins.spotbugs.resources.ResourcesLoader;
 
 import javax.swing.*;
-import java.util.Map;
+import java.util.*;
 
 public interface PluginIcons {
 
@@ -91,13 +91,7 @@ public interface PluginIcons {
             ResourcesLoader.loadIcon("actions/groupByTemplate.svg")
     );
 
-    Map<String, Icon> GROUP_BY_RANK_ICONS = Map.of(
-            "SCARIEST", GROUP_BY_RANK_SCARIEST_ICON,
-            "SCARY", GROUP_BY_RANK_SCARY_ICON,
-            "TROUBLING", GROUP_BY_RANK_TROUBLING_ICON,
-            "OF_CONCERN", GROUP_BY_RANK_OF_CONCERN_ICON,
-            "OF CONCERN", GROUP_BY_RANK_OF_CONCERN_ICON
-    );
+    Map<String, Icon> GROUP_BY_RANK_ICONS = InitIcons.initGroupByRankIconsMap();
 
     Icon GROUP_BY_PRIORITY_HIGH_ICON = ResourcesLoader.loadIcon("priority/priorityHigh.png");
     Icon GROUP_BY_PRIORITY_MEDIUM_ICON = ResourcesLoader.loadIcon("priority/priorityMedium.png");
@@ -105,13 +99,7 @@ public interface PluginIcons {
     Icon GROUP_BY_PRIORITY_EXP_ICON = ResourcesLoader.loadIcon("priority/priorityExp.png");
     Icon GROUP_BY_PRIORITY_IGNORE_ICON = ResourcesLoader.loadIcon("priority/priorityIgnore.png");
 
-    Map<String, Icon> GROUP_BY_PRIORITY_ICONS = Map.of(
-            "Low", GROUP_BY_PRIORITY_LOW_ICON,
-            "Medium", GROUP_BY_PRIORITY_MEDIUM_ICON,
-            "High", GROUP_BY_PRIORITY_HIGH_ICON,
-            "Exp", GROUP_BY_PRIORITY_EXP_ICON,
-            "Ignore", GROUP_BY_PRIORITY_IGNORE_ICON
-    );
+    Map<String, Icon> GROUP_BY_PRIORITY_ICONS = InitIcons.initGroupByPriorityIconsMap();
 
     /**
      * --------------------------------------------------------------------------------------------------
@@ -119,7 +107,7 @@ public interface PluginIcons {
      */
     Icon HIGH_PRIORITY_ICON = ResourcesLoader.loadIcon("priority/bugHigh.svg");
     Icon NORMAL_PRIORITY_ICON = ResourcesLoader.loadIcon("priority/bugNormal.svg");
-	Icon LOW_PRIORITY_ICON = ResourcesLoader.loadIcon("priority/bugLow.svg");
+	  Icon LOW_PRIORITY_ICON = ResourcesLoader.loadIcon("priority/bugLow.svg");
     Icon EXP_PRIORITY_ICON = ResourcesLoader.loadIcon("priority/bugExp.svg");
 
     /**
