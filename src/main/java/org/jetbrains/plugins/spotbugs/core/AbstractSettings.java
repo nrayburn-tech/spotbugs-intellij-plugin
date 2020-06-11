@@ -31,6 +31,7 @@ import org.jetbrains.plugins.spotbugs.common.util.FindBugsCustomPluginUtil;
 import org.jetbrains.plugins.spotbugs.common.util.New;
 import org.jetbrains.plugins.spotbugs.preferences.AnalysisEffort;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -89,7 +90,7 @@ public abstract class AbstractSettings {
 			keyAttributeName = "file",
 			valueAttributeName = "enabled"
 	)
-	public Map<String, Boolean> includeFilterFiles = New.map();
+	public Map<String, Boolean> includeFilterFiles = new HashMap<>();
 
 	/**
 	 * @see edu.umd.cs.findbugs.config.UserPreferences#setExcludeFilterFiles(Map)
@@ -103,7 +104,7 @@ public abstract class AbstractSettings {
 			keyAttributeName = "file",
 			valueAttributeName = "enabled"
 	)
-	public Map<String, Boolean> excludeFilterFiles = New.map();
+	public Map<String, Boolean> excludeFilterFiles = new HashMap<>();
 
 	/**
 	 * @see edu.umd.cs.findbugs.config.UserPreferences#setExcludeBugsFiles(Map)
@@ -117,7 +118,7 @@ public abstract class AbstractSettings {
 			keyAttributeName = "file",
 			valueAttributeName = "enabled"
 	)
-	public Map<String, Boolean> excludeBugsFiles = New.map();
+	public Map<String, Boolean> excludeBugsFiles = new HashMap<>();
 
 	/**
 	 * Note that the map only contains detectors from the core plugin and
@@ -138,5 +139,5 @@ public abstract class AbstractSettings {
 			keyAttributeName = "name",
 			valueAttributeName = "enabled"
 	)
-	public Map<String, Boolean> detectors = New.map();
+	public Map<String, Boolean> detectors = new HashMap<>();
 }

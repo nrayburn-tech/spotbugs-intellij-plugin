@@ -25,6 +25,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -52,7 +53,7 @@ public final class FindBugsUtil {
 
 
 	static {
-		final Map<String, String> archiveExtensions = New.map(5);
+    final Map<String, String> archiveExtensions = new HashMap<>(5);
 		archiveExtensions.put(".jar", "");
 		archiveExtensions.put(".zip", "");
 		archiveExtensions.put(".ear", "");

@@ -19,22 +19,12 @@
  */
 package org.jetbrains.plugins.spotbugs.common.util;
 
-import gnu.trove.THashSet;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.WeakHashMap;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.atomic.AtomicReference;
 
 public final class New {
 
@@ -42,42 +32,13 @@ public final class New {
 	}
 
 	@NotNull
-	public static <V> AtomicReference<V> atomicRef(@Nullable V initialValue) {
-		return new AtomicReference<V>(initialValue);
-	}
-
-	@NotNull
-	public static <K, V> Map<K, V> map() {
-		return new HashMap<K, V>();
-	}
-
-	@NotNull
-	public static <K, V> Map<K, V> map(final int initialCapacity) {
-		return new HashMap<K, V>(initialCapacity);
-	}
-
-	@NotNull
-	public static <K, V> WeakHashMap<K, V> weakHashMap() {
-		return new WeakHashMap<K, V>();
-	}
-
-	@NotNull
-	public static <V> WeakReference<V> weakRef(@NotNull final V referent) {
-		return new WeakReference<V>(referent);
-	}
-
-	@NotNull
-	public static <K, V> ConcurrentMap<K, V> concurrentMap() {
-		return new ConcurrentHashMap<K, V>();
-	}
-
-	@NotNull
+	@SafeVarargs
 	public static <T> Set<T> asSet(@Nullable final T... elements) {
 		int cap = 4;
 		if (elements != null) {
 			cap = elements.length;
 		}
-		final HashSet<T> ret = new HashSet<T>(cap);
+		final HashSet<T> ret = new HashSet<>(cap);
 		if (elements != null) {
 			ret.addAll(Arrays.asList(elements));
 		}

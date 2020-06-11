@@ -23,7 +23,6 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.plugins.spotbugs.common.util.New;
 import org.jetbrains.plugins.spotbugs.core.AbstractSettings;
 
 import java.lang.ref.WeakReference;
@@ -52,10 +51,10 @@ public final class PluginLoader {
 		if (latestProject != project || latestModule != module) {
 			final PluginLoaderImpl pluginLoader = new PluginLoaderImpl(addEditSettingsLinkToErrorMessage);
 			pluginLoader.load(settings.plugins);
-			projectRef = New.weakRef(project);
+      projectRef = new WeakReference<>(project);
 			moduleRef = null;
 			if (module != null) {
-				moduleRef = New.weakRef(module);
+        moduleRef = new WeakReference<>(module);
 			}
 			return pluginLoader.showErrorNotificationIfNecessary(project);
 		}

@@ -35,7 +35,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.spotbugs.common.EventDispatchThreadHelper;
 import org.jetbrains.plugins.spotbugs.common.util.IdeaUtilImpl;
-import org.jetbrains.plugins.spotbugs.common.util.New;
 import org.jetbrains.plugins.spotbugs.common.util.WithPluginClassloader;
 import org.jetbrains.plugins.spotbugs.gui.common.BalloonTipFactory;
 import org.jetbrains.plugins.spotbugs.resources.ResourcesLoader;
@@ -43,6 +42,7 @@ import org.jetbrains.plugins.spotbugs.resources.ResourcesLoader;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -60,7 +60,7 @@ public final class FindBugsProjects {
 
 	FindBugsProjects(@NotNull final Project project) {
 		this.project = project;
-		projects = New.map();
+		projects = new HashMap<>();
 	}
 
 	public boolean addFiles(@NotNull final Iterable<VirtualFile> files, final boolean checkCompiled, final boolean includeTests) {

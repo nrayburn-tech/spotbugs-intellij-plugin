@@ -25,11 +25,11 @@ import edu.umd.cs.findbugs.DetectorFactory;
 import edu.umd.cs.findbugs.DetectorFactoryCollection;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.plugins.spotbugs.common.util.New;
 import org.jetbrains.plugins.spotbugs.core.AbstractSettings;
 import org.jetbrains.plugins.spotbugs.core.PluginSettings;
 import org.jetbrains.plugins.spotbugs.resources.ResourcesLoader;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -53,7 +53,7 @@ abstract class SonarProfileImporter {
 
 		// disable all detectors (like legacy sonar importer logic)
 		settings.detectors.clear();
-		final Map<String, PluginSettings> settingsByPluginId = New.map();
+		final Map<String, PluginSettings> settingsByPluginId = new HashMap<>();
 		for (final PluginSettings pluginSettings : settings.plugins) {
 			pluginSettings.detectors.clear();
 			settingsByPluginId.put(pluginSettings.id, pluginSettings);
@@ -104,7 +104,7 @@ abstract class SonarProfileImporter {
 
 	@NotNull
 	private static Map<String, String> createIndexDetectorsPluginIdByShortName() {
-		final Map<String, String> ret = New.map();
+		final Map<String, String> ret = new HashMap<>();
 		for (final DetectorFactory detector : DetectorFactoryCollection.instance().getFactories()) {
 			ret.put(detector.getShortName(), detector.getPlugin().getPluginId());
 		}
@@ -113,14 +113,10 @@ abstract class SonarProfileImporter {
 
 	@NotNull
 	private static Map<String, Set<String>> createIndexShortNameByBugPatternType() {
-		final Map<String, Set<String>> ret = New.map();
+		final Map<String, Set<String>> ret = new HashMap<>();
 		for (final DetectorFactory detector : DetectorFactoryCollection.instance().getFactories()) {
 			for (final BugPattern bugPattern : detector.getReportedBugPatterns()) {
-				Set<String> detectorsShortName = ret.get(bugPattern.getType());
-				if (detectorsShortName == null) {
-					detectorsShortName = new HashSet<String>();
-					ret.put(bugPattern.getType(), detectorsShortName);
-				}
+				Set<String> detectorsShortName = ret.computeIfAbsent(bugPattern.getType(), k -> new HashSet<>());
 				detectorsShortName.add(detector.getShortName());
 			}
 		}

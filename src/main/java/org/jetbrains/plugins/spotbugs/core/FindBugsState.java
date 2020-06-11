@@ -23,9 +23,9 @@ package org.jetbrains.plugins.spotbugs.core;
 
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.plugins.spotbugs.common.util.New;
 
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -41,10 +41,10 @@ public enum FindBugsState {
 	Aborted,
 	Finished;
 
-	private static final Map<Project, FindBugsState> _stateByProject = New.concurrentMap();
+	private static final Map<Project, FindBugsState> _stateByProject = new ConcurrentHashMap<>();
 
 
-	public boolean isStarted() {
+  public boolean isStarted() {
 		return Started.equals(this);
 	}
 

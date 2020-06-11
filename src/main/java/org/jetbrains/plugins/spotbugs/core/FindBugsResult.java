@@ -24,9 +24,9 @@ import edu.umd.cs.findbugs.ProjectStats;
 import edu.umd.cs.findbugs.SortedBugCollection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.plugins.spotbugs.common.util.New;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 public final class FindBugsResult {
@@ -34,7 +34,7 @@ public final class FindBugsResult {
 	private final Map<Project, SortedBugCollection> results;
 
 	public FindBugsResult() {
-		this.results = New.map();
+		this.results = new HashMap<>();
 	}
 
 	public void put(@NotNull final Project project, @Nullable final SortedBugCollection bugCollection) {

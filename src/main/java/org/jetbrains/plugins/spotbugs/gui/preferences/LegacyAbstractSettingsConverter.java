@@ -27,7 +27,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.spotbugs.common.FindBugsPluginConstants;
 import org.jetbrains.plugins.spotbugs.common.util.FileUtilFb;
-import org.jetbrains.plugins.spotbugs.common.util.New;
 import org.jetbrains.plugins.spotbugs.core.AbstractSettings;
 import org.jetbrains.plugins.spotbugs.core.PluginSettings;
 import org.jetbrains.plugins.spotbugs.core.WorkspaceSettings;
@@ -35,6 +34,7 @@ import org.jetbrains.plugins.spotbugs.plugins.AbstractPluginLoaderLegacy;
 import org.jetbrains.plugins.spotbugs.plugins.Plugins;
 import org.jetbrains.plugins.spotbugs.preferences.PersistencePreferencesBean;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -173,14 +173,10 @@ public final class LegacyAbstractSettingsConverter {
 				from.getDisabledBundledPluginIds()
 		);
 
-		final Map<String, Map<String, Boolean>> detectorDefaultEnabled = New.map();
+		final Map<String, Map<String, Boolean>> detectorDefaultEnabled = new HashMap<>();
 		for (final DetectorFactory detector : DetectorFactoryCollection.instance().getFactories()) {
-			Map<String, Boolean> byDetector = detectorDefaultEnabled.get(detector.getPlugin().getPluginId());
-			if (byDetector == null) {
-				byDetector = New.map();
-				detectorDefaultEnabled.put(detector.getPlugin().getPluginId(), byDetector);
-			}
-			byDetector.put(detector.getShortName(), detector.isDefaultEnabled());
+			detectorDefaultEnabled.computeIfAbsent(detector.getPlugin().getPluginId(), k -> new HashMap<>())
+					.put(detector.getShortName(), detector.isDefaultEnabled());
 		}
 
 		// core detectors
@@ -230,7 +226,7 @@ public final class LegacyAbstractSettingsConverter {
 		}
 		for (final Map.Entry<String, String> fromEntry : from.entrySet()) {
 			if (!StringUtil.isEmptyOrSpaces(fromEntry.getValue()) && !StringUtil.isEmptyOrSpaces(fromEntry.getKey())) {
-				final boolean enabled = Boolean.valueOf(fromEntry.getValue());
+				final boolean enabled = Boolean.parseBoolean(fromEntry.getValue());
 				final Boolean defaultEnabled = defaults.get(fromEntry.getKey());
 				if (defaultEnabled != null) { // otherwise detector does not belong to the plugin
 					final boolean apply = defaultEnabled != enabled;
@@ -266,7 +262,7 @@ public final class LegacyAbstractSettingsConverter {
 
 		LegacyPluginLoaderImpl() {
 			super(false);
-			userPluginIdByPluginUrl = New.map();
+			userPluginIdByPluginUrl = new HashMap<>();
 		}
 
 		@Override

@@ -32,7 +32,6 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.dom4j.DocumentException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.plugins.spotbugs.common.*;
-import org.jetbrains.plugins.spotbugs.common.util.New;
 import org.jetbrains.plugins.spotbugs.core.*;
 import org.jetbrains.plugins.spotbugs.gui.common.*;
 import org.jetbrains.plugins.spotbugs.gui.toolwindow.view.ToolWindowPanel;
@@ -152,8 +151,9 @@ public final class ImportBugCollection extends AbstractAction {
 						/*
 						 * Guarantee thread visibility *one* time.
 						 */
-						final AtomicReference<BugInstance> bugInstanceRef = New.atomicRef(bugInstance);
-						final AtomicReference<SortedBugCollection> importBugCollectionRef = New.atomicRef(importBugCollection);
+						final AtomicReference<BugInstance> bugInstanceRef = new AtomicReference<>(bugInstance);
+						final AtomicReference<SortedBugCollection> importBugCollectionRef =
+								new AtomicReference<>(importBugCollection);
 						final int analyzedClassCount = projectStats.getNumClasses();
 						transferToEDTQueue.offer(new Runnable() {
 							/**

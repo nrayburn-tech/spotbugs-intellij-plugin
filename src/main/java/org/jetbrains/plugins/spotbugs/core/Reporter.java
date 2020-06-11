@@ -37,7 +37,6 @@ import edu.umd.cs.findbugs.config.ProjectFilterSettings;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.plugins.spotbugs.common.EventDispatchThreadHelper;
-import org.jetbrains.plugins.spotbugs.common.util.New;
 import org.jetbrains.plugins.spotbugs.messages.MessageBusManager;
 
 import java.util.ArrayList;
@@ -133,8 +132,8 @@ final class Reporter extends AbstractBugReporter implements FindBugsProgress {
 		observeClass(bug.getPrimaryClass().getClassDescriptor());
 
 		// Guarantee thread visibility *one* time.
-		final AtomicReference<SortedBugCollection> bugCollectionRef = New.atomicRef(_bugCollection);
-		final AtomicReference<BugInstance> bugRef = New.atomicRef(bug);
+    final AtomicReference<SortedBugCollection> bugCollectionRef = new AtomicReference<>(_bugCollection);
+    final AtomicReference<BugInstance> bugRef = new AtomicReference<>(bug);
 		final int analyzedClassCount = analyzedClassCountOffset + getProjectStats().getNumClasses();
 		_transferToEDTQueue.offer(new Runnable() {
 			/**

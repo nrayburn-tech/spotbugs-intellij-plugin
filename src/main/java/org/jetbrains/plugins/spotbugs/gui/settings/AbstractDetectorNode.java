@@ -29,7 +29,6 @@ import edu.umd.cs.findbugs.I18N;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.spotbugs.common.FindBugsPluginConstants;
-import org.jetbrains.plugins.spotbugs.common.util.New;
 import org.jetbrains.plugins.spotbugs.common.util.WithPluginClassloader;
 import org.jetbrains.plugins.spotbugs.core.AbstractSettings;
 import org.jetbrains.plugins.spotbugs.core.PluginSettings;
@@ -85,7 +84,7 @@ abstract class AbstractDetectorNode extends DefaultMutableTreeNode {
 			@NotNull final Map<String, Map<String, Boolean>> detectors
 	) {
 
-		final Map<String, List<DetectorNode>> byGroup = New.map();
+		final Map<String, List<DetectorNode>> byGroup = new HashMap<>();
 		final Iterator<DetectorFactory> detectorFactoryIterator = WithPluginClassloader.notNull(
 				() -> DetectorFactoryCollection.instance().factoryIterator());
 		fillByGroup(groupBy, acceptor, detectorFactoryIterator, byGroup, detectors);
@@ -183,7 +182,7 @@ abstract class AbstractDetectorNode extends DefaultMutableTreeNode {
 	static Map<String, Map<String, Boolean>> createEnabledMap(
 			@NotNull final AbstractSettings settings
 	) {
-		final Map<String, Map<String, Boolean>> ret = New.map();
+		final Map<String, Map<String, Boolean>> ret = new HashMap<>();
 		if (!settings.detectors.isEmpty()) {
 			ret.put(FindBugsPluginConstants.FINDBUGS_CORE_PLUGIN_ID, new HashMap<>(settings.detectors));
 		}

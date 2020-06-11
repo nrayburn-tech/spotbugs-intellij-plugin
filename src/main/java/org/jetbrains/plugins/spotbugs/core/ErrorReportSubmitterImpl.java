@@ -53,7 +53,7 @@ public final class ErrorReportSubmitterImpl extends ErrorReportSubmitter {
 	@Override
 	public boolean submit(@NotNull IdeaLoggingEvent[] events, @Nullable String additionalInfo, @NotNull Component parentComponent, @NotNull Consumer<SubmittedReportInfo> consumer) {
 
-		final AtomicReference<String> latestVersionRef = New.atomicRef(null);
+		final AtomicReference<String> latestVersionRef = new AtomicReference<>(null);
 		new Task.Modal(null, ResourcesLoader.getString("error.submitReport.checkVersion"), false) {
 			@Override
 			public void run(@NotNull final ProgressIndicator indicator) {

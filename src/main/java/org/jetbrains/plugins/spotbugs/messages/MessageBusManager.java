@@ -24,17 +24,17 @@ import com.intellij.util.messages.Topic;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.spotbugs.common.EventDispatchThreadHelper;
-import org.jetbrains.plugins.spotbugs.common.util.New;
 import org.jetbrains.plugins.spotbugs.core.Bug;
 import org.jetbrains.plugins.spotbugs.core.FindBugsResult;
 import org.jetbrains.plugins.spotbugs.core.FindBugsState;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 public final class MessageBusManager {
 
-	private static final Map<Project, MessageBus> _busByProject = New.map();
+	private static final Map<Project, MessageBus> _busByProject = new HashMap<>();
 
 	private MessageBusManager() {
 	}
@@ -115,8 +115,8 @@ public final class MessageBusManager {
 		/*
 		 * Guarantee thread visibility *one* time.
 		 */
-		final AtomicReference<FindBugsResult> resultRef = New.atomicRef(result);
-		final AtomicReference<Throwable> errorRef = New.atomicRef(error);
+		final AtomicReference<FindBugsResult> resultRef = new AtomicReference<>(result);
+		final AtomicReference<Throwable> errorRef = new AtomicReference<>(error);
 		EventDispatchThreadHelper.invokeLater(() -> {
 			FindBugsState.set(project, FindBugsState.Finished);
 			publish(project, AnalysisFinishedListener.TOPIC).analysisFinished(resultRef.get(), errorRef.get());

@@ -24,11 +24,11 @@ package org.jetbrains.plugins.spotbugs.messages;
 import com.intellij.openapi.project.Project;
 import com.intellij.util.messages.Topic;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.plugins.spotbugs.common.util.New;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -49,17 +49,13 @@ final class MessageBus {
 
 	MessageBus(@NotNull final Project project) {
 		_project = project;
-		_subscribers = New.map();
-		_publisher = New.map();
+		_subscribers = new HashMap<>();
+		_publisher = new HashMap<>();
 	}
 
 
 	public <L> void subscribe(@NotNull final Object subscriber, @NotNull final Topic<L> topic, @NotNull final L handler) {
-		Map<Topic<?>, Object/*handler*/> handlerByTopic = _subscribers.get(subscriber);
-		if (handlerByTopic == null) {
-			handlerByTopic = New.map();
-			_subscribers.put(subscriber, handlerByTopic);
-		}
+		Map<Topic<?>, Object/*handler*/> handlerByTopic = _subscribers.computeIfAbsent(subscriber, k -> new HashMap<>());
 		if (!handlerByTopic.containsKey(topic)) {
 			handlerByTopic.put(topic, handler);
 		} // else do nothing ; subscriber has already subscribed this topic

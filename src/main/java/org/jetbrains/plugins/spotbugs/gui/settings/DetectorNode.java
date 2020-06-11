@@ -22,8 +22,8 @@ package org.jetbrains.plugins.spotbugs.gui.settings;
 import edu.umd.cs.findbugs.DetectorFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.plugins.spotbugs.common.util.New;
 
+import java.util.HashMap;
 import java.util.Map;
 
 final class DetectorNode extends AbstractDetectorNode {
@@ -49,7 +49,7 @@ final class DetectorNode extends AbstractDetectorNode {
 	}
 
 	@Override
-	@Nullable
+	@NotNull
 	Boolean getEnabled() {
 		final Map<String, Boolean> enabledMap = enabled.get(detector.getPlugin().getPluginId());
 		if (enabledMap != null) {
@@ -66,11 +66,7 @@ final class DetectorNode extends AbstractDetectorNode {
 		final boolean e = null != enabled && enabled;
 		final String pluginId = detector.getPlugin().getPluginId();
 		if (e != detector.isDefaultEnabled()) {
-			Map<String, Boolean> settings = this.enabled.get(pluginId);
-			if (settings == null) {
-				settings = New.map();
-				this.enabled.put(pluginId, settings);
-			}
+			Map<String, Boolean> settings = this.enabled.computeIfAbsent(pluginId, k -> new HashMap<>());
 			settings.put(detector.getShortName(), e);
 		} else {
 			final Map<String, Boolean> settings = this.enabled.get(pluginId);

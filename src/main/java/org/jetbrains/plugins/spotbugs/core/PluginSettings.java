@@ -27,9 +27,10 @@ import edu.umd.cs.findbugs.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.spotbugs.common.util.MapUtil;
-import org.jetbrains.plugins.spotbugs.common.util.New;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 @Tag(value = "plugin")
@@ -70,17 +71,17 @@ public final class PluginSettings implements Comparable<PluginSettings> {
 			keyAttributeName = "name",
 			valueAttributeName = "enabled"
 	)
-	public Map<String, Boolean> detectors = New.map();
+	public Map<String, Boolean> detectors = new HashMap<>();
 
 	@Override
 	public int compareTo(@NotNull final PluginSettings o) {
 		int ret = id.compareTo(o.id);
 		if (ret == 0) {
-			ret = Boolean.valueOf(bundled).compareTo(o.bundled); // LATER: use Boolean.compare when JRE 1.6 support is gone
+			ret = Boolean.compare(bundled, o.bundled);
 			if (ret == 0) {
 				ret = StringUtil.compare(url, o.url, false);
 				if (ret == 0) {
-					ret = Boolean.valueOf(enabled).compareTo(o.enabled); // LATER: use Boolean.compare when JRE 1.6 support is gone
+					ret = Boolean.compare(enabled, o.enabled);
 					if (ret == 0) {
 						ret = MapUtil.compare(detectors, o.detectors);
 					}
@@ -97,11 +98,10 @@ public final class PluginSettings implements Comparable<PluginSettings> {
 
 		final PluginSettings that = (PluginSettings) o;
 
-		if (enabled != that.enabled) return false;
-		if (bundled != that.bundled) return false;
-		if (!id.equals(that.id)) return false;
-		if (url != null ? !url.equals(that.url) : that.url != null) return false;
-		return detectors.equals(that.detectors);
+		return enabled == that.enabled && bundled == that.bundled && 
+					 id.equals(that.id) && 
+					 Objects.equals(url, that.url) && 
+					 detectors.equals(that.detectors);
 
 	}
 

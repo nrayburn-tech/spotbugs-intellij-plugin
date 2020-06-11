@@ -30,9 +30,9 @@ import com.intellij.util.xmlb.annotations.MapAnnotation;
 import com.intellij.util.xmlb.annotations.Tag;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.plugins.spotbugs.common.util.New;
 import org.jetbrains.plugins.spotbugs.gui.tree.GroupBy;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @State(
@@ -98,7 +98,7 @@ public final class WorkspaceSettings implements PersistentStateComponent<Workspa
 			keyAttributeName = "module",
 			valueAttributeName = "path"
 	)
-	public Map<String, String> importFilePath = New.map();
+	public Map<String, String> importFilePath = new HashMap<>();
 
 	@Tag
 	public boolean annotationTextRangeMarkup = true;
@@ -121,9 +121,8 @@ public final class WorkspaceSettings implements PersistentStateComponent<Workspa
 	@Tag
 	public boolean analyzeBeforeCheckIn = false;
 
-	@Nullable
 	@Override
-	public WorkspaceSettings getState() {
+	public @NotNull WorkspaceSettings getState() {
 		return this;
 	}
 

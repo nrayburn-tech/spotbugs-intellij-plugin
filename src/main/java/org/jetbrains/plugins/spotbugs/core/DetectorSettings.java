@@ -24,8 +24,8 @@ import com.intellij.util.xmlb.annotations.Property;
 import com.intellij.util.xmlb.annotations.Tag;
 import edu.umd.cs.findbugs.DetectorFactory;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.plugins.spotbugs.common.util.New;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -48,7 +48,7 @@ public final class DetectorSettings implements Comparable<DetectorSettings> {
 			keyAttributeName = "name",
 			valueAttributeName = "enabled"
 	)
-	public Map<String, Boolean> enabled = New.map();
+	public Map<String, Boolean> enabled = new HashMap<>();
 
 	@Override
 	public int compareTo(@NotNull final DetectorSettings o) {

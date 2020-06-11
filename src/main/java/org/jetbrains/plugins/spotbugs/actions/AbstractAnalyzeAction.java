@@ -31,7 +31,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.PropertyKey;
 import org.jetbrains.plugins.spotbugs.common.EventDispatchThreadHelper;
 import org.jetbrains.plugins.spotbugs.common.FindBugsPluginConstants;
-import org.jetbrains.plugins.spotbugs.common.util.New;
 import org.jetbrains.plugins.spotbugs.core.AbstractSettings;
 import org.jetbrains.plugins.spotbugs.core.FindBugsState;
 import org.jetbrains.plugins.spotbugs.core.PluginSettings;
@@ -43,6 +42,7 @@ import org.jetbrains.plugins.spotbugs.resources.ResourcesLoader;
 
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
+import java.util.HashMap;
 import java.util.Map;
 
 abstract class AbstractAnalyzeAction extends AbstractAction {
@@ -103,7 +103,7 @@ abstract class AbstractAnalyzeAction extends AbstractAction {
 			// plugin state is invalid.
 			return false;
 		}
-		final Map<String, Map<String, Boolean>> byPluginId = New.map();
+		final Map<String, Map<String, Boolean>> byPluginId = new HashMap<>();
 		byPluginId.put(FindBugsPluginConstants.FINDBUGS_CORE_PLUGIN_ID, projectSettings.detectors);
 		for (final PluginSettings pluginSettings : projectSettings.plugins) {
 			byPluginId.put(pluginSettings.id, pluginSettings.detectors);
