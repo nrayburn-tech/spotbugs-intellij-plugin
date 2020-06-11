@@ -31,7 +31,7 @@ enum DetectorGroupBy {
 	@NotNull
 	final String displayName;
 
-	DetectorGroupBy(@NotNull @PropertyKey(resourceBundle = ResourcesLoader.BUNDLE) final String propertyKey) {
+	DetectorGroupBy(@NotNull final String propertyKey) {
 		displayName = ResourcesLoader.getString(propertyKey);
 	}
 }
