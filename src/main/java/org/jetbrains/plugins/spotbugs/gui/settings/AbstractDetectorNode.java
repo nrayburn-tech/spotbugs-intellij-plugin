@@ -174,7 +174,7 @@ abstract class AbstractDetectorNode extends DefaultMutableTreeNode {
 			@NotNull final Map<String, List<DetectorNode>> byGroup,
 			@NotNull final Map<String, Map<String, Boolean>> enabledMap
 	) {
-		List<DetectorNode> detectorNodes = byGroup.computeIfAbsent(group, k -> New.arrayList());
+		List<DetectorNode> detectorNodes = byGroup.computeIfAbsent(group, k -> new ArrayList<>());
 		detectorNodes.add(create(factory, enabledMap));
 	}
 

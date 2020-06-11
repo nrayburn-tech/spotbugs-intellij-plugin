@@ -32,15 +32,14 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.ui.popup.ListPopup;
-import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.AnActionButton;
-import com.intellij.ui.AnActionButtonRunnable;
 import com.intellij.ui.ToolbarDecorator;
 import com.intellij.ui.table.JBTable;
 import edu.umd.cs.findbugs.Plugin;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.spotbugs.common.util.FindBugsCustomPluginUtil;
@@ -53,23 +52,19 @@ import org.jetbrains.plugins.spotbugs.plugins.AbstractPluginLoader;
 import org.jetbrains.plugins.spotbugs.plugins.PluginInfo;
 import org.jetbrains.plugins.spotbugs.resources.ResourcesLoader;
 
-import javax.swing.JPanel;
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
 import java.io.File;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 final class PluginTablePane extends JPanel {
 	private static final Logger LOGGER = Logger.getInstance(PluginTablePane.class);
 
-	private JBTable table;
+	private final JBTable table;
 	private String lastPluginError;
 	private DetectorTablePane detectorTablePane;
 	private List<PluginInfo> bundled;
@@ -77,15 +72,10 @@ final class PluginTablePane extends JPanel {
 	PluginTablePane() {
 		super(new BorderLayout());
 		setBorder(GuiUtil.createTitledBorder(ResourcesLoader.getString("plugins.title")));
-		table = GuiUtil.createCheckboxTable(
-				new Model(New.<PluginInfo>arrayList()),
+    table = GuiUtil.createCheckboxTable(
+				new Model(new ArrayList<>()),
 				Model.IS_ENABLED_COLUMN,
-				new ActionListener() {
-					@Override
-					public void actionPerformed(final ActionEvent e) {
-						swapEnabled();
-					}
-				}
+				e -> swapEnabled()
 		);
 		table.getColumnModel().getColumn(Model.NAME_COLUMN).setCellRenderer(new TableCellRenderer() {
 			private PluginPane pane;
@@ -111,18 +101,8 @@ final class PluginTablePane extends JPanel {
 		});
 
 		final JPanel tablePane = ToolbarDecorator.createDecorator(table)
-				.setAddAction(new AnActionButtonRunnable() {
-					@Override
-					public void run(@NotNull final AnActionButton anActionButton) {
-						doAdd(anActionButton);
-					}
-				})
-				.setRemoveAction(new AnActionButtonRunnable() {
-					@Override
-					public void run(@NotNull final AnActionButton anActionButton) {
-						doRemove();
-					}
-				})
+				.setAddAction(this::doAdd)
+				.setRemoveAction(anActionButton -> doRemove())
 				.setAsUsualTopToolbar().createPanel();
 
 		add(tablePane);
@@ -134,7 +114,7 @@ final class PluginTablePane extends JPanel {
 	}
 
 	private void swapEnabled() {
-		final int rows[] = table.getSelectedRows();
+		final int[] rows = table.getSelectedRows();
 		for (final int row : rows) {
 			getModel().rows.get(row).settings.enabled = !getModel().rows.get(row).settings.enabled;
 		}
@@ -192,12 +172,7 @@ final class PluginTablePane extends JPanel {
 		final FileChooserDescriptor descriptor = new FileChooserDescriptor(true, false, true, true, false, true);
 		descriptor.setTitle(ResourcesLoader.getString("plugins.choose.title"));
 		descriptor.setDescription(ResourcesLoader.getString("plugins.choose.description"));
-		descriptor.withFileFilter(new Condition<VirtualFile>() {
-			@Override
-			public boolean value(final VirtualFile virtualFile) {
-				return "jar".equalsIgnoreCase(virtualFile.getExtension());
-			}
-		});
+		descriptor.withFileFilter(virtualFile -> "jar".equalsIgnoreCase(virtualFile.getExtension()));
 
 		final VirtualFile[] files = FileChooser.chooseFiles(descriptor, this, project, null);
 		if (files.length > 0) {
@@ -215,7 +190,7 @@ final class PluginTablePane extends JPanel {
 				}
 			}
 
-			// load choosed plugins
+			// load chosen plugins
 			StringBuilder errors = new StringBuilder();
 			for (final VirtualFile virtualFile : files) {
 				final File file = VfsUtilCore.virtualToIoFile(virtualFile);
@@ -230,6 +205,7 @@ final class PluginTablePane extends JPanel {
 					for (final PluginSettings other : settings) {
 						if (other.id.equals(pluginSettings.id)) {
 							pluginSettings.enabled = false;
+							break;
 						}
 					}
 					settings.add(pluginSettings);
@@ -302,8 +278,8 @@ final class PluginTablePane extends JPanel {
 		getModel().rows.clear();
 		final PluginLoaderImpl pluginLoader = new PluginLoaderImpl();
 		pluginLoader.load(settings);
-		Collections.sort(pluginLoader.configured, PluginInfo.ByShortDescription);
-		Collections.sort(pluginLoader.bundled, PluginInfo.ByShortDescription);
+		pluginLoader.configured.sort(PluginInfo.ByShortDescription);
+		pluginLoader.bundled.sort(PluginInfo.ByShortDescription);
 		bundled = pluginLoader.bundled;
 		getModel().rows.addAll(pluginLoader.configured);
 		getModel().fireTableDataChanged();
@@ -399,8 +375,8 @@ final class PluginTablePane extends JPanel {
 
 		PluginLoaderImpl() {
 			super(false);
-			configured = New.arrayList();
-			bundled = New.arrayList();
+      configured = new ArrayList<>();
+      bundled = new ArrayList<>();
 		}
 
 		@Override

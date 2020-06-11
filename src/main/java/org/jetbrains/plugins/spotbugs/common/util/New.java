@@ -94,8 +94,4 @@ public final class New {
 		return new THashSet<E>();
 	}
 
-	@NotNull
-	public static <E> List<E> arrayList() {
-		return new ArrayList<E>();
-	}
 }

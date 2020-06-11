@@ -21,13 +21,13 @@ package org.jetbrains.plugins.spotbugs.gui.common;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.plugins.spotbugs.common.util.New;
 
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -63,7 +63,7 @@ public final class TreeState {
 			}
 		}
 		if (selection != null) {
-			final List<TreePath> paths = New.arrayList();
+      final List<TreePath> paths = new ArrayList<>();
 			for (final String[] strSelection : selection) {
 				final List<TreeNode> path = createPath(strSelection);
 				if (!path.isEmpty()) {
@@ -71,14 +71,14 @@ public final class TreeState {
 				}
 			}
 			if (!paths.isEmpty()) {
-				tree.setSelectionPaths(paths.toArray(new TreePath[paths.size()]));
+				tree.setSelectionPaths(paths.toArray(new TreePath[0]));
 			}
 		}
 	}
 
 	@NotNull
 	private List<TreeNode> createPath(@NotNull final String[] path) {
-		final List<TreeNode> ret = New.arrayList();
+    final List<TreeNode> ret = new ArrayList<>();
 		createPathRecursive(path, 0, ret, (TreeNode) tree.getModel().getRoot());
 		return ret;
 	}
@@ -105,7 +105,7 @@ public final class TreeState {
 
 	@NotNull
 	public static TreeState create(@NotNull final JTree tree) {
-		final List<String[]> expanded = New.arrayList();
+    final List<String[]> expanded = new ArrayList<>();
 		final TreeModel model = tree.getModel();
 		final DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
 		addExpandedRecursive(expanded, tree, root);
@@ -113,7 +113,7 @@ public final class TreeState {
 		final TreePath[] selected = tree.getSelectionPaths();
 		List<String[]> strSelection = null;
 		if (selected != null) {
-			strSelection = New.arrayList();
+      strSelection = new ArrayList<>();
 			for (final TreePath treePath : selected) {
 				final Object[] path = treePath.getPath();
 				final String[] strPath = new String[path.length];

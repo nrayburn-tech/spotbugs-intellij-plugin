@@ -33,6 +33,7 @@ import org.jetbrains.plugins.spotbugs.common.util.IdeaUtilImpl;
 import org.jetbrains.plugins.spotbugs.common.util.New;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -50,8 +51,8 @@ final class Changes {
 
 
 	static final Changes INSTANCE = new Changes();
-	private final Set<Project> _listeners = new THashSet<Project>();
-	private final Map<Project, Set<VirtualFile>> _changed = new THashMap<Project, Set<VirtualFile>>();
+	private final Set<Project> _listeners = new THashSet<>();
+	private final Map<Project, Set<VirtualFile>> _changed = new THashMap<>();
 
 
 	private Changes() {
@@ -78,7 +79,7 @@ final class Changes {
 			vf = lfs.findFileByIoFile(f);
 			if (vf != null && vf.isValid() && !vf.isDirectory() && IdeaUtilImpl.isValidFileType(vf.getFileType())) {
 				if (vfs == null) {
-					vfs = New.arrayList();
+          vfs = new ArrayList<>();
 				}
 				vfs.add(vf);
 			}

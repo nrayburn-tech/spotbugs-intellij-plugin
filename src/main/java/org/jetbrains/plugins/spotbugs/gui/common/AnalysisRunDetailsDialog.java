@@ -23,9 +23,9 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogBuilder;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.util.ui.JBUI;
+
 import org.jetbrains.plugins.spotbugs.common.VersionManager;
 import org.jetbrains.plugins.spotbugs.common.util.FindBugsUtil;
-import org.jetbrains.plugins.spotbugs.common.util.New;
 import org.jetbrains.plugins.spotbugs.core.FindBugsProject;
 import org.jetbrains.plugins.spotbugs.core.FindBugsResult;
 import org.jetbrains.plugins.spotbugs.resources.GuiResources;
@@ -35,7 +35,6 @@ import javax.swing.JEditorPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
-import javax.swing.border.EmptyBorder;
 import javax.swing.text.html.HTMLEditorKit;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -43,6 +42,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings({"HardcodedFileSeparator"})
@@ -69,7 +69,7 @@ public class AnalysisRunDetailsDialog {
 
 			final List<String> fileList = bugsProject.getFileList();
 			final List<String> auxClasspathEntries = bugsProject.getAuxClasspathEntryList();
-			List<String> configuredOutputFiles = New.arrayList();
+      List<String> configuredOutputFiles = new ArrayList<>();
 			if (bugsProject instanceof FindBugsProject) {
 				configuredOutputFiles = ((FindBugsProject) bugsProject).getConfiguredOutputFiles();
 			} // else project was imported from XML
@@ -157,11 +157,7 @@ public class AnalysisRunDetailsDialog {
 		panel.add(ScrollPaneFacade.createScrollPane(jEditorPane, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED));
 		dialogBuilder.setCenterPanel(panel);
 
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				jEditorPane.scrollRectToVisible(new Rectangle(0, 0));
-			}
-		});
+		SwingUtilities.invokeLater(() -> jEditorPane.scrollRectToVisible(new Rectangle(0, 0)));
 
 		return dialogBuilder;
 	}

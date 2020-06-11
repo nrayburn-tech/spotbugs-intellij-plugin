@@ -26,7 +26,6 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import icons.PluginIcons;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.plugins.spotbugs.common.util.New;
 import org.jetbrains.plugins.spotbugs.core.Bug;
 import org.jetbrains.plugins.spotbugs.gui.tree.BugInstanceComparator;
 import org.jetbrains.plugins.spotbugs.gui.tree.GroupBy;
@@ -46,9 +45,9 @@ import java.util.Locale;
 
 public final class BugInstanceGroupNode extends AbstractTreeNode<VisitableTreeNode> implements VisitableTreeNode {
 
-	private final List<VisitableTreeNode> _childs;
+	private final List<VisitableTreeNode> _children;
 	private final Bug bug;
-	private final RecurseNodeVisitor<BugInstanceGroupNode> _recurseNodeVisitor = new RecurseNodeVisitor<BugInstanceGroupNode>(this);
+	private final RecurseNodeVisitor<BugInstanceGroupNode> _recurseNodeVisitor = new RecurseNodeVisitor<>(this);
 	private final Project _project;
 
 	/**
@@ -66,7 +65,7 @@ public final class BugInstanceGroupNode extends AbstractTreeNode<VisitableTreeNo
 		setParent(parent);
 		_project = project;
 		this.bug = bug;
-		_childs = new ArrayList<VisitableTreeNode>();
+		_children = new ArrayList<>();
 		_groupBy = groupBy;
 		_groupName = groupName;
 		_simpleName = groupName;
@@ -84,9 +83,9 @@ public final class BugInstanceGroupNode extends AbstractTreeNode<VisitableTreeNo
 
 	@Override
 	public void addChild(final VisitableTreeNode node) {
-		_childs.add(node);
+		_children.add(node);
 		if (node instanceof BugInstanceNode && node.isLeaf()) {
-			_childs.sort(new ChildComparator());
+			_children.sort(new ChildComparator());
 			incrementMemberCount();
 			TreeNode treeNode = getParent();
 			while (treeNode instanceof BugInstanceGroupNode) {
@@ -112,8 +111,8 @@ public final class BugInstanceGroupNode extends AbstractTreeNode<VisitableTreeNo
 
 	@NotNull
 	List<Bug> getAllChildBugs() {
-		final List<Bug> ret = New.arrayList();
-		for (final TreeNode child : _childs) {
+    final List<Bug> ret = new ArrayList<>();
+		for (final TreeNode child : _children) {
 			if (child instanceof BugInstanceGroupNode) {
 				final BugInstanceGroupNode node = (BugInstanceGroupNode) child;
 				final List<Bug> bugs = node.getAllChildBugs();
@@ -124,7 +123,7 @@ public final class BugInstanceGroupNode extends AbstractTreeNode<VisitableTreeNo
 	}
 
 	public static TreePath getPath(TreeNode node) {
-		final List<TreeNode> list = New.arrayList();
+    final List<TreeNode> list = new ArrayList<>();
 		while (node != null) {
 			list.add(node);
 			//noinspection AssignmentToMethodParameter
@@ -150,7 +149,7 @@ public final class BugInstanceGroupNode extends AbstractTreeNode<VisitableTreeNo
 	}
 
 	private List<String> _getPath() {
-		final List<String> list = New.arrayList();
+    final List<String> list = new ArrayList<>();
 		TreeNode node = this;
 		while (node != null) {
 			if (node instanceof BugInstanceGroupNode) {
@@ -163,7 +162,7 @@ public final class BugInstanceGroupNode extends AbstractTreeNode<VisitableTreeNo
 
 	@Override
 	public List<VisitableTreeNode> getChildsList() {
-		return _childs;
+		return _children;
 	}
 
 	@Override
@@ -178,7 +177,7 @@ public final class BugInstanceGroupNode extends AbstractTreeNode<VisitableTreeNo
 
 	@Override
 	public boolean isLeaf() {
-		return _childs.isEmpty();
+		return _children.isEmpty();
 	}
 
 	private void incrementMemberCount() {
@@ -193,27 +192,16 @@ public final class BugInstanceGroupNode extends AbstractTreeNode<VisitableTreeNo
 		switch (groupBy) {
 			case BugCategory:
 				return PluginIcons.GROUP_BY_CATEGORY_ICON;
-			case BugShortDescription:
-			case BugType:
-				return _collapsedIcon;
 			case Class:
 				return PluginIcons.GROUP_BY_CLASS_ICON;
 			case Package:
 				return PluginIcons.GROUP_BY_PACKAGE_ICON;
 			case Priority:
 				final String priorityString = bug.getInstance().getPriorityString();
-				if (PluginIcons.GROUP_BY_PRIORITY_ICONS.containsKey(priorityString)) {
-					return PluginIcons.GROUP_BY_PRIORITY_ICONS.get(priorityString);
-				} else {
-					return PluginIcons.GROUP_BY_PRIORITY_EXP_ICON;
-				}
+				return PluginIcons.GROUP_BY_PRIORITY_ICONS.getOrDefault(priorityString, PluginIcons.GROUP_BY_PRIORITY_EXP_ICON);
 			case BugRank:
 				final String rankString = BugRankCategory.getRank(bug.getInstance().getBugRank()).toString().toUpperCase(Locale.ENGLISH);
-				if (PluginIcons.GROUP_BY_RANK_ICONS.containsKey(rankString)) {
-					return PluginIcons.GROUP_BY_RANK_ICONS.get(rankString);
-				} else {
-					return PluginIcons.GROUP_BY_PRIORITY_ICON;
-				}
+				return PluginIcons.GROUP_BY_RANK_ICONS.getOrDefault(rankString, PluginIcons.GROUP_BY_PRIORITY_ICON);
 			default:
 				return _collapsedIcon;
 		}
@@ -223,27 +211,16 @@ public final class BugInstanceGroupNode extends AbstractTreeNode<VisitableTreeNo
 		switch (groupBy) {
 			case BugCategory:
 				return PluginIcons.GROUP_BY_CATEGORY_ICON;
-			case BugShortDescription:
-			case BugType:
-				return _expandedIcon;
 			case Class:
 				return PluginIcons.GROUP_BY_CLASS_ICON;
 			case Package:
 				return PluginIcons.GROUP_BY_PACKAGE_ICON;
 			case Priority:
 				final String priorityString = bug.getInstance().getPriorityString();
-				if (PluginIcons.GROUP_BY_PRIORITY_ICONS.containsKey(priorityString)) {
-					return PluginIcons.GROUP_BY_PRIORITY_ICONS.get(priorityString);
-				} else {
-					return PluginIcons.GROUP_BY_PRIORITY_EXP_ICON;
-				}
+				return PluginIcons.GROUP_BY_PRIORITY_ICONS.getOrDefault(priorityString, PluginIcons.GROUP_BY_PRIORITY_EXP_ICON);
 			case BugRank:
 				final String rankString = BugRankCategory.getRank(bug.getInstance().getBugRank()).name();
-				if (PluginIcons.GROUP_BY_RANK_ICONS.containsKey(rankString)) {
-					return PluginIcons.GROUP_BY_RANK_ICONS.get(rankString);
-				} else {
-					return PluginIcons.GROUP_BY_PRIORITY_ICON;
-				}
+				return PluginIcons.GROUP_BY_RANK_ICONS.getOrDefault(rankString, PluginIcons.GROUP_BY_PRIORITY_ICON);
 			default:
 				return _expandedIcon;
 		}
@@ -252,10 +229,10 @@ public final class BugInstanceGroupNode extends AbstractTreeNode<VisitableTreeNo
 	@Override
 	public String toString() {
 		return "BugInstanceGroupNode" +
-				"{_childs=" + _childs +
-				", bug=" + bug +
-				", _recurseNodeVisitor=" + _recurseNodeVisitor +
-				'}';
+					 "{_childs=" + _children +
+					 ", bug=" + bug +
+					 ", _recurseNodeVisitor=" + _recurseNodeVisitor +
+					 '}';
 	}
 
 	private static class ChildComparator implements Comparator<TreeNode> {

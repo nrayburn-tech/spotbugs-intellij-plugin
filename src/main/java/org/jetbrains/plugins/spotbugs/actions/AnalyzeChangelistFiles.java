@@ -33,11 +33,11 @@ import com.intellij.util.Consumer;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.plugins.spotbugs.common.util.IdeaUtilImpl;
-import org.jetbrains.plugins.spotbugs.common.util.New;
 import org.jetbrains.plugins.spotbugs.core.FindBugsProjects;
 import org.jetbrains.plugins.spotbugs.core.FindBugsStarter;
 import org.jetbrains.plugins.spotbugs.core.FindBugsState;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public final class AnalyzeChangelistFiles extends AbstractAnalyzeAction {
@@ -85,7 +85,7 @@ public final class AnalyzeChangelistFiles extends AbstractAnalyzeAction {
 			@NotNull final FindBugsState state
 	) {
 
-		final List<VirtualFile> files = New.arrayList();
+    final List<VirtualFile> files = new ArrayList<>();
 		final ChangeList[] changeLists = e.getData(VcsDataKeys.CHANGE_LISTS);
 		final StringBuilder sb = new StringBuilder();
 		for (final ChangeList changeList : changeLists) {

@@ -22,7 +22,6 @@ package org.jetbrains.plugins.spotbugs.gui.tree.model;
 import com.intellij.ui.JBColor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.plugins.spotbugs.common.util.New;
 import org.jetbrains.plugins.spotbugs.core.Bug;
 import org.jetbrains.plugins.spotbugs.gui.tree.NodeVisitor;
 import org.jetbrains.plugins.spotbugs.gui.tree.RecurseNodeVisitor;
@@ -42,13 +41,13 @@ public class RootNode extends AbstractTreeNode<VisitableTreeNode> implements Vis
 
 	private int _bugCount;
 	private int _classesCount;
-	private final List<VisitableTreeNode> _childs;
-	private final RecurseNodeVisitor<RootNode> _recurseNodeVisitor = new RecurseNodeVisitor<RootNode>(this);
+	private final List<VisitableTreeNode> _children;
+	private final RecurseNodeVisitor<RootNode> _recurseNodeVisitor = new RecurseNodeVisitor<>(this);
 
 
 	public RootNode(final String simpleName) {
 		setParent(null);
-		_childs = new ArrayList<VisitableTreeNode>();
+		_children = new ArrayList<>();
 		_simpleName = simpleName;
 		_bugCount = -1;
 		_classesCount = 0;
@@ -71,7 +70,7 @@ public class RootNode extends AbstractTreeNode<VisitableTreeNode> implements Vis
 
 	public String getLinkHtml() {
 		if (_bugCount > -1) {
-			return new StringBuilder().append("<html><body>").append(" <a href='#more'>more...</a>").append("</body></html>").toString();
+			return "<html><body> <a href='#more'>more...</a></body></html>";
 		}
 		return "";
 	}
@@ -84,8 +83,8 @@ public class RootNode extends AbstractTreeNode<VisitableTreeNode> implements Vis
 
 	@NotNull
 	List<Bug> getAllChildBugs() {
-		final List<Bug> ret = New.arrayList();
-		for (final TreeNode child : _childs) {
+    final List<Bug> ret = new ArrayList<>();
+		for (final TreeNode child : _children) {
 			if (child instanceof BugInstanceGroupNode) {
 				final BugInstanceGroupNode node = (BugInstanceGroupNode) child;
 				final List<Bug> bugs = node.getAllChildBugs();
@@ -102,11 +101,11 @@ public class RootNode extends AbstractTreeNode<VisitableTreeNode> implements Vis
 	@Override
 	public String toString() {
 		return "RootNode" +
-				"{_bugCount=" + _bugCount +
-				", _classesCount=" + _classesCount +
-				", _childs=" + _childs +
-				", _recurseNodeVisitor=" + _recurseNodeVisitor +
-				'}';
+					 "{_bugCount=" + _bugCount +
+					 ", _classesCount=" + _classesCount +
+					 ", _childs=" + _children +
+					 ", _recurseNodeVisitor=" + _recurseNodeVisitor +
+					 '}';
 	}
 
 	@Override
@@ -116,7 +115,7 @@ public class RootNode extends AbstractTreeNode<VisitableTreeNode> implements Vis
 
 	@Override
 	public List<VisitableTreeNode> getChildsList() {
-		return _childs;
+		return _children;
 	}
 
 	@Override
@@ -131,6 +130,6 @@ public class RootNode extends AbstractTreeNode<VisitableTreeNode> implements Vis
 
 	@Override
 	public boolean isLeaf() {
-		return _childs.isEmpty();
+		return _children.isEmpty();
 	}
 }

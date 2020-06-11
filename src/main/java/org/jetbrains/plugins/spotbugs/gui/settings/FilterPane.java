@@ -25,15 +25,13 @@ import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.ui.AnActionButton;
-import com.intellij.ui.AnActionButtonRunnable;
 import com.intellij.ui.ToolbarDecorator;
 import com.intellij.ui.table.JBTable;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.PropertyKey;
@@ -42,12 +40,11 @@ import org.jetbrains.plugins.spotbugs.common.util.IdeaUtilImpl;
 import org.jetbrains.plugins.spotbugs.common.util.New;
 import org.jetbrains.plugins.spotbugs.resources.ResourcesLoader;
 
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -66,7 +63,7 @@ final class FilterPane extends JPanel {
 	@PropertyKey(resourceBundle = ResourcesLoader.BUNDLE)
 	private final String description;
 
-	private JBTable table;
+	private final JBTable table;
 
 	FilterPane(
 			@NotNull @PropertyKey(resourceBundle = ResourcesLoader.BUNDLE) final String titleKey,
@@ -76,31 +73,18 @@ final class FilterPane extends JPanel {
 		title = ResourcesLoader.getString(titleKey);
 		description = ResourcesLoader.getString(descriptionKey);
 		setBorder(GuiUtil.createTitledBorder(title));
-		table = GuiUtil.createCheckboxTable(
-				new Model(New.<Item>arrayList()),
+    table = GuiUtil.createCheckboxTable(
+				new Model(new ArrayList<>()),
 				Model.IS_ENABLED_COLUMN,
-				new ActionListener() {
-					@Override
-					public void actionPerformed(final ActionEvent e) {
-						swapEnabled();
-					}
-				}
+				e -> swapEnabled()
 		);
 
 		final JPanel tablePane = ToolbarDecorator.createDecorator(table)
-				.setAddAction(new AnActionButtonRunnable() {
-					@Override
-					public void run(final AnActionButton anActionButton) {
-						final Project project = IdeaUtilImpl.getProject(anActionButton.getDataContext());
-						doAdd(project);
-					}
+				.setAddAction(anActionButton -> {
+					final Project project = IdeaUtilImpl.getProject(anActionButton.getDataContext());
+					doAdd(project);
 				})
-				.setRemoveAction(new AnActionButtonRunnable() {
-					@Override
-					public void run(final AnActionButton anActionButton) {
-						doRemove();
-					}
-				})
+				.setRemoveAction(anActionButton -> doRemove())
 				.setAsUsualTopToolbar().createPanel();
 
 		add(tablePane);
@@ -112,7 +96,7 @@ final class FilterPane extends JPanel {
 	}
 
 	private void swapEnabled() {
-		final int rows[] = table.getSelectedRows();
+		final int[] rows = table.getSelectedRows();
 		for (final int row : rows) {
 			getModel().rows.get(row).enabled = !getModel().rows.get(row).enabled;
 		}
@@ -123,12 +107,7 @@ final class FilterPane extends JPanel {
 		final FileChooserDescriptor descriptor = FileChooserDescriptorFactory.createMultipleFilesNoJarsDescriptor();
 		descriptor.setTitle(StringUtil.capitalizeWords(title, true));
 		descriptor.setDescription(description);
-		descriptor.withFileFilter(new Condition<VirtualFile>() {
-			@Override
-			public boolean value(final VirtualFile virtualFile) {
-				return XmlFileType.DEFAULT_EXTENSION.equalsIgnoreCase(virtualFile.getExtension());
-			}
-		});
+		descriptor.withFileFilter(virtualFile -> XmlFileType.DEFAULT_EXTENSION.equalsIgnoreCase(virtualFile.getExtension()));
 
 		final VirtualFile[] files = FileChooser.chooseFiles(descriptor, this, project, null);
 		if (files.length > 0) {

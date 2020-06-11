@@ -27,7 +27,6 @@ import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.CompilerModuleExtension;
-import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.wm.ToolWindow;
@@ -35,7 +34,6 @@ import com.intellij.util.Consumer;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.plugins.spotbugs.collectors.RecurseFileCollector;
-import org.jetbrains.plugins.spotbugs.common.util.New;
 import org.jetbrains.plugins.spotbugs.core.FindBugsProject;
 import org.jetbrains.plugins.spotbugs.core.FindBugsProjects;
 import org.jetbrains.plugins.spotbugs.core.FindBugsStarter;
@@ -43,6 +41,7 @@ import org.jetbrains.plugins.spotbugs.core.FindBugsState;
 import org.jetbrains.plugins.spotbugs.resources.ResourcesLoader;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AnalyzeProjectFiles extends AbstractAnalyzeAction {
@@ -84,7 +83,7 @@ public abstract class AnalyzeProjectFiles extends AbstractAnalyzeAction {
 			@Override
 			protected boolean configure(@NotNull final ProgressIndicator indicator, @NotNull final FindBugsProjects projects, final boolean justCompiled) {
 				final Module[] modules = ModuleManager.getInstance(project).getModules();
-				final List<Pair.NonNull<Module, VirtualFile>> compilerOutputPaths = New.arrayList();
+        final List<Pair.NonNull<Module, VirtualFile>> compilerOutputPaths = new ArrayList<>();
 				for (final Module module : modules) {
 					final CompilerModuleExtension extension = CompilerModuleExtension.getInstance(module);
 					if (extension == null) {

@@ -44,6 +44,7 @@ import org.jetbrains.plugins.spotbugs.common.FindBugsPluginConstants;
 import org.jetbrains.plugins.spotbugs.common.util.IdeaUtilImpl;
 import org.jetbrains.plugins.spotbugs.common.util.New;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -221,7 +222,7 @@ public class FindBugsCompileAfterHook implements CompilationStatusListener, Proj
 			@NotNull final Project project,
 			@NotNull final CompileScope compileScope
 	) {
-		final List<VirtualFile> ret = New.arrayList();
+    final List<VirtualFile> ret = new ArrayList<>();
 		for (final FileType fileType : IdeaUtilImpl.SUPPORTED_FILE_TYPES) {
 			final VirtualFile[] files = compileScope.getFiles(fileType, true);
 			for (final VirtualFile file : files) {

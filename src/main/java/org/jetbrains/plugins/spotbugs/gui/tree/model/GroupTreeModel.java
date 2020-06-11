@@ -26,7 +26,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.plugins.spotbugs.common.EventDispatchThreadHelper;
 import org.jetbrains.plugins.spotbugs.common.ExtendedProblemDescriptor;
 import org.jetbrains.plugins.spotbugs.common.util.BugInstanceUtil;
-import org.jetbrains.plugins.spotbugs.common.util.New;
 import org.jetbrains.plugins.spotbugs.core.Bug;
 import org.jetbrains.plugins.spotbugs.core.ProblemCacheService;
 import org.jetbrains.plugins.spotbugs.gui.tree.BugInstanceComparator;
@@ -60,7 +59,7 @@ public class GroupTreeModel extends AbstractTreeModel<VisitableTreeNode, RootNod
 		_root = root;
 		_project = project;
 		_groupBy = groupBy.clone();
-		_groups = new HashMap<String, Map<Integer, List<BugInstanceGroupNode>>>();
+		_groups = new HashMap<>();
 		_problems = project.getService(ProblemCacheService.class).getProblems();
 	}
 
@@ -70,7 +69,7 @@ public class GroupTreeModel extends AbstractTreeModel<VisitableTreeNode, RootNod
 
 	private void addGroupIfAbsent(final String groupNameKey, final int depth, final BugInstanceGroupNode groupNode) {
 		if (!_groups.containsKey(groupNameKey)) {
-			final Map<Integer, List<BugInstanceGroupNode>> map = new HashMap<Integer, List<BugInstanceGroupNode>>();
+			final Map<Integer, List<BugInstanceGroupNode>> map = new HashMap<>();
 			_groups.put(groupNameKey, map);
 			final List<BugInstanceGroupNode> groupNodes = addGroupIfAbsentImpl(groupNameKey, depth, groupNode);
 			map.put(depth, groupNodes);
@@ -83,18 +82,9 @@ public class GroupTreeModel extends AbstractTreeModel<VisitableTreeNode, RootNod
 	private List<BugInstanceGroupNode> addGroupIfAbsentImpl(final String groupNameKey, final int depth, final BugInstanceGroupNode groupNode) {
 		final Map<Integer, List<BugInstanceGroupNode>> map = _groups.get(groupNameKey);
 
-		if (map.containsKey(depth)) {
-			final List<BugInstanceGroupNode> list = map.get(depth);
-			list.add(groupNode);
-
-			return list;
-		} else {
-			final List<BugInstanceGroupNode> list = new ArrayList<BugInstanceGroupNode>();
-			list.add(groupNode);
-			map.put(depth, list);
-
-			return list;
-		}
+		final List<BugInstanceGroupNode> list = map.computeIfAbsent(depth, k -> new ArrayList<>());
+		list.add(groupNode);
+		return list;
 	}
 
 	@SuppressWarnings({"ReturnOfCollectionOrArrayField"})
@@ -114,7 +104,7 @@ public class GroupTreeModel extends AbstractTreeModel<VisitableTreeNode, RootNod
 			if (_problems.containsKey(value)) {
 				_problems.get(value).add(element);
 			} else {
-				final List<ExtendedProblemDescriptor> list = new ArrayList<ExtendedProblemDescriptor>();
+				final List<ExtendedProblemDescriptor> list = new ArrayList<>();
 				list.add(element);
 				_problems.put(value, list);
 			}
@@ -137,7 +127,7 @@ public class GroupTreeModel extends AbstractTreeModel<VisitableTreeNode, RootNod
 
 	private void group(@NotNull final Bug bug) {
 		if (_grouper == null) {
-			_grouper = new Grouper<Bug>(this);
+			_grouper = new Grouper<>(this);
 		}
 		final List<Comparator<Bug>> groupComparators = BugInstanceComparator.getGroupComparators(_groupBy);
 		_grouper.group(bug, groupComparators);
@@ -220,7 +210,7 @@ public class GroupTreeModel extends AbstractTreeModel<VisitableTreeNode, RootNod
 
 	@Override
 	public List<Bug> availableGroups(final int depth, @NotNull final Bug bug) {
-		final List<Bug> result = New.arrayList();
+    final List<Bug> result = new ArrayList<>();
 
 		//final GroupBy groupBy = _groupBy[0];
 		//final String groupName = GroupBy.getGroupName(groupBy, bug);

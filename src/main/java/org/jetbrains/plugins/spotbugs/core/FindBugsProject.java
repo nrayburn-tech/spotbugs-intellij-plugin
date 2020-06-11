@@ -26,8 +26,8 @@ import com.intellij.psi.PsiClass;
 import edu.umd.cs.findbugs.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.plugins.spotbugs.collectors.StatelessClassAdder;
-import org.jetbrains.plugins.spotbugs.common.util.New;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -63,7 +63,7 @@ public class FindBugsProject extends edu.umd.cs.findbugs.Project {
 
 	void addOutputFile(@NotNull final VirtualFile file) {
 		if (_outputFiles == null) {
-			_outputFiles = New.arrayList();
+      _outputFiles = new ArrayList<>();
 		}
 		_outputFiles.add(file.getPath());
 		getClassAdder().addContainingClasses(file);
@@ -71,7 +71,7 @@ public class FindBugsProject extends edu.umd.cs.findbugs.Project {
 
 	public void addOutputFile(@NotNull final VirtualFile file, @NotNull final PsiClass psiClass) {
 		if (_outputFiles == null) {
-			_outputFiles = New.arrayList();
+      _outputFiles = new ArrayList<>();
 		}
 		_outputFiles.add(file.getPath());
 		getClassAdder().addContainingClasses(file, psiClass);
@@ -79,7 +79,7 @@ public class FindBugsProject extends edu.umd.cs.findbugs.Project {
 
 	@NotNull
 	public List<String> getConfiguredOutputFiles() {
-		return _outputFiles != null ? _outputFiles : Collections.<String>emptyList();
+		return _outputFiles != null ? _outputFiles : Collections.emptyList();
 	}
 
 	@NotNull

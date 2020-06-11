@@ -28,7 +28,6 @@ import edu.umd.cs.findbugs.DetectorFactoryCollection;
 import edu.umd.cs.findbugs.I18N;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.plugins.spotbugs.common.util.GuiUtil;
-import org.jetbrains.plugins.spotbugs.common.util.New;
 import org.jetbrains.plugins.spotbugs.core.AbstractSettings;
 import org.jetbrains.plugins.spotbugs.resources.ResourcesLoader;
 
@@ -40,6 +39,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -54,8 +54,8 @@ final class BugCategoryPane extends JPanel implements SettingsOwner<AbstractSett
 	BugCategoryPane() {
 		super(new BorderLayout());
 		setBorder(GuiUtil.createTitledBorder(ResourcesLoader.getString("bugCategory.title")));
-		table = GuiUtil.createCheckboxTable(
-				new Model(New.<Item>arrayList()),
+    table = GuiUtil.createCheckboxTable(
+				new Model(new ArrayList<Item>()),
 				Model.IS_ENABLED_COLUMN,
 				new ActionListener() {
 					@Override
