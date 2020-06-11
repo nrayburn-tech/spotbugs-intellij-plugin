@@ -172,9 +172,9 @@ final class DetectorTableHeaderPane extends JPanel implements Disposable {
 		protected DefaultActionGroup createPopupActionGroup(final JComponent button) {
 			final DefaultActionGroup group = new DefaultActionGroup();
 			for (final DetectorGroupBy groupBy : DetectorGroupBy.values()) {
-				group.add(new AnAction(groupBy.displayName) {
+				group.add(new AnAction(groupBy.getDisplayName()) {
 					@Override
-					public void actionPerformed(final AnActionEvent e) {
+					public void actionPerformed(final @NotNull AnActionEvent e) {
 						DetectorTableHeaderPane.this.groupBy = groupBy;
 						tablePane.reload(false);
 					}
@@ -184,9 +184,9 @@ final class DetectorTableHeaderPane extends JPanel implements Disposable {
 		}
 
 		@Override
-		public void update(final AnActionEvent e) {
+		public void update(final @NotNull AnActionEvent e) {
 			super.update(e);
-			e.getPresentation().setText(groupBy.displayName);
+			e.getPresentation().setText(groupBy.getDisplayName());
 		}
 	}
 
@@ -261,7 +261,7 @@ final class DetectorTableHeaderPane extends JPanel implements Disposable {
 		private boolean isAccepted(@NotNull final Set<String> search, @NotNull final String filter, @Nullable final String description) {
 			if (null == description) return false;
 			if (StringUtil.containsIgnoreCase(description, filter)) return true;
-			final HashSet<String> descriptionSet = new HashSet<String>(search);
+			final HashSet<String> descriptionSet = new HashSet<>(search);
 			descriptionSet.removeAll(searchableOptionsRegistrar.getProcessedWords(description));
 			return descriptionSet.isEmpty();
 		}

@@ -19,13 +19,13 @@
  */
 package org.jetbrains.plugins.spotbugs.gui.settings;
 
-import com.intellij.openapi.util.NotNullComputable;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.util.Processor;
 import edu.umd.cs.findbugs.BugPattern;
 import edu.umd.cs.findbugs.DetectorFactory;
 import edu.umd.cs.findbugs.DetectorFactoryCollection;
 import edu.umd.cs.findbugs.I18N;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.spotbugs.common.FindBugsPluginConstants;
@@ -74,7 +74,7 @@ abstract class AbstractDetectorNode extends DefaultMutableTreeNode {
 
 	@NotNull
 	static AbstractDetectorNode notLoaded() {
-		return createRoot("not loaded", Collections.<String, Map<String, Boolean>>emptyMap());
+		return createRoot("not loaded", Collections.emptyMap());
 	}
 
 	@NotNull
@@ -85,30 +85,20 @@ abstract class AbstractDetectorNode extends DefaultMutableTreeNode {
 	) {
 
 		final Map<String, List<DetectorNode>> byGroup = New.map();
-		final Iterator<DetectorFactory> detectorFactoryIterator = WithPluginClassloader.notNull(new NotNullComputable<Iterator<DetectorFactory>>() {
-			@NotNull
-			@Override
-			public Iterator<DetectorFactory> compute() {
-				return DetectorFactoryCollection.instance().factoryIterator();
-			}
-		});
+		final Iterator<DetectorFactory> detectorFactoryIterator = WithPluginClassloader.notNull(
+				() -> DetectorFactoryCollection.instance().factoryIterator());
 		fillByGroup(groupBy, acceptor, detectorFactoryIterator, byGroup, detectors);
 
-		final Comparator<DetectorNode> nodeComparator = new Comparator<DetectorNode>() {
-			@Override
-			public int compare(final DetectorNode o1, final DetectorNode o2) {
-				return o1.toString().compareToIgnoreCase(o2.toString());
-			}
-		};
+		final Comparator<DetectorNode> nodeComparator = (o1, o2) -> o1.toString().compareToIgnoreCase(o2.toString());
 
-		final AbstractDetectorNode root = createRoot(groupBy.displayName, detectors);
-		final ArrayList<String> groupSorted = new ArrayList<String>(byGroup.keySet());
+		final AbstractDetectorNode root = createRoot(groupBy.getDisplayName(), detectors);
+		final ArrayList<String> groupSorted = new ArrayList<>(byGroup.keySet());
 		Collections.sort(groupSorted);
 		for (final String group : groupSorted) {
 			final AbstractDetectorNode groupNode = createGroup(group);
 			root.add(groupNode);
-			final List<DetectorNode> nodes = new ArrayList<DetectorNode>(byGroup.get(group));
-			Collections.sort(nodes, nodeComparator);
+			final List<DetectorNode> nodes = new ArrayList<>(byGroup.get(group));
+			nodes.sort(nodeComparator);
 			for (final DetectorNode node : nodes) {
 				groupNode.add(node);
 			}
@@ -184,11 +174,7 @@ abstract class AbstractDetectorNode extends DefaultMutableTreeNode {
 			@NotNull final Map<String, List<DetectorNode>> byGroup,
 			@NotNull final Map<String, Map<String, Boolean>> enabledMap
 	) {
-		List<DetectorNode> detectorNodes = byGroup.get(group);
-		if (detectorNodes == null) {
-			detectorNodes = New.arrayList();
-			byGroup.put(group, detectorNodes);
-		}
+		List<DetectorNode> detectorNodes = byGroup.computeIfAbsent(group, k -> New.arrayList());
 		detectorNodes.add(create(factory, enabledMap));
 	}
 
@@ -198,11 +184,11 @@ abstract class AbstractDetectorNode extends DefaultMutableTreeNode {
 	) {
 		final Map<String, Map<String, Boolean>> ret = New.map();
 		if (!settings.detectors.isEmpty()) {
-			ret.put(FindBugsPluginConstants.FINDBUGS_CORE_PLUGIN_ID, new HashMap<String, Boolean>(settings.detectors));
+			ret.put(FindBugsPluginConstants.FINDBUGS_CORE_PLUGIN_ID, new HashMap<>(settings.detectors));
 		}
 		for (final PluginSettings pluginSettings : settings.plugins) {
 			if (!pluginSettings.detectors.isEmpty()) {
-				ret.put(pluginSettings.id, new HashMap<String, Boolean>(pluginSettings.detectors));
+				ret.put(pluginSettings.id, new HashMap<>(pluginSettings.detectors));
 			}
 		}
 		return ret;

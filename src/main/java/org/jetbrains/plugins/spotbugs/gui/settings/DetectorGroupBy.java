@@ -29,9 +29,13 @@ enum DetectorGroupBy {
 	BugCategory("detector.groupBy.bugCategory");
 
 	@NotNull
-	final String displayName;
+	final String propertyKey;
 
 	DetectorGroupBy(@NotNull final String propertyKey) {
-		displayName = ResourcesLoader.getString(propertyKey);
+		this.propertyKey = propertyKey;
+	}
+	
+	String getDisplayName() {
+		return ResourcesLoader.getString(propertyKey);
 	}
 }
