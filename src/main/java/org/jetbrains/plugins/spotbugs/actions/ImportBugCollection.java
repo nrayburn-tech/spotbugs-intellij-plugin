@@ -40,6 +40,7 @@ import org.jetbrains.plugins.spotbugs.messages.MessageBusManager;
 import org.jetbrains.plugins.spotbugs.tasks.BackgroundableTask;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.*;
 
@@ -96,7 +97,7 @@ public final class ImportBugCollection extends AbstractAction {
 			}
 		}
 
-		final Set<String> enabledPluginIds = New.set();
+    final Set<String> enabledPluginIds = new HashSet<>();
 		for (final PluginSettings pluginSettings : ProjectSettings.getInstance(project).plugins) {
 			if (pluginSettings.enabled) {
 				enabledPluginIds.add(pluginSettings.id);

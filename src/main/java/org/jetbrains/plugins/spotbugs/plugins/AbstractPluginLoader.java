@@ -33,7 +33,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.spotbugs.common.FindBugsPluginUtil;
 import org.jetbrains.plugins.spotbugs.common.util.FindBugsCustomPluginUtil;
-import org.jetbrains.plugins.spotbugs.common.util.New;
 import org.jetbrains.plugins.spotbugs.core.PluginSettings;
 import org.jetbrains.plugins.spotbugs.gui.settings.ProjectConfigurableImpl;
 import org.jetbrains.plugins.spotbugs.resources.ResourcesLoader;
@@ -76,7 +75,7 @@ public abstract class AbstractPluginLoader {
 		final IdeaPluginDescriptor ideaPluginDescriptor = FindBugsPluginUtil.getIdeaPluginDescriptor();
 		Plugins.deploy(ideaPluginDescriptor);
 		final File[] bundledPlugins = Plugins.getDirectory(ideaPluginDescriptor).listFiles();
-		final Set<String> enabledBundledPluginUrls = New.set();
+    final Set<String> enabledBundledPluginUrls = new HashSet<>();
 		if (bundledPlugins != null) {
 			for (final File pluginFile : bundledPlugins) {
 				if (!pluginFile.getName().endsWith(".jar")) {

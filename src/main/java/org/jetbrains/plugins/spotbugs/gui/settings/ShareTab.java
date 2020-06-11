@@ -39,7 +39,6 @@ import com.intellij.ui.HyperlinkLabel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.spotbugs.common.util.FileUtilFb;
-import org.jetbrains.plugins.spotbugs.common.util.New;
 import org.jetbrains.plugins.spotbugs.core.WorkspaceSettings;
 import org.jetbrains.plugins.spotbugs.gui.common.HAlignment;
 import org.jetbrains.plugins.spotbugs.gui.common.VAlignment;
@@ -159,7 +158,7 @@ final class ShareTab extends JPanel implements SettingsOwner<WorkspaceSettings>,
 	}
 
 	private void removeOrphanEntries(@NotNull final Map<String, String> importFilePath) {
-		final Set<String> moduleNames = New.set();
+    final Set<String> moduleNames = new HashSet<>();
 		for (final Module module : ModuleManager.getInstance(project).getModules()) {
 			moduleNames.add(module.getName());
 		}

@@ -72,11 +72,6 @@ public final class New {
 	}
 
 	@NotNull
-	public static <E> Set<E> set() {
-		return new HashSet<E>();
-	}
-
-	@NotNull
 	public static <T> Set<T> asSet(@Nullable final T... elements) {
 		int cap = 4;
 		if (elements != null) {
@@ -88,10 +83,4 @@ public final class New {
 		}
 		return ret;
 	}
-
-	@NotNull
-	public static <E> Set<E> tSet() {
-		return new THashSet<E>();
-	}
-
 }

@@ -22,6 +22,7 @@ package org.jetbrains.plugins.spotbugs.common.util;
 
 import com.intellij.ide.plugins.cl.PluginClassLoader;
 import com.intellij.openapi.util.io.FileUtil;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,8 +31,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Vector;
@@ -41,14 +41,14 @@ public final class DebugUtil {
 	private DebugUtil() {
 	}
 
-	public static void dumpClasses(@NotNull final Class clazz) {
+	public static void dumpClasses(@NotNull final Class<?> clazz) {
 		final StringBuilder s = new StringBuilder();
 		s.append("Begin dump: ").append(clazz).append("\n");
 
 		final ClassLoader threadCl = Thread.currentThread().getContextClassLoader();
 		s.append("Current Context CL: ").append(threadCl.getClass()).append(" [").append(System.identityHashCode(threadCl)).append("]\n");
 
-		final Set<ClassLoader> cls = New.set();
+    final Set<ClassLoader> cls = new HashSet<>();
 		collectClassLoaders(cls, clazz.getClassLoader());
 		collectClassLoaders(cls, threadCl);
 
@@ -64,13 +64,8 @@ public final class DebugUtil {
 			s.append("\n\nCL: ").append(cl.getClass()).append(" [").append(System.identityHashCode(cl)).append("]\n");
 			try {
 				@SuppressWarnings("unchecked") final Vector<Class<?>> classes = (Vector<Class<?>>) classesField.get(cl);
-				final List<Class<?>> sorted = new ArrayList<Class<?>>(classes);
-				Collections.sort(sorted, new Comparator<Class<?>>() {
-					@Override
-					public int compare(Class<?> o1, Class<?> o2) {
-						return o1.getName().compareToIgnoreCase(o2.getName());
-					}
-				});
+				final List<Class<?>> sorted = new ArrayList<>(classes);
+				sorted.sort((o1, o2) -> o1.getName().compareToIgnoreCase(o2.getName()));
 				for (final Class<?> c : sorted) {
 					final URL url = cl.getResource("/" + c.getName().replace(".", "/") + ".class");
 					s.append("    ").append(c.getName()).append(" -> ").append(url).append("\n");
@@ -101,9 +96,7 @@ public final class DebugUtil {
 					for (final ClassLoader parent : parents) {
 						collectClassLoaders(cls, parent);
 					}
-				} catch (NoSuchFieldException e) {
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
+				} catch (NoSuchFieldException | IllegalAccessException e) {
 					e.printStackTrace();
 				}
 			}

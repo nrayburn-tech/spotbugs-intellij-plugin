@@ -25,11 +25,13 @@ import com.intellij.util.xmlb.annotations.MapAnnotation;
 import com.intellij.util.xmlb.annotations.Tag;
 import edu.umd.cs.findbugs.BugRanker;
 import edu.umd.cs.findbugs.config.ProjectFilterSettings;
+
 import org.jetbrains.plugins.spotbugs.common.FindBugsPluginConstants;
 import org.jetbrains.plugins.spotbugs.common.util.FindBugsCustomPluginUtil;
 import org.jetbrains.plugins.spotbugs.common.util.New;
 import org.jetbrains.plugins.spotbugs.preferences.AnalysisEffort;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -73,9 +75,9 @@ public abstract class AbstractSettings {
 	 */
 	@Tag(value = "plugins")
 	@AbstractCollection(surroundWithTag = false, elementTag = Constants.SET)
-	public Set<PluginSettings> plugins = New.set();
+	public Set<PluginSettings> plugins = new HashSet<>();
 
-	/**
+  /**
 	 * @see edu.umd.cs.findbugs.config.UserPreferences#setIncludeFilterFiles(Map)
 	 */
 	@Tag(value = "includeFilterFiles")

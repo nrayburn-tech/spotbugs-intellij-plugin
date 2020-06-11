@@ -26,11 +26,11 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.CompilerModuleExtension;
 import com.intellij.openapi.roots.CompilerProjectExtension;
 import com.intellij.openapi.roots.ModuleRootManager;
-import com.intellij.openapi.util.NotNullComputable;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiJavaFile;
 import com.intellij.psi.PsiManager;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.spotbugs.common.EventDispatchThreadHelper;
@@ -43,6 +43,7 @@ import org.jetbrains.plugins.spotbugs.resources.ResourcesLoader;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -125,17 +126,11 @@ public final class FindBugsProjects {
 		FindBugsProject ret = projects.get(module);
 		if (ret == null) {
 
-			ret = WithPluginClassloader.notNull(new NotNullComputable<FindBugsProject>() {
-				@NotNull
-				@Override
-				public FindBugsProject compute() {
-					return FindBugsProject.create(
-							project,
-							module,
-							makeProjectName(module)
-					);
-				}
-			});
+			ret = WithPluginClassloader.notNull(() -> FindBugsProject.create(
+					project,
+					module,
+					makeProjectName(module)
+			));
 
 			final VirtualFile[] sourceRoots = getSourceRoots(module, includeTests);
 			for (final VirtualFile sourceRoot : sourceRoots) {
@@ -172,11 +167,11 @@ public final class FindBugsProjects {
 	@NotNull
 	private Collection<VirtualFile> getCompilerOutputPaths(@NotNull final Module module, final boolean includeTests) {
 
-		final Set<Module> modules = New.set();
+    final Set<Module> modules = new HashSet<>();
 		ModuleUtilCore.getDependencies(module, modules);
 		modules.add(module);
 
-		final List<VirtualFile> ret = new ArrayList<VirtualFile>(modules.size());
+		final List<VirtualFile> ret = new ArrayList<>(modules.size());
 		boolean projectFallbackExecuted = false;
 
 		for (final Module m : modules) {
@@ -218,11 +213,7 @@ public final class FindBugsProjects {
 	}
 
 	private void showWarning(@NotNull final String message) {
-		EventDispatchThreadHelper.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				BalloonTipFactory.showToolWindowWarnNotifier(project, message + " " + ResourcesLoader.getString("analysis.aborted"));
-			}
-		});
+		EventDispatchThreadHelper.invokeLater(() -> BalloonTipFactory.showToolWindowWarnNotifier(
+				project, message + " " + ResourcesLoader.getString("analysis.aborted")));
 	}
 }

@@ -30,7 +30,6 @@ import gnu.trove.THashSet;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.spotbugs.common.util.IdeaUtilImpl;
-import org.jetbrains.plugins.spotbugs.common.util.New;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -96,7 +95,7 @@ final class Changes {
 						if (changesPerProject == null) {
 							changesPerProject = _changed.get(project);
 							if (changesPerProject == null) {
-								changesPerProject = New.tSet();
+								changesPerProject = new THashSet<>();
 								_changed.put(project, changesPerProject);
 							}
 						}

@@ -45,7 +45,6 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.spotbugs.common.util.FindBugsCustomPluginUtil;
 import org.jetbrains.plugins.spotbugs.common.util.GuiUtil;
 import org.jetbrains.plugins.spotbugs.common.util.IdeaUtilImpl;
-import org.jetbrains.plugins.spotbugs.common.util.New;
 import org.jetbrains.plugins.spotbugs.core.AbstractSettings;
 import org.jetbrains.plugins.spotbugs.core.PluginSettings;
 import org.jetbrains.plugins.spotbugs.plugins.AbstractPluginLoader;
@@ -58,6 +57,7 @@ import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -132,7 +132,7 @@ final class PluginTablePane extends JPanel {
 				group.add(new DumbAwareAction(ResourcesLoader.getString("plugins.add", pluginInfo.shortDescription)) {
 					@Override
 					public void actionPerformed(@NotNull final AnActionEvent e) {
-						final Set<PluginSettings> settings = New.set();
+						final Set<PluginSettings> settings = new HashSet<>();
 						pluginInfo.settings.enabled = true;
 						for (final PluginInfo other : getModel().rows) {
 							settings.add(other.settings);
@@ -178,7 +178,7 @@ final class PluginTablePane extends JPanel {
 		if (files.length > 0) {
 
 			// collect current plugin settings
-			final Set<PluginSettings> settings = New.set();
+			final Set<PluginSettings> settings = new HashSet<>();
 			for (final PluginInfo plugin : getModel().rows) {
 				settings.add(plugin.settings);
 			}
@@ -234,7 +234,7 @@ final class PluginTablePane extends JPanel {
 	private void doRemove() {
 		final int[] index = table.getSelectedRows();
 		if (index != null && index.length > 0) {
-			final Set<PluginSettings> settings = New.set();
+			final Set<PluginSettings> settings = new HashSet<>();
 			for (final PluginInfo plugin : getModel().rows) {
 				settings.add(plugin.settings);
 			}
@@ -252,7 +252,7 @@ final class PluginTablePane extends JPanel {
 	}
 
 	boolean isModified(@NotNull final AbstractSettings settings) {
-		final Set<PluginSettings> plugins = New.set();
+		final Set<PluginSettings> plugins = new HashSet<>();
 		for (final PluginInfo pluginInfo : getModel().rows) {
 			plugins.add(pluginInfo.settings);
 		}

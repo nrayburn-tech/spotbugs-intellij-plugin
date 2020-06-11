@@ -42,7 +42,6 @@ import edu.umd.cs.findbugs.config.*;
 import org.dom4j.DocumentException;
 import org.jetbrains.annotations.*;
 import org.jetbrains.plugins.spotbugs.common.EventDispatchThreadHelper;
-import org.jetbrains.plugins.spotbugs.common.util.New;
 import org.jetbrains.plugins.spotbugs.gui.common.BalloonTipFactory;
 import org.jetbrains.plugins.spotbugs.gui.toolwindow.view.ToolWindowPanel;
 import org.jetbrains.plugins.spotbugs.messages.*;
@@ -355,7 +354,7 @@ public abstract class FindBugsStarter implements AnalysisAbortingListener {
 	 */
 	@Nullable
 	private CompileScope createFacetsCompileScope(@NotNull final CompilerManager compilerManager, @NotNull final VirtualFile[] files) {
-		final Set<Module> modules = New.set();
+    final Set<Module> modules = new HashSet<>();
 		boolean facetsFound = false;
 		for (final VirtualFile file : files) {
 			final Module module = ModuleUtilCore.findModuleForFile(file, project);

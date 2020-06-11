@@ -34,12 +34,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.spotbugs.android.AndroidUtil;
 import org.jetbrains.plugins.spotbugs.android.RFilerFilterSuggestion;
-import org.jetbrains.plugins.spotbugs.common.util.New;
 import org.jetbrains.plugins.spotbugs.gui.common.NotificationUtil;
 import org.jetbrains.plugins.spotbugs.gui.settings.ModuleConfigurableImpl;
 import org.jetbrains.plugins.spotbugs.gui.settings.ProjectConfigurableImpl;
 import org.jetbrains.plugins.spotbugs.plugins.Plugins;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public final class PluginSuggestion extends AbstractProjectComponent {
@@ -140,7 +140,7 @@ public final class PluginSuggestion extends AbstractProjectComponent {
 
 	@NotNull
 	private static Set<Suggestion> collectSuggestions(@NotNull final Project project, @NotNull final ProjectSettings settings) {
-		final Set<Suggestion> ret = New.set();
+    final Set<Suggestion> ret = new HashSet<>();
 		collectSuggestionsByModules(project, settings, ret);
 		return ret;
 	}
@@ -201,7 +201,7 @@ public final class PluginSuggestion extends AbstractProjectComponent {
 		@NotNull
 		private final Module module;
 
-		private boolean moduleSettingsOverrideProjectSettings;
+		private final boolean moduleSettingsOverrideProjectSettings;
 
 		Suggestion(@NotNull final String pluginId, @NotNull final String name, @NotNull final Module module, final boolean moduleSettingsOverrideProjectSettings) {
 			this.pluginId = pluginId;

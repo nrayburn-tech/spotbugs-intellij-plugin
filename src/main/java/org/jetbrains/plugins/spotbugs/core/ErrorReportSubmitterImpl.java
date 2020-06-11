@@ -102,7 +102,7 @@ public final class ErrorReportSubmitterImpl extends ErrorReportSubmitter {
 		}
 
 		boolean isFindBugsError = false;
-		final Set<Error> errors = New.set();
+    final Set<Error> errors = new HashSet<>();
 		for (final IdeaLoggingEvent event : events) {
 			final Error error = createError(event);
 			if (error != null) {
@@ -151,7 +151,7 @@ public final class ErrorReportSubmitterImpl extends ErrorReportSubmitter {
 		 * Note: set errorText as body does not work:
 		 *   - can cause HTTP 414 Request URI too long
 		 *   - if user is not yet logged in github login page will show an error
-		 *     502 - "This page is taking way too long to load." (this will also occure with HTTP POST).
+		 *     502 - "This page is taking way too long to load." (this will also occur with HTTP POST).
 		 */
 		final String body = "The error was copied to the clipboard. Press " + (SystemInfo.isMac ? "Command+V" : "Ctrl+V");
 		final String newIssueUrl = baseUrl + "/new?title=" + encode(title) + "&body=" + encode(body);

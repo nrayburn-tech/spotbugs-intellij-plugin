@@ -37,7 +37,6 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.PropertyKey;
 import org.jetbrains.plugins.spotbugs.common.util.GuiUtil;
 import org.jetbrains.plugins.spotbugs.common.util.IdeaUtilImpl;
-import org.jetbrains.plugins.spotbugs.common.util.New;
 import org.jetbrains.plugins.spotbugs.resources.ResourcesLoader;
 
 import javax.swing.*;
@@ -45,6 +44,7 @@ import javax.swing.table.AbstractTableModel;
 import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -122,7 +122,7 @@ final class FilterPane extends JPanel {
 	private void doRemove() {
 		final int[] index = table.getSelectedRows();
 		if (index != null && index.length > 0) {
-			final Set<Item> toRemove = New.set();
+			final Set<Item> toRemove = new HashSet<>();
 			for (final int idx : index) {
 				toRemove.add(getModel().rows.get(idx));
 			}

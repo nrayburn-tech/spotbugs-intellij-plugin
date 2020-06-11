@@ -40,6 +40,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -139,7 +140,7 @@ abstract class AbstractDetectorNode extends DefaultMutableTreeNode {
 						break;
 					case BugCategory:
 						final Collection<BugPattern> patterns = factory.getReportedBugPatterns();
-						final Set<String> categories = New.set();
+						final Set<String> categories = new HashSet<>();
 						for (final BugPattern bugPattern : patterns) {
 							final String category = bugPattern.getCategory();
 							if (!StringUtil.isEmptyOrSpaces(category)) {

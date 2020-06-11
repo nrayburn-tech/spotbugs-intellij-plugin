@@ -24,9 +24,9 @@ import com.intellij.ide.ui.search.SearchableOptionProcessor;
 import com.intellij.openapi.util.text.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.plugins.spotbugs.common.util.New;
 import org.jetbrains.plugins.spotbugs.resources.ResourcesLoader;
 
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
@@ -49,10 +49,10 @@ public final class SearchableOptionContributorImpl extends SearchableOptionContr
 			@NotNull final SearchableOptionProcessor processor,
 			@Nullable final String path,
 			@NotNull final String[] resourceKey,
-			@Nullable final String[] texts
+			final String @Nullable [] texts
 	) {
 
-		final Set<String> added = New.set();
+    final Set<String> added = new HashSet<>();
 		for (final String key : resourceKey) {
 			final String text = ResourcesLoader.getString(key);
 			indexImpl(processor, added, path, text);
