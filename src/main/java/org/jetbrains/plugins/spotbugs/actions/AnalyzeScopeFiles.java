@@ -93,7 +93,7 @@ public final class AnalyzeScopeFiles extends AbstractAnalyzeAction {
 		final boolean rememberScope = e.getPlace().equals(ActionPlaces.MAIN_MENU);
 		final AnalysisUIOptions uiOptions = AnalysisUIOptions.getInstance(project);
 		final PsiElement element = LangDataKeys.PSI_ELEMENT.getData(dataContext);
-		final BaseAnalysisActionDialog dlg = new BaseAnalysisActionDialog(AnalysisScopeBundle.message("specify.analysis.scope", "FindBugs Analyze"),
+		final BaseAnalysisActionDialog dlg = new BaseAnalysisActionDialog(AnalysisScopeBundle.message("specify.analysis.scope", "SpotBugs Analyze"),
 				AnalysisScopeBundle.message("analysis.scope.title", "Analyze"),
 				project,
 				scope,
