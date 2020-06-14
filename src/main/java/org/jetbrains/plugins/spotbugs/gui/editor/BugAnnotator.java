@@ -27,6 +27,7 @@ import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiAnonymousClass;
+import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -105,9 +106,15 @@ public final class BugAnnotator implements Annotator {
 		switch (priority) {
 			case Detector.HIGH_PRIORITY:
 
-				if (psiElement instanceof PsiAnonymousClass) {
-					final PsiElement firstChild = psiElement.getFirstChild();
-					annotation = annotationHolder.createWarningAnnotation(firstChild == null ? psiElement : firstChild, getAnnotationText(matchingDescriptors));
+				if (psiElement instanceof PsiClass) {
+					PsiElement elementToAnnotation;
+					if (psiElement instanceof PsiAnonymousClass) {
+						elementToAnnotation = psiElement.getFirstChild();
+					} else {
+						elementToAnnotation = ((PsiClass) psiElement).getNameIdentifier();
+					}
+
+					annotation = annotationHolder.createWarningAnnotation(elementToAnnotation == null ? psiElement : elementToAnnotation, getAnnotationText(matchingDescriptors));
 					// FIXME: use color from annotation configuration
 					annotation.setEnforcedTextAttributes(new TextAttributes(null, null, JBColor.RED.brighter(), EffectType.BOXED, Font.PLAIN));
 				} else {
@@ -125,9 +132,14 @@ public final class BugAnnotator implements Annotator {
 
 			case Detector.NORMAL_PRIORITY:
 
-				if (psiElement instanceof PsiAnonymousClass) {
-					final PsiElement firstChild = psiElement.getFirstChild();
-					annotation = annotationHolder.createWarningAnnotation(firstChild == null ? psiElement : firstChild, getAnnotationText(matchingDescriptors));
+				if (psiElement instanceof PsiClass) {
+					PsiElement elementToAnnotation;
+					if (psiElement instanceof PsiAnonymousClass) {
+						elementToAnnotation = psiElement.getFirstChild();
+					} else {
+						elementToAnnotation = ((PsiClass) psiElement).getNameIdentifier();
+					}
+					annotation = annotationHolder.createWarningAnnotation(elementToAnnotation == null ? psiElement : elementToAnnotation, getAnnotationText(matchingDescriptors));
 				} else {
 					annotation = annotationHolder.createWarningAnnotation(textRange, getAnnotationText(matchingDescriptors));
 				}
@@ -144,9 +156,14 @@ public final class BugAnnotator implements Annotator {
 
 			case Detector.EXP_PRIORITY:
 
-				if (problemElement instanceof PsiAnonymousClass) {
-					final PsiElement firstChild = psiElement.getFirstChild();
-					annotation = annotationHolder.createWarningAnnotation(firstChild == null ? psiElement : firstChild, getAnnotationText(matchingDescriptors));
+				if (problemElement instanceof PsiClass) {
+					PsiElement elementToAnnotation;
+					if (problemElement instanceof PsiAnonymousClass) {
+						elementToAnnotation = problemElement.getFirstChild();
+					} else {
+						elementToAnnotation = ((PsiClass) problemElement).getNameIdentifier();
+					}
+					annotation = annotationHolder.createWarningAnnotation(elementToAnnotation == null ? psiElement : elementToAnnotation, getAnnotationText(matchingDescriptors));
 				} else {
 					annotation = annotationHolder.createWarningAnnotation(textRange, getAnnotationText(matchingDescriptors));
 				}
@@ -162,9 +179,14 @@ public final class BugAnnotator implements Annotator {
 				break;
 			case Detector.LOW_PRIORITY:
 
-				if (psiElement instanceof PsiAnonymousClass) {
-					final PsiElement firstChild = psiElement.getFirstChild();
-					annotation = annotationHolder.createInfoAnnotation(firstChild == null ? psiElement : firstChild, getAnnotationText(matchingDescriptors));
+				if (psiElement instanceof PsiClass) {
+					PsiElement elementToAnnotation;
+					if (psiElement instanceof PsiAnonymousClass) {
+						elementToAnnotation = psiElement.getFirstChild();
+					} else {
+						elementToAnnotation = ((PsiClass) psiElement).getNameIdentifier();
+					}
+					annotation = annotationHolder.createInfoAnnotation(elementToAnnotation == null ? psiElement : elementToAnnotation, getAnnotationText(matchingDescriptors));
 				} else {
 					annotation = annotationHolder.createInfoAnnotation(textRange, getAnnotationText(matchingDescriptors));
 				}
@@ -179,9 +201,14 @@ public final class BugAnnotator implements Annotator {
 
 				break;
 			case Detector.IGNORE_PRIORITY:
-				if (problemElement instanceof PsiAnonymousClass) {
-					final PsiElement firstChild = psiElement.getFirstChild();
-					annotation = annotationHolder.createWarningAnnotation(firstChild == null ? psiElement : firstChild, getAnnotationText(matchingDescriptors));
+				if (problemElement instanceof PsiClass) {
+					PsiElement elementToAnnotation;
+					if (problemElement instanceof PsiAnonymousClass) {
+						elementToAnnotation = problemElement.getFirstChild();
+					} else {
+						elementToAnnotation = ((PsiClass) problemElement).getNameIdentifier();
+					}
+					annotation = annotationHolder.createWarningAnnotation(elementToAnnotation == null ? psiElement : elementToAnnotation, getAnnotationText(matchingDescriptors));
 					annotation.setEnforcedTextAttributes(new TextAttributes(null, null, JBColor.MAGENTA.brighter(), EffectType.WAVE_UNDERSCORE, Font.PLAIN));
 				} else {
 					annotation = annotationHolder.createWarningAnnotation(textRange, getAnnotationText(matchingDescriptors));
