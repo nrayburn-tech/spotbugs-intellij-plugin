@@ -5,11 +5,11 @@
 IntelliJ SpotBugs plugin provides static byte code analysis to look for bugs in Java code from within IntelliJ IDEA.
 The plugin uses [SpotBugs](https://spotbugs.github.io/) under the hood.
 
-The plugin is created by [Andrey Cherkasov](jqy@protonmail.com) and sponsored by JetBrains s.r.o.
+The plugin is created by [Andrey Cherkasov](mailto:jqy@protonmail.com) and sponsored by JetBrains s.r.o.
 
 The plugin is based on [FindBugs-IDEA](https://github.com/andrepdo/findbugs-idea), which is created by [Andre Pfeiler](mailto:andrepdo@dev.java.net) and licensed under the [GNU LESSER GENERAL PUBLIC LICENSE](https://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html).
 
-Contribution from [Stanislav Anokhin](staslock@gmail.com) (migration to gradle build system) is used.
+Contribution from [Stanislav Anokhin](mailto:staslock@gmail.com) (migration to gradle build system) is used.
 
 [SpotBugs](https://spotbugs.github.io/) is the spiritual successor of [FindBugs](https://github.com/findbugsproject/findbugs), carrying on from the point where it left off with support of its community.
 
