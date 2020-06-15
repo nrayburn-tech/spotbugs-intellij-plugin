@@ -84,13 +84,9 @@ public final class BugAnnotator implements Annotator {
 		for (final ExtendedProblemDescriptor descriptor : problemDescriptors) {
 			final PsiElement problemPsiElement = descriptor.getPsiElement();
 
-			final PsiAnonymousClass psiAnonymousClass = PsiTreeUtil.getParentOfType(psiElement, PsiAnonymousClass.class);
 			if (psiElement.equals(problemPsiElement)) {
 				matchingDescriptors.add(descriptor);
 				addAnnotation(descriptor, matchingDescriptors, psiElement, annotationHolder);
-			} else if (psiAnonymousClass != null && psiAnonymousClass.equals(problemPsiElement)) {
-				matchingDescriptors.add(descriptor);
-				addAnnotation(descriptor, matchingDescriptors, psiAnonymousClass, annotationHolder);
 			}
 		}
 	}

@@ -209,12 +209,20 @@ public class BugInstanceNode extends AbstractTreeNode<VisitableTreeNode> impleme
 		return lines;
 	}
 
-	public static boolean isAnonymousClass(@NotNull final int lines[]) {
+	public static boolean isAnonymousClass(@NotNull final int[] lines) {
 		return lines[0] == -1 && lines[1] == -1;
 	}
 
 	public boolean isAnonymousClass() {
 		return isAnonymousClass(getSourceLines());
+	}
+
+	public static boolean isFirstLines(@NotNull final int[] lines) {
+		return lines[0] == 1 && lines[1] == 1;
+	}
+
+	public boolean isFirstLines() {
+		return isFirstLines(getSourceLines());
 	}
 
 	@Override

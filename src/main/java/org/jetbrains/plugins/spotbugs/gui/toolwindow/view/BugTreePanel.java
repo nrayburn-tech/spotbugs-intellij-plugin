@@ -142,13 +142,14 @@ public class BugTreePanel extends JPanel {
 	}
 
 	private static void scrollToPreviewSource(final BugInstanceNode bugInstanceNode, final Editor editor) {
-		final int line = bugInstanceNode.getSourceLines()[0] - 1;
-		if (line >= 0) {
-			final LogicalPosition problemPos = new LogicalPosition(line, 0);
-			editor.getCaretModel().moveToLogicalPosition(problemPos);
-		} else { // anonymous classes
+		final int lineStart = bugInstanceNode.getSourceLines()[0] - 1;
+		final int lineEnd = bugInstanceNode.getSourceLines()[0];
+		if (lineStart < 0 || ((lineStart == 0 && lineEnd == 1))) {
 			final RangeHighlighter rangeHighlighter = editor.getMarkupModel().getAllHighlighters()[0];
 			editor.getCaretModel().moveToOffset(rangeHighlighter.getStartOffset());
+		} else {
+			final LogicalPosition problemPos = new LogicalPosition(lineStart, 0);
+			editor.getCaretModel().moveToLogicalPosition(problemPos);
 		}
 		editor.getScrollingModel().scrollToCaret(ScrollType.CENTER);
 	}
@@ -205,7 +206,12 @@ public class BugTreePanel extends JPanel {
 		PsiElement element = null;
 
 		if (lineStart < 0 && lineEnd < 0) {   // find anonymous classes
-			final PsiElement psiElement = IdeaUtilImpl.findAnonymousClassPsiElement(bugInstanceNode.getPsiFile(), bugInstanceNode.getBugInstance(), _project);
+			final PsiElement psiElement = IdeaUtilImpl.findClassPsiElement(bugInstanceNode.getPsiFile(), bugInstanceNode.getBugInstance(), _project);
+			if (psiElement != null) {
+				element = psiElement;
+			}
+		} if (lineStart == 0 && lineEnd == 1) {
+			final PsiElement psiElement = IdeaUtilImpl.findPsiElement(bugInstanceNode.getPsiFile(), bugInstanceNode.getBugInstance(), _project);
 			if (psiElement != null) {
 				element = psiElement;
 			}
@@ -217,7 +223,7 @@ public class BugTreePanel extends JPanel {
 		if (element != null) {
 			final MethodAnnotation primaryMethod = BugInstanceUtil.getPrimaryMethod(bugInstanceNode.getBugInstance());
 			if (primaryMethod != null && DebuggerUtilsEx.isLambdaName(primaryMethod.getMethodName())) {
-				element = IdeaUtilImpl.getOnlyLambdaExpressionOrPsiElement(element);
+				element = IdeaUtilImpl.findOnlyLambdaExpressionOrPsiElement(element);
 			}
 			marker = document.createRangeMarker(element.getTextRange());
 		} else if (lineStart >= 0 && lineEnd >= 0) {

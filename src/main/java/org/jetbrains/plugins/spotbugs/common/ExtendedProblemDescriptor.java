@@ -22,11 +22,13 @@ package org.jetbrains.plugins.spotbugs.common;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.QuickFix;
+import com.intellij.debugger.impl.DebuggerUtilsEx;
 import com.intellij.lang.annotation.ProblemGroup;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import edu.umd.cs.findbugs.MethodAnnotation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.spotbugs.common.util.BugInstanceUtil;
@@ -44,6 +46,7 @@ public class ExtendedProblemDescriptor implements ProblemDescriptor, ProblemGrou
 	 * This is the line as reported by FindBugs, rather than that computed by IDEA.
 	 */
 	private final int lineStart;
+	private final int lineEnd;
 
 	@NotNull
 	private final Bug bug;
@@ -54,6 +57,7 @@ public class ExtendedProblemDescriptor implements ProblemDescriptor, ProblemGrou
 		this.bug = bug;
 		final int[] lines = BugInstanceUtil.getSourceLines(this.bug.getInstance());
 		lineStart = lines[0] - 1;
+		lineEnd = lines[1];
 	}
 
 	@Override
@@ -106,10 +110,16 @@ public class ExtendedProblemDescriptor implements ProblemDescriptor, ProblemGrou
 		if (psiElement != null) {
 			return psiElement;
 		}
-		if (lineStart < 0) {
-			psiElement = IdeaUtilImpl.findAnonymousClassPsiElement(psiFile, bug.getInstance(), psiFile.getProject());
+		if (lineStart == 0 && lineEnd == 1) {
+			psiElement = IdeaUtilImpl.findPsiElement(psiFile, bug.getInstance(), psiFile.getProject());
+		} else if (lineStart < 0) {
+			psiElement = IdeaUtilImpl.findClassPsiElement(psiFile, bug.getInstance(), psiFile.getProject());
 		} else {
 			psiElement = IdeaUtilImpl.getElementAtLine(psiFile, lineStart);
+		}
+		final MethodAnnotation primaryMethod = BugInstanceUtil.getPrimaryMethod(bug.getInstance());
+		if (primaryMethod != null && DebuggerUtilsEx.isLambdaName(primaryMethod.getMethodName())) {
+			psiElement = IdeaUtilImpl.findOnlyLambdaExpressionOrPsiElement(psiElement);
 		}
 		return psiElement;
 	}

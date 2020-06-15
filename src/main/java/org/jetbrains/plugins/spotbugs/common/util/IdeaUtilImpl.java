@@ -43,6 +43,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
 import edu.umd.cs.findbugs.BugInstance;
+import edu.umd.cs.findbugs.FieldAnnotation;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import gnu.trove.THashSet;
 import org.jetbrains.annotations.NotNull;
@@ -440,7 +441,7 @@ public final class IdeaUtilImpl {
 	}
 
 	@Nullable
-	public static PsiElement findAnonymousClassPsiElement(@Nullable final PsiFileSystemItem psiFile, @NotNull final BugInstance bugInstance, @NotNull final Project project) {
+	public static PsiElement findClassPsiElement(@Nullable final PsiFileSystemItem psiFile, @NotNull final BugInstance bugInstance, @NotNull final Project project) {
 		if (psiFile != null) {
 			final String classNameToFind = BugInstanceUtil.getSimpleClassName(bugInstance);
 			final ClassCollector cc = new ClassCollector(project);
@@ -457,6 +458,19 @@ public final class IdeaUtilImpl {
 		return null;
 	}
 
+	@Nullable
+	public static PsiElement findPsiElement(@Nullable final PsiFileSystemItem psiFile, @NotNull final BugInstance bugInstance, @NotNull final Project project) {
+		if (psiFile == null) {
+			return null;
+		}
+		final PsiElement element = findClassPsiElement(psiFile, bugInstance, project);
+		final FieldAnnotation primaryField = bugInstance.getPrimaryField();
+		if (element != null && primaryField != null) {
+			return ((PsiClass) element).findFieldByName(primaryField.getFieldName(), false);
+		}
+		// FIXME: add finding the method
+		return element;
+	}
 
 	@Nullable
 	public static String getFirstProjectRootPath(final Project project) {
@@ -480,7 +494,7 @@ public final class IdeaUtilImpl {
 		return macroManager.expandPath(path);
 	}
 
-	public static PsiElement getOnlyLambdaExpressionOrPsiElement(@NotNull final PsiElement psiElement) {
+	public static PsiElement findOnlyLambdaExpressionOrPsiElement(@NotNull final PsiElement psiElement) {
 		final PsiLambdaExpression[] lastLambdaExpression = {null};
 		final int[] lambdaCount = {0};
 
