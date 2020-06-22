@@ -122,7 +122,7 @@ public final class ExportBugCollection extends AbstractAction {
 					File finalExportDir = exportDirPath;
 					final String currentTime = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", Locale.ENGLISH).format(new Date());
 					if (createSubDir) {
-						final String dirName = "findbugs-result-" + project.getName() + "_" + currentTime;
+						final String dirName = "spotbugs-result-" + project.getName() + "_" + currentTime;
 						finalExportDir = new File(exportDirPath, dirName);
 						FileUtilFb.mkdirs(finalExportDir);
 					}
@@ -137,7 +137,7 @@ public final class ExportBugCollection extends AbstractAction {
 								fileName = "result";
 							}
 						} else {
-							fileName = "findbugs-result-" + entry.getKey().getProjectName() + "_" + currentTime;
+							fileName = "spotbugs-result-" + entry.getKey().getProjectName() + "_" + currentTime;
 						}
 						exportImpl(
 								entry.getValue(),
