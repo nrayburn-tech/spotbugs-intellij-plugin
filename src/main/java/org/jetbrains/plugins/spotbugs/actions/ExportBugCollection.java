@@ -28,6 +28,7 @@ import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.wm.ToolWindow;
 import edu.umd.cs.findbugs.*;
+import net.sf.saxon.TransformerFactoryImpl;
 import org.dom4j.Document;
 import org.dom4j.io.DocumentSource;
 import org.jetbrains.annotations.NotNull;
@@ -195,7 +196,8 @@ public final class ExportBugCollection extends AbstractAction {
 			xsl.setSystemId(FINDBUGS_PLAIN_XSL);
 
 			// Create a transformer using the stylesheet
-			final Transformer transformer = TransformerFactory.newInstance().newTransformer(xsl);
+			final TransformerFactoryImpl transformerFactory = new TransformerFactoryImpl();
+			final Transformer transformer = transformerFactory.newTransformer(xsl);
 
 			// Source document is the XML generated from the BugCollection
 			final Source source = new DocumentSource(document);
