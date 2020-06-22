@@ -20,7 +20,6 @@
 package org.jetbrains.plugins.spotbugs.gui.settings;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.PropertyKey;
 import org.jetbrains.plugins.spotbugs.resources.ResourcesLoader;
 
 enum DetectorGroupBy {

@@ -29,7 +29,6 @@ import com.intellij.util.xmlb.XmlSerializerUtil;
 import com.intellij.util.xmlb.annotations.MapAnnotation;
 import com.intellij.util.xmlb.annotations.Tag;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.spotbugs.gui.tree.GroupBy;
 
 import java.util.HashMap;

@@ -21,7 +21,6 @@ package org.jetbrains.plugins.spotbugs.gui.settings;
 
 import com.intellij.openapi.options.ConfigurationException;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.plugins.spotbugs.core.AbstractSettings;
 
 interface SettingsOwner<V> {
 

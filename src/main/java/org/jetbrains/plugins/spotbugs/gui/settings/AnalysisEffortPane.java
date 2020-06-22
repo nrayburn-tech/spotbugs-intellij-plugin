@@ -30,7 +30,6 @@ import org.jetbrains.plugins.spotbugs.resources.ResourcesLoader;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 
 final class AnalysisEffortPane extends JPanel implements SettingsOwner<AbstractSettings> {
