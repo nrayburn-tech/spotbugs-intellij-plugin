@@ -83,8 +83,8 @@
         <![CDATA[<html>
         <h3>1.2.1</h3>
         <ul>
-            <li>Fixes export HTML report</li>
-            <li>A few highlighting improvements</li>
+            <li>Fixed HTML report export</li>
+            <li>Improved error highlighting</li>
             <li>Cosmetic changes</li>
         </ul>
         <h3>1.2.0</h3>
