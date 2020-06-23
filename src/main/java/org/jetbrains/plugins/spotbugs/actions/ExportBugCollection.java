@@ -217,7 +217,7 @@ public final class ExportBugCollection extends AbstractAction {
 	}
 
 	private static void openInBrowser(@NotNull final File file) {
-		EventDispatchThreadHelper.invokeLater(() -> BrowserUtil.browse(file));
+		EventDispatchThreadHelper.invokeLater(() -> BrowserUtil.browse(file.toURI()));
 	}
 
 	private static void showError(@NotNull final String message) {
