@@ -42,7 +42,7 @@ import java.util.Set;
 
 public final class PluginSuggestionService {
 
-	private static final String NOTIFICATION_GROUP_ID_PLUGIN_SUGGESTION = "FindBugs: Plugin Suggestion";
+	private static final String NOTIFICATION_GROUP_ID_PLUGIN_SUGGESTION = "SpotBugs: Plugin Suggestion";
 	private static final NotificationGroup NOTIFICATION_GROUP_PLUGIN_SUGGESTION = new NotificationGroup(NOTIFICATION_GROUP_ID_PLUGIN_SUGGESTION, NotificationDisplayType.STICKY_BALLOON, false);
 	private final Project myProject;
 
@@ -109,7 +109,7 @@ public final class PluginSuggestionService {
 		sb.append("<br><a href='").append(AbstractSuggestionNotificationListener.A_HREF_DISABLE_ANCHOR).append("'>Disable Suggestion</a>");
 
 		NOTIFICATION_GROUP_PLUGIN_SUGGESTION.createNotification(
-				"FindBugs Plugin Suggestion",
+				"SpotBugs Plugin Suggestion",
 				sb.toString(),
 				NotificationType.INFORMATION,
 				new AbstractSuggestionNotificationListener(project, NOTIFICATION_GROUP_ID_PLUGIN_SUGGESTION) {

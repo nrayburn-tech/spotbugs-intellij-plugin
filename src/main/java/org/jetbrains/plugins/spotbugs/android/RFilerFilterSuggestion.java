@@ -38,7 +38,7 @@ import org.jetbrains.plugins.spotbugs.gui.settings.ProjectConfigurableImpl;
 
 public final class RFilerFilterSuggestion {
 
-	private static final String NOTIFICATION_GROUP_ID_SUGGESTION = "FindBugs: R-File Filter Suggestion";
+	private static final String NOTIFICATION_GROUP_ID_SUGGESTION = "SpotBugs: R-File Filter Suggestion";
 	private static final NotificationGroup NOTIFICATION_GROUP_PLUGIN_SUGGESTION = new NotificationGroup(NOTIFICATION_GROUP_ID_SUGGESTION, NotificationDisplayType.STICKY_BALLOON, false);
 
 	@NotNull
@@ -79,7 +79,7 @@ public final class RFilerFilterSuggestion {
 		sb.append("<br><br><a href='").append(AbstractSuggestionNotificationListener.A_HREF_DISABLE_ANCHOR).append("'>Disable Suggestion</a>");
 
 		NOTIFICATION_GROUP_PLUGIN_SUGGESTION.createNotification(
-				"FindBugs R-Filter Suggestion",
+				"SpotBugs R-Filter Suggestion",
 				sb.toString(),
 				NotificationType.INFORMATION,
 				new AbstractSuggestionNotificationListener(project, NOTIFICATION_GROUP_ID_SUGGESTION) {
