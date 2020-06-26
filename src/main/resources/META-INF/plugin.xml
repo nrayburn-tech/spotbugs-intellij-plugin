@@ -131,6 +131,9 @@
     <depends>com.intellij.modules.java</depends>
 
     <resource-bundle>org.jetbrains.plugins.spotbugs.resources.i18n.Messages</resource-bundle>
+    <projectListeners>
+        <listener class="org.jetbrains.plugins.spotbugs.core.ProjectOpenListener" topic="com.intellij.openapi.project.ProjectManagerListener"/>
+    </projectListeners>
     <extensions defaultExtensionNs="com.intellij">
         <toolWindow anchor="bottom" id="SpotBugs" icon="PluginIcons.FINDBUGS_ICON_13X13"
                     factoryClass="org.jetbrains.plugins.spotbugs.core.ToolWindowFactoryImpl"/>
@@ -148,6 +151,7 @@
                             displayName="SpotBugs"/>
         <checkinHandlerFactory implementation="org.jetbrains.plugins.spotbugs.core.CheckinHandlerFactoryImpl"/>
         <projectService serviceImplementation="org.jetbrains.plugins.spotbugs.core.ProblemCacheService"/>
+        <projectService serviceImplementation="org.jetbrains.plugins.spotbugs.core.PluginSuggestionService"/>
     </extensions>
     <extensions defaultExtensionNs="com.intellij">
         <errorHandler implementation="org.jetbrains.plugins.spotbugs.core.ErrorReportSubmitterImpl"/>
@@ -165,11 +169,6 @@
     <project-components>
         <component>
             <implementation-class>org.jetbrains.plugins.spotbugs.core.FindBugsCompileAfterHook</implementation-class>
-        </component>
-    </project-components>
-    <project-components>
-        <component>
-            <implementation-class>org.jetbrains.plugins.spotbugs.core.PluginSuggestion</implementation-class>
         </component>
     </project-components>
     <project-components>

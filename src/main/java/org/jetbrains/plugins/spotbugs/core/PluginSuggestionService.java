@@ -26,14 +26,12 @@ import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationDisplayType;
 import com.intellij.notification.NotificationGroup;
 import com.intellij.notification.NotificationType;
-import com.intellij.openapi.components.AbstractProjectComponent;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.spotbugs.android.AndroidUtil;
-import org.jetbrains.plugins.spotbugs.android.RFilerFilterSuggestion;
 import org.jetbrains.plugins.spotbugs.gui.common.NotificationUtil;
 import org.jetbrains.plugins.spotbugs.gui.settings.ModuleConfigurableImpl;
 import org.jetbrains.plugins.spotbugs.gui.settings.ProjectConfigurableImpl;
@@ -42,22 +40,17 @@ import org.jetbrains.plugins.spotbugs.plugins.Plugins;
 import java.util.HashSet;
 import java.util.Set;
 
-public final class PluginSuggestion extends AbstractProjectComponent {
+public final class PluginSuggestionService {
 
 	private static final String NOTIFICATION_GROUP_ID_PLUGIN_SUGGESTION = "FindBugs: Plugin Suggestion";
 	private static final NotificationGroup NOTIFICATION_GROUP_PLUGIN_SUGGESTION = new NotificationGroup(NOTIFICATION_GROUP_ID_PLUGIN_SUGGESTION, NotificationDisplayType.STICKY_BALLOON, false);
+	private final Project myProject;
 
-	public PluginSuggestion(@NotNull final Project project) {
-		super(project);
+	public PluginSuggestionService(@NotNull final Project project) {
+		myProject = project;
 	}
 
-	@Override
-	public void projectOpened() {
-		suggestPlugins();
-		new RFilerFilterSuggestion(myProject).suggest();
-	}
-
-	private void suggestPlugins() {
+	public void suggestPlugins() {
 		final ProjectSettings settings = ProjectSettings.getInstance(myProject);
 		if (!NotificationUtil.isGroupEnabled(NOTIFICATION_GROUP_ID_PLUGIN_SUGGESTION)) {
 			return;
@@ -107,7 +100,7 @@ public final class PluginSuggestion extends AbstractProjectComponent {
 
 		final StringBuilder sb = new StringBuilder();
 		for (final Suggestion suggestion : suggestions) {
-			sb.append("&nbsp;&nbsp;- <a href='").append(suggestion.pluginId).append("'>").append("Enable '").append(suggestion.name).append("'</a>");
+			sb.append("&nbsp;&nbsp; <a href='").append(suggestion.pluginId).append("'>").append("Enable '").append(suggestion.name).append("'</a>");
 			if (suggestion.moduleSettingsOverrideProjectSettings) {
 				sb.append(" for module '").append(suggestion.module.getName()).append("'");
 			}
