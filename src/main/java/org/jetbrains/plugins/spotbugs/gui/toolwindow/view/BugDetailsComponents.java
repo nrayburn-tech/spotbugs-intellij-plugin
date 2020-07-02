@@ -47,14 +47,12 @@ import java.util.stream.Collectors;
 public final class BugDetailsComponents {
 
 	private static final Logger LOGGER = Logger.getInstance(BugDetailsComponents.class);
-	private static final String EDU_UMD_CS_FINDBUGS_PLUGINS_WEB_CLOUD = "edu.umd.cs.findbugs.plugins.webCloud";
 
 	private HTMLEditorKit _htmlEditorKit;
 	private JEditorPane _bugDetailsPane;
 	private JEditorPane _explanationPane;
 	private JPanel _bugDetailsPanel;
 	private JPanel _explanationPanel;
-	private JPanel _cloudCommentsPanel;
 	private final ToolWindowPanel _parent;
 	private double _splitPaneHorizontalWeight = 0.6;
 	private SortedBugCollection _lastBugCollection;
@@ -92,16 +90,6 @@ public final class BugDetailsComponents {
 
 			_jTabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
 
-
-			if (Plugin.getByPluginId(EDU_UMD_CS_FINDBUGS_PLUGINS_WEB_CLOUD) != null) {
-				if (SystemInfo.isMac) {
-					// Aqua LF will rotate content
-					_jTabbedPane.addTab("Comments", PluginIcons.FINDBUGS_CLOUD_ICON, getCloudCommentsPanel(), "Comments from the FindBugs Cloud");
-				} else {
-					_jTabbedPane.addTab(null, new VerticalTextIcon("Comments", true, PluginIcons.FINDBUGS_CLOUD_ICON), getCloudCommentsPanel(), "Comments from the FindBugs Cloud");
-				}
-				_jTabbedPane.setMnemonicAt(1, KeyEvent.VK_2);
-			}
 		}
 
 		return _jTabbedPane;
@@ -185,11 +173,6 @@ public final class BugDetailsComponents {
 		return _explanationPane;
 	}
 
-	private JPanel getCloudCommentsPanel() {
-		throw new UnsupportedOperationException();
-	}
-
-
 	private void handleDetailsClick(final HyperlinkEvent evt) {
 		if (evt.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)) {
 			if (_parent != null) {
@@ -204,8 +187,6 @@ public final class BugDetailsComponents {
 						tree.getScrollToSourceHandler().scollToSelectionSource();
 						bugTreePanel.setScrollToSource(false);
 					}
-				} else if ("#comments".equals(desc)) {
-					getTabbedPane().setSelectedComponent(getCloudCommentsPanel());
 				}
 			}
 		}

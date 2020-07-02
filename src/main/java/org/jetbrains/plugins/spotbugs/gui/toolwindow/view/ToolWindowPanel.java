@@ -165,7 +165,6 @@ public final class ToolWindowPanel extends JPanel implements AnalysisStateListen
 			getMultiSplitPane().add(getBugTreePanel(), "left");
 			getMultiSplitPane().add(getBugDetailsComponents().getTabbedPane(), "right");
 			//getMultiSplitPane().add(getBugDetailsComponents().getBugExplanationPanel(), "right.bottom");
-			////getMultiSplitPane().add(_bugDetailsComponents.getCloudCommentsPanel(), "right");
 
 			if (getPreviewPanel().getEditor() != null) {
 				resizeSplitNodes(ToolWindowPanel.this);

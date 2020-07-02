@@ -32,7 +32,6 @@ public interface PluginIcons {
 
     Icon FINDBUGS_ICON = ResourcesLoader.loadIcon("bug.svg");
     Icon FINDBUGS_ICON_13X13 = ResourcesLoader.loadIcon("bug13x13.svg");
-    Icon FINDBUGS_CLOUD_ICON = ResourcesLoader.loadIcon("bug_cloud.png");
 
     Icon CLOSE_EDITOR_ICON = AllIcons.Actions.Close;
     Icon CLOSE_EDITOR_HOVER_ICON = AllIcons.Actions.CloseHovered;
