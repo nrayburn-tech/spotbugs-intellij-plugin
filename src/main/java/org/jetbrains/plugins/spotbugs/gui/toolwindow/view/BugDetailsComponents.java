@@ -21,12 +21,9 @@ package org.jetbrains.plugins.spotbugs.gui.toolwindow.view;
 
 import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.util.SystemInfo;
-import com.intellij.ui.components.JBTabbedPane;
 import com.intellij.util.ui.*;
 import edu.umd.cs.findbugs.*;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import icons.PluginIcons;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.plugins.spotbugs.common.util.BugInstanceUtil;
 import org.jetbrains.plugins.spotbugs.gui.common.*;
@@ -37,7 +34,6 @@ import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.text.html.HTMLEditorKit;
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.io.*;
 import java.net.URL;
 import java.util.Collection;
@@ -57,7 +53,6 @@ public final class BugDetailsComponents {
 	private double _splitPaneHorizontalWeight = 0.6;
 	private SortedBugCollection _lastBugCollection;
 	private BugInstance _lastBugInstance;
-	private JTabbedPane _jTabbedPane;
 	private MultiSplitPane _bugDetailsSplitPane;
 
 
@@ -66,36 +61,7 @@ public final class BugDetailsComponents {
 		_htmlEditorKit = GuiResources.createHtmlEditorKit();
 	}
 
-	JTabbedPane getTabbedPane() {
-		if (_jTabbedPane == null) {
-			if (SystemInfo.isMac) {
-				// use JTabbedPane because JBTabbedPane does not work with tabPlacement=RIGHT
-				// on OS X (Aqua) at least with IDEA 14.1.4 (141.1532.4) and OS X 10.10 Yosemite.
-				//noinspection UndesirableClassUsage
-				_jTabbedPane = new JTabbedPane(SwingConstants.RIGHT);
-			} else {
-				_jTabbedPane = new JBTabbedPane(SwingConstants.RIGHT);
-				((JBTabbedPane) _jTabbedPane).setTabComponentInsets(JBUI.insets(0, 0, 0, 5));
-			}
-
-			_jTabbedPane.setFocusable(false);
-			_jTabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
-
-			if (SystemInfo.isMac) {
-				// Aqua LF will rotate content
-				_jTabbedPane.addTab("Bug Details", PluginIcons.FINDBUGS_ICON, getBugDetailsSplitPane(), "Bug details concerning the current selected bug in the left tree");
-			} else {
-				_jTabbedPane.addTab(null, new VerticalTextIcon("Bug Details", true, PluginIcons.FINDBUGS_ICON), getBugDetailsSplitPane(), "Bug details concerning the current selected bug in the left tree");
-			}
-
-			_jTabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
-
-		}
-
-		return _jTabbedPane;
-	}
-
-	private Component getBugDetailsSplitPane() {
+	Component getBugDetailsSplitPane() {
 		if (_bugDetailsSplitPane == null) {
 			_bugDetailsSplitPane = new MultiSplitPane();
 			_bugDetailsSplitPane.setContinuousLayout(true);

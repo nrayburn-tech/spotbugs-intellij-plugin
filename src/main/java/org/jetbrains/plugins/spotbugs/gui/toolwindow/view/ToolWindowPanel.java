@@ -64,11 +64,8 @@ public final class ToolWindowPanel extends JPanel implements AnalysisStateListen
 	private static final String A_HREF_DISABLE_ANCHOR = "#disable";
 	private static final String A_HREF_ERROR_ANCHOR = "#error";
 
-	///private static final String DEFAULT_LAYOUT_DEF = "(ROW (LEAF name=left weight=0.3) (COLUMN weight=0.3 right.top right.bottom) (LEAF name=right weight=0.4))";
 	private static final String DEFAULT_LAYOUT_DEF = "(ROW (LEAF name=left weight=0.4) (LEAF name=right weight=0.6))";
 	private static final String PREVIEW_LAYOUT_DEF = "(ROW (LEAF name=left weight=0.3) (LEAF name=middle weight=0.4) (LEAF weight=0.3 name=right))";
-	///private static final String PREVIEW_LAYOUT_DEF = "(ROW (LEAF name=left weight=0.3) (LEAF name=middle weight=0.4) (COLUMN weight=0.3 right.top right.bottom))";
-	//private static final String PREVIEW_LAYOUT_DEF = "(ROW (LEAF name=left weight=0.4) (COLUMN weight=0.6 right.top right.bottom)  (LEAF name=right))";
 
 	private final Project _project;
 	private BugTreePanel _bugTreePanel;
@@ -154,8 +151,7 @@ public final class ToolWindowPanel extends JPanel implements AnalysisStateListen
 			_updateMultiSplitLayout(PREVIEW_LAYOUT_DEF);
 			getMultiSplitPane().add(getBugTreePanel(), "left");
 			_multiSplitPane.add(getPreviewPanel().getComponent(), "middle");
-			getMultiSplitPane().add(getBugDetailsComponents().getTabbedPane(), "right");
-			//getMultiSplitPane().add(getBugDetailsComponents().getBugExplanationPanel(), "right.bottom");
+			getMultiSplitPane().add(getBugDetailsComponents().getBugDetailsSplitPane(), "right");
 			_isPreviewLayoutEnabled = true;
 
 		} else if (!enablePreviewLayout) {
@@ -163,8 +159,7 @@ public final class ToolWindowPanel extends JPanel implements AnalysisStateListen
 
 			_updateMultiSplitLayout(DEFAULT_LAYOUT_DEF);
 			getMultiSplitPane().add(getBugTreePanel(), "left");
-			getMultiSplitPane().add(getBugDetailsComponents().getTabbedPane(), "right");
-			//getMultiSplitPane().add(getBugDetailsComponents().getBugExplanationPanel(), "right.bottom");
+			getMultiSplitPane().add(getBugDetailsComponents().getBugDetailsSplitPane(), "right");
 
 			if (getPreviewPanel().getEditor() != null) {
 				resizeSplitNodes(ToolWindowPanel.this);
