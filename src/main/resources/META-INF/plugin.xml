@@ -81,6 +81,11 @@
     </description>
     <change-notes>
         <![CDATA[<html>
+        <h3>1.2.3</h3>
+        <ul>
+            <li>Fixes issue #35: Possible ArrayIndexOutOfBoundsException</li>
+            <li>Removed the "Bug Details" tab</li>
+        </ul>
         <h3>1.2.2</h3>
         <ul>
             <li>SpotBugs dependency updated from 4.0.5 to 4.0.6 (fixed critical issue #33)</li>
