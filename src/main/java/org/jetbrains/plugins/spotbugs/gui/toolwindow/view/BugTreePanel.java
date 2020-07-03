@@ -210,7 +210,7 @@ public class BugTreePanel extends JPanel {
 			if (psiElement != null) {
 				element = psiElement;
 			}
-		} if (lineStart == 0 && lineEnd == 1) {
+		} else if (lineStart == 0 && lineEnd == 1) {
 			final PsiElement psiElement = IdeaUtilImpl.findPsiElement(bugInstanceNode.getPsiFile(), bugInstanceNode.getBugInstance(), _project);
 			if (psiElement != null) {
 				element = psiElement;
