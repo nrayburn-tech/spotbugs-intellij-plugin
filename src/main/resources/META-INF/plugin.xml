@@ -136,9 +136,9 @@
     <depends>com.intellij.modules.java</depends>
 
     <resource-bundle>org.jetbrains.plugins.spotbugs.resources.i18n.Messages</resource-bundle>
-    <projectListeners>
-        <listener class="org.jetbrains.plugins.spotbugs.core.ProjectOpenListener" topic="com.intellij.openapi.project.ProjectManagerListener"/>
-    </projectListeners>
+    <applicationListeners>
+        <listener class="org.jetbrains.plugins.spotbugs.core.ProjectOpenCloseListener" topic="com.intellij.openapi.project.ProjectManagerListener"/>
+    </applicationListeners>
     <extensions defaultExtensionNs="com.intellij">
         <toolWindow anchor="bottom" id="SpotBugs" icon="PluginIcons.FINDBUGS_ICON_13X13"
                     factoryClass="org.jetbrains.plugins.spotbugs.core.ToolWindowFactoryImpl"/>
@@ -157,6 +157,7 @@
         <checkinHandlerFactory implementation="org.jetbrains.plugins.spotbugs.core.CheckinHandlerFactoryImpl"/>
         <projectService serviceImplementation="org.jetbrains.plugins.spotbugs.core.ProblemCacheService"/>
         <projectService serviceImplementation="org.jetbrains.plugins.spotbugs.core.PluginSuggestionService"/>
+        <projectService serviceImplementation="org.jetbrains.plugins.spotbugs.core.FindBugsCompileAfterHookService"/>
     </extensions>
     <extensions defaultExtensionNs="com.intellij">
         <errorHandler implementation="org.jetbrains.plugins.spotbugs.core.ErrorReportSubmitterImpl"/>
@@ -171,11 +172,6 @@
         <annotator language="Groovy" implementationClass="org.jetbrains.plugins.spotbugs.gui.editor.BugAnnotator"/>
         <codeInsight.lineMarkerProvider language="Groovy" implementationClass="org.jetbrains.plugins.spotbugs.gui.editor.BugsLineMarkerProvider"/>
     </extensions>
-    <project-components>
-        <component>
-            <implementation-class>org.jetbrains.plugins.spotbugs.core.FindBugsCompileAfterHook</implementation-class>
-        </component>
-    </project-components>
     <project-components>
         <component>
             <implementation-class>org.jetbrains.plugins.spotbugs.gui.preferences.LegacyProjectSettingsConverter</implementation-class>

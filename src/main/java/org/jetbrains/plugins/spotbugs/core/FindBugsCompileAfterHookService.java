@@ -21,11 +21,9 @@ package org.jetbrains.plugins.spotbugs.core;
 
 import com.intellij.compiler.server.BuildManagerListener;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.compiler.CompilationStatusListener;
 import com.intellij.openapi.compiler.CompileContext;
 import com.intellij.openapi.compiler.CompileScope;
 import com.intellij.openapi.compiler.CompilerManager;
-import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
@@ -40,7 +38,6 @@ import com.intellij.util.io.storage.HeavyProcessLatch;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.plugins.spotbugs.common.EventDispatchThreadHelper;
-import org.jetbrains.plugins.spotbugs.common.FindBugsPluginConstants;
 import org.jetbrains.plugins.spotbugs.common.util.IdeaUtilImpl;
 
 import java.util.ArrayList;
@@ -52,7 +49,7 @@ import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-public class FindBugsCompileAfterHook implements CompilationStatusListener, ProjectComponent {
+public class FindBugsCompileAfterHookService {
 
 	private static final int DEFAULT_DELAY_MS = 30000;
 	private static final int DELAY_MS = StringUtil.parseInt(System.getProperty("idea.findbugs.autoanalyze.delaymillis", String.valueOf(DEFAULT_DELAY_MS)), DEFAULT_DELAY_MS);
@@ -69,7 +66,7 @@ public class FindBugsCompileAfterHook implements CompilationStatusListener, Proj
 		 */
 		ApplicationManager.getApplication().getMessageBus().connect().subscribe(BuildManagerListener.TOPIC, new BuildManagerListener() {
 
-			//@Override // introduced with IDEA 15 EA
+			@Override
 			public void beforeBuildProcessStarted(final @NotNull Project project, final @NotNull UUID sessionId) {
 			}
 
@@ -101,65 +98,9 @@ public class FindBugsCompileAfterHook implements CompilationStatusListener, Proj
 							}
 						}
 					}
-				} // else do nothing ; see FindBugsCompileAfterHook#compilationFinished
+				} // else do nothing
 			}
 		});
-	}
-
-	private final Project _project;
-
-	public FindBugsCompileAfterHook(@NotNull final Project project) {
-		_project = project;
-	}
-
-	@Override
-	public void compilationFinished(final boolean aborted, final int errors, final int warnings, final @NotNull CompileContext compileContext) {
-		// note that this is not invoked when auto make trigger compilation
-		if (!aborted && errors == 0) {
-			initWorker(compileContext);
-		}
-	}
-
-	@Override
-	public void fileGenerated(final @NotNull String s, final @NotNull String s1) {
-	}
-
-	@SuppressWarnings("UnusedDeclaration")
-	public void fileGenerated(final String s) {
-	}
-
-	@NotNull
-	@Override
-	public String getComponentName() {
-		return FindBugsPluginConstants.PLUGIN_ID + "#FindBugsCompileAfterHook";
-	}
-
-	@Override
-	public void initComponent() {
-	}
-
-	/**
-	 * Invoked by EDT.
-	 */
-	@Override
-	public void projectClosed() {
-		CompilerManager.getInstance(_project).removeCompilationStatusListener(this);
-		setAnalyzeAfterAutomake(_project, false);
-	}
-
-	@Override
-	public void disposeComponent() {
-	}
-
-	/**
-	 * Invoked by EDT.
-	 */
-	@Override
-	public void projectOpened() {
-		CompilerManager.getInstance(_project).addCompilationStatusListener(this);
-		if (isAfterAutoMakeEnabled(_project)) {
-			setAnalyzeAfterAutomake(_project, true);
-		}
 	}
 
 	@SuppressFBWarnings(value = {"LI_LAZY_INIT_UPDATE_STATIC", "LI_LAZY_INIT_STATIC"}, justification = "EDT thread confinement")
@@ -181,7 +122,7 @@ public class FindBugsCompileAfterHook implements CompilationStatusListener, Proj
 		}
 	}
 
-	private static void initWorker(final CompileContext compileContext) {
+	static void initWorker(final CompileContext compileContext) {
 		final com.intellij.openapi.project.Project project = compileContext.getProject();
 		if (null == project) { // project reload, eg: open IDEA project with unknown JRE and fix it
 			return;
@@ -236,7 +177,7 @@ public class FindBugsCompileAfterHook implements CompilationStatusListener, Proj
 		return ret;
 	}
 
-	private static boolean isAfterAutoMakeEnabled(@NotNull final Project project) {
+	static boolean isAfterAutoMakeEnabled(@NotNull final Project project) {
 		final WorkspaceSettings settings = WorkspaceSettings.getInstance(project);
 		return settings.analyzeAfterAutoMake;
 	}
