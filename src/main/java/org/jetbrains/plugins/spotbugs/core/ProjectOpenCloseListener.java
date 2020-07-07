@@ -27,6 +27,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManagerListener;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.plugins.spotbugs.android.RFilerFilterSuggestion;
+import org.jetbrains.plugins.spotbugs.gui.preferences.LegacyProjectSettingsConverter;
 
 public class ProjectOpenCloseListener implements ProjectManagerListener {
 
@@ -54,14 +55,16 @@ public class ProjectOpenCloseListener implements ProjectManagerListener {
 
     @Override
     public void projectOpened(@NotNull Project project) {
-        PluginSuggestionService pluginSuggestionService = project.getService(PluginSuggestionService.class);
-        pluginSuggestionService.suggestPlugins();
-        new RFilerFilterSuggestion(project).suggest();
-
         CompilerManager.getInstance(project).addCompilationStatusListener(compilationStatusListener);
         if (FindBugsCompileAfterHookService.isAfterAutoMakeEnabled(project)) {
             FindBugsCompileAfterHookService.setAnalyzeAfterAutomake(project, true);
         }
+
+        PluginSuggestionService pluginSuggestionService = project.getService(PluginSuggestionService.class);
+        pluginSuggestionService.suggestPlugins();
+        new RFilerFilterSuggestion(project).suggest();
+
+        LegacyProjectSettingsConverter.convertSettings(project);
     }
 
     @Override

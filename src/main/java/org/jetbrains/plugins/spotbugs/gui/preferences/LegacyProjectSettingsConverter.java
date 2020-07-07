@@ -19,7 +19,6 @@
  */
 package org.jetbrains.plugins.spotbugs.gui.preferences;
 
-import com.intellij.openapi.components.AbstractProjectComponent;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
@@ -31,10 +30,7 @@ import org.jetbrains.plugins.spotbugs.preferences.PersistencePreferencesBean;
 
 import java.util.List;
 
-public final class LegacyProjectSettingsConverter extends AbstractProjectComponent {
-	public LegacyProjectSettingsConverter(@NotNull final Project project) {
-		super(project);
-	}
+public final class LegacyProjectSettingsConverter {
 
 	/**
 	 * We can not persist changes immediately in some cases (see issue #121).
@@ -43,10 +39,9 @@ public final class LegacyProjectSettingsConverter extends AbstractProjectCompone
 	 * but not the module settings (f. e. user open only project settings. But, in general,
 	 * it is up to IDEA when the settings are stored).
 	 */
-	@Override
-	public void projectOpened() {
+	public static void convertSettings(@NotNull final Project project) {
 
-		final LegacyProjectSettings legacy = LegacyProjectSettings.getInstance(myProject);
+		final LegacyProjectSettings legacy = LegacyProjectSettings.getInstance(project);
 		PersistencePreferencesBean legacyBean = null;
 		List<String> enabledModuleConfigs = null;
 
@@ -57,10 +52,10 @@ public final class LegacyProjectSettingsConverter extends AbstractProjectCompone
 			}
 		}
 
-		final WorkspaceSettings currentWorkspace = WorkspaceSettings.getInstance(myProject);
+		final WorkspaceSettings currentWorkspace = WorkspaceSettings.getInstance(project);
 
 		// first convert module settings if necessary
-		for (final Module module : ModuleManager.getInstance(myProject).getModules()) {
+		for (final Module module : ModuleManager.getInstance(project).getModules()) {
 			final LegacyModuleSettings legacyModuleSettings = LegacyModuleSettings.getInstance(module);
 			if (legacyModuleSettings != null && legacyModuleSettings.getState() != null) {
 				final ModuleSettings currentModule = ModuleSettings.getInstance(module);
@@ -71,7 +66,7 @@ public final class LegacyProjectSettingsConverter extends AbstractProjectCompone
 
 		// convert project- after module-settings if necessary
 		if (legacyBean != null) {
-			final ProjectSettings current = ProjectSettings.getInstance(myProject);
+			final ProjectSettings current = ProjectSettings.getInstance(project);
 			legacy.applyTo(current, currentWorkspace);
 		}
 
