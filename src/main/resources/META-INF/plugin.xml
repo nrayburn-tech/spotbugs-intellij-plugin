@@ -170,11 +170,6 @@
         <annotator language="Groovy" implementationClass="org.jetbrains.plugins.spotbugs.gui.editor.BugAnnotator"/>
         <codeInsight.lineMarkerProvider language="Groovy" implementationClass="org.jetbrains.plugins.spotbugs.gui.editor.BugsLineMarkerProvider"/>
     </extensions>
-    <project-components>
-        <component>
-            <implementation-class>org.jetbrains.plugins.spotbugs.gui.preferences.LegacyProjectSettingsConverter</implementation-class>
-        </component>
-    </project-components>
 
     <actions>
         <group id="SpotBugs.AnalyzeMenu" text="SpotBugs" popup="true">
