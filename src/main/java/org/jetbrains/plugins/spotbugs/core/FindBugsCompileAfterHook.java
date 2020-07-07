@@ -49,7 +49,7 @@ import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-public class FindBugsCompileAfterHookService {
+public class FindBugsCompileAfterHook {
 
 	private static final int DEFAULT_DELAY_MS = 30000;
 	private static final int DELAY_MS = StringUtil.parseInt(System.getProperty("idea.findbugs.autoanalyze.delaymillis", String.valueOf(DEFAULT_DELAY_MS)), DEFAULT_DELAY_MS);

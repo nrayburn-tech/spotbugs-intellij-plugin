@@ -39,7 +39,7 @@ public class ProjectOpenCloseListener implements ProjectManagerListener {
             public void compilationFinished(final boolean aborted, final int errors, final int warnings, final @NotNull CompileContext compileContext) {
                 // note that this is not invoked when auto make trigger compilation
                 if (!aborted && errors == 0) {
-                    FindBugsCompileAfterHookService.initWorker(compileContext);
+                    FindBugsCompileAfterHook.initWorker(compileContext);
                 }
             }
 
@@ -56,12 +56,11 @@ public class ProjectOpenCloseListener implements ProjectManagerListener {
     @Override
     public void projectOpened(@NotNull Project project) {
         CompilerManager.getInstance(project).addCompilationStatusListener(compilationStatusListener);
-        if (FindBugsCompileAfterHookService.isAfterAutoMakeEnabled(project)) {
-            FindBugsCompileAfterHookService.setAnalyzeAfterAutomake(project, true);
+        if (FindBugsCompileAfterHook.isAfterAutoMakeEnabled(project)) {
+            FindBugsCompileAfterHook.setAnalyzeAfterAutomake(project, true);
         }
 
-        PluginSuggestionService pluginSuggestionService = project.getService(PluginSuggestionService.class);
-        pluginSuggestionService.suggestPlugins();
+        PluginSuggestion.suggestPlugins(project);
         new RFilerFilterSuggestion(project).suggest();
 
         LegacyProjectSettingsConverter.convertSettings(project);
@@ -70,6 +69,6 @@ public class ProjectOpenCloseListener implements ProjectManagerListener {
     @Override
     public void projectClosed(@NotNull Project project) {
         CompilerManager.getInstance(project).removeCompilationStatusListener(compilationStatusListener);
-        FindBugsCompileAfterHookService.setAnalyzeAfterAutomake(project, false);
+        FindBugsCompileAfterHook.setAnalyzeAfterAutomake(project, false);
     }
 }

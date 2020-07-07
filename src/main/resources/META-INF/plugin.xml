@@ -156,8 +156,6 @@
                             displayName="SpotBugs"/>
         <checkinHandlerFactory implementation="org.jetbrains.plugins.spotbugs.core.CheckinHandlerFactoryImpl"/>
         <projectService serviceImplementation="org.jetbrains.plugins.spotbugs.core.ProblemCacheService"/>
-        <projectService serviceImplementation="org.jetbrains.plugins.spotbugs.core.PluginSuggestionService"/>
-        <projectService serviceImplementation="org.jetbrains.plugins.spotbugs.core.FindBugsCompileAfterHookService"/>
     </extensions>
     <extensions defaultExtensionNs="com.intellij">
         <errorHandler implementation="org.jetbrains.plugins.spotbugs.core.ErrorReportSubmitterImpl"/>

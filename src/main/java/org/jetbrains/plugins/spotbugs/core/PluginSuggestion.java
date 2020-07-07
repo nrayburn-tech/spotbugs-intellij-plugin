@@ -40,27 +40,22 @@ import org.jetbrains.plugins.spotbugs.plugins.Plugins;
 import java.util.HashSet;
 import java.util.Set;
 
-public final class PluginSuggestionService {
+public final class PluginSuggestion {
 
 	private static final String NOTIFICATION_GROUP_ID_PLUGIN_SUGGESTION = "SpotBugs: Plugin Suggestion";
 	private static final NotificationGroup NOTIFICATION_GROUP_PLUGIN_SUGGESTION = new NotificationGroup(NOTIFICATION_GROUP_ID_PLUGIN_SUGGESTION, NotificationDisplayType.STICKY_BALLOON, false);
-	private final Project myProject;
 
-	public PluginSuggestionService(@NotNull final Project project) {
-		myProject = project;
-	}
-
-	public void suggestPlugins() {
-		final ProjectSettings settings = ProjectSettings.getInstance(myProject);
+	public static void suggestPlugins(@NotNull final Project project) {
+		final ProjectSettings settings = ProjectSettings.getInstance(project);
 		if (!NotificationUtil.isGroupEnabled(NOTIFICATION_GROUP_ID_PLUGIN_SUGGESTION)) {
 			return;
 		}
 		if (isAndroidFindbugsPluginEnabled(settings)) {
 			return;
 		}
-		final Set<Suggestion> suggestions = collectSuggestions(myProject, settings);
+		final Set<Suggestion> suggestions = collectSuggestions(project, settings);
 		if (!suggestions.isEmpty()) {
-			showSuggestions(myProject, suggestions);
+			showSuggestions(project, suggestions);
 		}
 	}
 
