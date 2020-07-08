@@ -19,6 +19,8 @@
  */
 package org.jetbrains.plugins.spotbugs.core;
 
+import com.intellij.diagnostic.AbstractMessage;
+import com.intellij.diagnostic.IdeaReportingEvent;
 import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.diagnostic.*;
 import com.intellij.openapi.ide.CopyPasteManager;
@@ -203,8 +205,15 @@ public final class ErrorReportSubmitterImpl extends ErrorReportSubmitter {
 		if (StringUtil.isEmptyOrSpaces(message) || "null".equals(message)) {
 			message = null;
 		}
-		final Throwable throwable = event.getThrowable();
-		if (message == null && throwable == null) {
+		final Throwable throwable;
+		// event is a com.intellij.diagnostic.IdeaReportingEvent.TextBasedThrowable
+		// This is a wrapper and is only providing the original stack trace via 'printStackTrace(...)',
+		// but not via 'getStackTrace()'.
+		//
+		// So, we workaround this by retrieving the original exception from the data property
+		if (event instanceof IdeaReportingEvent && event.getData() instanceof AbstractMessage) {
+			throwable = ((AbstractMessage) event.getData()).getThrowable();
+		} else {
 			return null;
 		}
 		final String fullError;
