@@ -85,6 +85,7 @@
         <ul>
             <li>Fixes issue #35: Possible ArrayIndexOutOfBoundsException</li>
             <li>Removed the "Bug Details" tab</li>
+            <li>Improved bug reporting</li>
         </ul>
         <h3>1.2.2</h3>
         <ul>
