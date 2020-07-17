@@ -21,6 +21,7 @@
 
 plugins {
     id "org.jetbrains.intellij" version "0.4.21"
+    id 'jacoco'
 }
 
 apply plugin: 'org.jetbrains.intellij'
@@ -44,6 +45,10 @@ intellij {
 
     plugins 'git4idea'
     plugins 'java'
+}
+
+jacoco {
+    toolVersion = "0.8.5"
 }
 
 runIde {
@@ -91,8 +96,27 @@ task copyThirdPartyPlugins(type: Copy) {
     into 'build/idea-sandbox/plugins/spotbugs-idea/customPlugins'
 }
 
+task deleteThirdPartyPlugins(type: Delete) {
+    delete 'build/resources/main/org/jetbrains/plugins/spotbugs/plugins'
+}
+
 tasks.compileJava.dependsOn(downloadThirdPartyPlugins, copyGradleProperties)
 tasks.buildPlugin.dependsOn(copyThirdPartyPlugins)
+tasks.jacocoTestReport.dependsOn(deleteThirdPartyPlugins)
+tasks.jacocoTestCoverageVerification.dependsOn(deleteThirdPartyPlugins)
+
+test {
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.enabled true
+        html.enabled false
+        csv.enabled false
+    }
+}
 
 wrapper {
     gradleVersion = '6.3'
