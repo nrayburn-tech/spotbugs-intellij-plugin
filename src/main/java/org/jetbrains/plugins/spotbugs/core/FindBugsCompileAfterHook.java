@@ -32,9 +32,11 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
+import com.intellij.openapi.vfs.impl.BulkVirtualFileListenerAdapter;
 import com.intellij.util.Alarm;
 import com.intellij.util.Consumer;
 import com.intellij.util.io.storage.HeavyProcessLatch;
+import com.intellij.util.messages.MessageBusConnection;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.plugins.spotbugs.common.EventDispatchThreadHelper;
@@ -56,6 +58,7 @@ public class FindBugsCompileAfterHook {
 	private static final ConcurrentMap<UUID, Set<VirtualFile>> CHANGED_BY_SESSION_ID = new ConcurrentHashMap<>();
 	private static final WeakHashMap<Project, DelayedExecutor> DELAYED_EXECUTOR_BY_PROJECT = new WeakHashMap<>();
 	private static ChangeCollector CHANGE_COLLECTOR; // EDT thread confinement
+	private static MessageBusConnection connection;
 
 	static {
 		/*
@@ -109,13 +112,14 @@ public class FindBugsCompileAfterHook {
 			Changes.INSTANCE.addListener(project);
 			if (CHANGE_COLLECTOR == null) {
 				CHANGE_COLLECTOR = new ChangeCollector();
-				VirtualFileManager.getInstance().addVirtualFileListener(CHANGE_COLLECTOR);
+				connection = project.getMessageBus().connect();
+				connection.subscribe(VirtualFileManager.VFS_CHANGES, new BulkVirtualFileListenerAdapter(CHANGE_COLLECTOR));
 			}
 		} else {
 			final boolean empty = Changes.INSTANCE.removeListener(project);
 			if (empty) {
 				if (CHANGE_COLLECTOR != null) {
-					VirtualFileManager.getInstance().removeVirtualFileListener(CHANGE_COLLECTOR);
+					connection.disconnect();
 					CHANGE_COLLECTOR = null;
 				}
 			}
