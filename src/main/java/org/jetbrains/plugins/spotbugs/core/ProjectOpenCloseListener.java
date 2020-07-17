@@ -22,9 +22,10 @@ package org.jetbrains.plugins.spotbugs.core;
 
 import com.intellij.openapi.compiler.CompilationStatusListener;
 import com.intellij.openapi.compiler.CompileContext;
-import com.intellij.openapi.compiler.CompilerManager;
+import com.intellij.openapi.compiler.CompilerTopics;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManagerListener;
+import com.intellij.util.messages.MessageBusConnection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.plugins.spotbugs.android.RFilerFilterSuggestion;
 import org.jetbrains.plugins.spotbugs.gui.preferences.LegacyProjectSettingsConverter;
@@ -32,6 +33,7 @@ import org.jetbrains.plugins.spotbugs.gui.preferences.LegacyProjectSettingsConve
 public class ProjectOpenCloseListener implements ProjectManagerListener {
 
     private final CompilationStatusListener compilationStatusListener;
+    private MessageBusConnection connection;
 
     public ProjectOpenCloseListener() {
         compilationStatusListener = new CompilationStatusListener() {
@@ -55,7 +57,8 @@ public class ProjectOpenCloseListener implements ProjectManagerListener {
 
     @Override
     public void projectOpened(@NotNull Project project) {
-        CompilerManager.getInstance(project).addCompilationStatusListener(compilationStatusListener);
+        connection = project.getMessageBus().connect();
+        connection.subscribe(CompilerTopics.COMPILATION_STATUS, compilationStatusListener);
         if (FindBugsCompileAfterHook.isAfterAutoMakeEnabled(project)) {
             FindBugsCompileAfterHook.setAnalyzeAfterAutomake(project, true);
         }
@@ -68,7 +71,7 @@ public class ProjectOpenCloseListener implements ProjectManagerListener {
 
     @Override
     public void projectClosed(@NotNull Project project) {
-        CompilerManager.getInstance(project).removeCompilationStatusListener(compilationStatusListener);
+        connection.disconnect();
         FindBugsCompileAfterHook.setAnalyzeAfterAutomake(project, false);
     }
 }
