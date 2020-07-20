@@ -29,36 +29,53 @@ import java.util.Properties;
 /**
  * @author Andre Pfeiler<andrep@twodividedbyzero.org>
  */
-@SuppressWarnings({"HardCodedStringLiteral", "UseOfSystemOutOrSystemErr", "StringConcatenation", "CallToPrintStackTrace", "CallToPrintStackTrace"})
+@SuppressWarnings({"UseOfSystemOutOrSystemErr", "StringConcatenation", "CallToPrintStackTrace", "CallToPrintStackTrace"})
 public class VersionManager {
 
-	private static final long _major;
-	private static final long _minor;
-	private static final long _build;
-
 	private static final String PROPERTIES_FILE = "version.properties";
+	private static final Version VERSION = Version.load(PROPERTIES_FILE);
 
-	static {
-		Properties properties = new Properties();
-		try (InputStream stream = VersionManager.class.getResourceAsStream(PROPERTIES_FILE)) {
-			properties.load(stream);
-		} catch (IOException e) {
-			throw new RuntimeException("Unable to read '"+PROPERTIES_FILE+"': build corrupted", e);
+	static class Version {
+		private final long major;
+		private final long minor;
+		private final long build;
+
+		private Version(long major, long minor, long build) {
+			this.major = major;
+			this.minor = minor;
+			this.build = build;
 		}
-		String version = properties.getProperty("version");
-		if (version == null) {
-			throw new RuntimeException("Unable to read version from '"+PROPERTIES_FILE+"': build corrupted");
+		
+		@Override
+		public String toString() {
+			return major + "." + minor + "." + build;
 		}
-		String[] components = version.split("\\.");
-		if (components.length != 3) {
-			throw new RuntimeException("Invalid version: "+version);
+
+		@SuppressWarnings("SameParameterValue")
+		static Version load(String resource) {
+			Properties properties = new Properties();
+			try (InputStream stream = VersionManager.class.getResourceAsStream(resource)) {
+				properties.load(stream);
+			} catch (IOException e) {
+				throw new RuntimeException("Unable to read '"+resource+"': build corrupted", e);
+			}
+			return load(properties);
 		}
-		try {
-			_major = Long.parseLong(components[0]);
-			_minor = Long.parseLong(components[1]);
-			_build = Long.parseLong(components[2]);
-		} catch (NumberFormatException e) {
-			throw new RuntimeException("Invalid version: "+version);
+		
+		static Version load(Properties properties) {
+			String version = properties.getProperty("version");
+			if (version == null) {
+				throw new RuntimeException("Unable to read version from '"+PROPERTIES_FILE+"': build corrupted");
+			}
+			String[] components = version.split("\\.");
+			if (components.length != 3) {
+				throw new RuntimeException("Invalid version: "+version);
+			}
+			try {
+				return new Version(Long.parseLong(components[0]), Long.parseLong(components[1]), Long.parseLong(components[2]));
+			} catch (NumberFormatException e) {
+				throw new RuntimeException("Invalid version: "+version);
+			}
 		}
 	}
 
@@ -74,8 +91,7 @@ public class VersionManager {
 
 	private static final String FULL_VERSION;
 
-	private static final String MAJOR_MINOR_BUILD = _major + "." + _minor + '.' + _build;
-
+	private static final String MAJOR_MINOR_BUILD = VERSION.toString();
 
 	static {
 		final String revisionString = VersionManager.class.getPackage().getImplementationVersion();
@@ -91,7 +107,6 @@ public class VersionManager {
 		REVISION = parsedRevision;
 		FULL_VERSION = NAME + ' ' + MAJOR_MINOR_BUILD;
 	}
-
 
 	/**
 	 * @return version number, e.g. "1.0.0"
