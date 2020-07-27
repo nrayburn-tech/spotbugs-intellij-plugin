@@ -71,7 +71,9 @@ public class ProjectOpenCloseListener implements ProjectManagerListener {
 
     @Override
     public void projectClosed(@NotNull Project project) {
-        connection.disconnect();
+        if (connection != null) {
+            connection.disconnect();
+        }
         FindBugsCompileAfterHook.setAnalyzeAfterAutomake(project, false);
     }
 }
