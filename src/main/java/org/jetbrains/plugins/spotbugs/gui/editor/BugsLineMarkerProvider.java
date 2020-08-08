@@ -101,7 +101,7 @@ public final class BugsLineMarkerProvider implements LineMarkerProvider {
 			}
 			if (!matchingDescriptors.isEmpty()) {
 				final GutterIconNavigationHandler<PsiElement> navHandler = new BugGutterIconNavigationHandler(psiElement, matchingDescriptors);
-				return new LineMarkerInfo<PsiElement>(psiElement, psiElement.getTextRange().getStartOffset(), GuiUtil.getTinyIcon(matchingDescriptors.get(0)), 4, new TooltipProvider(matchingDescriptors), navHandler, GutterIconRenderer.Alignment.LEFT);
+				return new LineMarkerInfo<>(psiElement, psiElement.getTextRange(), GuiUtil.getTinyIcon(matchingDescriptors.get(0)), new TooltipProvider(matchingDescriptors), navHandler, GutterIconRenderer.Alignment.LEFT);
 			}
 		}
 
