@@ -28,6 +28,8 @@ import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.impl.source.tree.LeafElement;
+import com.intellij.psi.impl.source.tree.TreeUtil;
 import com.intellij.ui.awt.RelativePoint;
 import com.intellij.util.Function;
 import org.jetbrains.annotations.NotNull;
@@ -65,6 +67,9 @@ public final class BugsLineMarkerProvider implements LineMarkerProvider {
 	@Override
 	@Nullable
 	public LineMarkerInfo<?> getLineMarkerInfo(@NotNull final PsiElement psiElement) {
+		if (psiElement.getFirstChild() != null) {
+			return null;
+		}
 		final Project project = psiElement.getProject();
 		final WorkspaceSettings workspaceSettings = WorkspaceSettings.getInstance(project);
 		if (!workspaceSettings.annotationGutterIcon) {
@@ -91,7 +96,7 @@ public final class BugsLineMarkerProvider implements LineMarkerProvider {
 			for (final ExtendedProblemDescriptor problemDescriptor : descriptors) {
 
 				final PsiElement problemPsiElement = problemDescriptor.getPsiElement();
-				if (psiElement.equals(problemPsiElement)) {
+				if (psiElement == firstLeafOrNull(problemPsiElement)) {
 					matchingDescriptors.add(problemDescriptor);
 					//if(psiElement instanceof PsiAnonymousClass) {
 					//	final Editor[] editors = com.intellij.openapi.editor.EditorFactory.getInstance().getEditors(IdeaUtilImpl.getDocument(psiFile.getProject(), problemDescriptor));
@@ -106,6 +111,12 @@ public final class BugsLineMarkerProvider implements LineMarkerProvider {
 		}
 
 		return null;
+	}
+
+	@Nullable
+	private static PsiElement firstLeafOrNull(@NotNull PsiElement element) {
+		LeafElement firstLeaf = TreeUtil.findFirstLeaf(element.getNode());
+		return firstLeaf != null ? firstLeaf.getPsi() : null;
 	}
 
 	public void collectSlowLineMarkers(@NotNull final List<PsiElement> elements, @NotNull final Collection<LineMarkerInfo> result) {
