@@ -145,18 +145,20 @@ public abstract class FindBugsStarter implements AnalysisAbortingListener {
 	private void startImpl(final boolean justCompiled) {
 		MessageBusManager.publishAnalysisStarted(project);
 
-		final ToolWindow toolWindow = ToolWindowPanel.getWindow(project);
-		if (toolWindow == null) {
-			throw new IllegalStateException("No SpotBugs ToolWindow");
-		}
-		/*
-		 * Important: Make sure the tool window is initialized.
-		 * This call is to important to make it just in case of false = toolWindowToFront
-		 * because we have no guarantee that activateToolWindow works.
-		 */
-		((ToolWindowImpl) toolWindow).ensureContentInitialized();
-		if (workspaceSettings.toolWindowToFront) {
-			ToolWindowPanel.showWindow(toolWindow);
+		if (!ApplicationManager.getApplication().isUnitTestMode()) {
+			final ToolWindow toolWindow = ToolWindowPanel.getWindow(project);
+			if (toolWindow == null) {
+				throw new IllegalStateException("No SpotBugs ToolWindow");
+			}
+			/*
+			 * Important: Make sure the tool window is initialized.
+			 * This call is to important to make it just in case of false = toolWindowToFront
+			 * because we have no guarantee that activateToolWindow works.
+			 */
+			((ToolWindowImpl) toolWindow).ensureContentInitialized();
+			if (workspaceSettings.toolWindowToFront) {
+				ToolWindowPanel.showWindow(toolWindow);
+			}
 		}
 
 		final Task task;
