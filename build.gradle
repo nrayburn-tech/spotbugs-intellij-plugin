@@ -106,6 +106,9 @@ tasks.jacocoTestReport.dependsOn(deleteThirdPartyPlugins)
 tasks.jacocoTestCoverageVerification.dependsOn(deleteThirdPartyPlugins)
 
 test {
+    // Set idea.home.path to the absolute path to the intellij-community source
+    // on your local machine.
+    systemProperty "idea.home.path", "~/intellij-community"
     finalizedBy jacocoTestReport
 }
 
