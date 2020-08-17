@@ -392,14 +392,25 @@ public final class IdeaUtilImpl {
 				element = file.getViewProvider().findElementAt(offset);
 				if (element != null) {
 					if (document.getLineNumber(element.getTextOffset()) != line) {
-						element = element.getNextSibling();
+						PsiElement prevSibling = element.getPrevSibling();
+						if (prevSibling instanceof PsiComment && element.getParent() instanceof PsiClass || prevSibling instanceof PsiModifierList) {
+							element = element.getParent();
+						} else if (prevSibling instanceof PsiAnnotation) {
+							element = element.getParent().getParent();
+						} else {
+							element = element.getNextSibling();
+						}
+					} else if (element.getParent() instanceof PsiModifierList) {
+						element = element.getParent().getParent();
+					} else if (element.getPrevSibling() instanceof PsiModifierList && element.getParent() instanceof PsiClass) {
+						element = element.getParent();
 					}
 				}
 			}
 		} catch (@NotNull final IndexOutOfBoundsException ignore) {
 		}
 
-		return element;
+		return element instanceof PsiNameIdentifierOwner ? ((PsiNameIdentifierOwner) element).getNameIdentifier() : element;
 	}
 
 	@SuppressFBWarnings("DM_CONVERT_CASE")
@@ -463,13 +474,16 @@ public final class IdeaUtilImpl {
 		if (psiFile == null) {
 			return null;
 		}
-		final PsiElement element = findClassPsiElement(psiFile, bugInstance, project);
+		PsiElement result = findClassPsiElement(psiFile, bugInstance, project);
 		final FieldAnnotation primaryField = bugInstance.getPrimaryField();
-		if (element != null && primaryField != null) {
-			return ((PsiClass) element).findFieldByName(primaryField.getFieldName(), false);
+		if (result != null && primaryField != null) {
+			result =  ((PsiClass) result).findFieldByName(primaryField.getFieldName(), false);
 		}
 		// FIXME: add finding the method
-		return element;
+		if (result == null) {
+			return null;
+		}
+		return result instanceof PsiAnonymousClass ? result : ((PsiNameIdentifierOwner) result).getNameIdentifier();
 	}
 
 	@Nullable

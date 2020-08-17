@@ -110,10 +110,8 @@ public class ExtendedProblemDescriptor implements ProblemDescriptor, ProblemGrou
 		if (psiElement != null) {
 			return psiElement;
 		}
-		if (lineStart == 0 && lineEnd == 1) {
+		if (lineStart < 0 || lineStart == 0 && lineEnd == 1) {
 			psiElement = IdeaUtilImpl.findPsiElement(psiFile, bug.getInstance(), psiFile.getProject());
-		} else if (lineStart < 0) {
-			psiElement = IdeaUtilImpl.findClassPsiElement(psiFile, bug.getInstance(), psiFile.getProject());
 		} else {
 			psiElement = IdeaUtilImpl.getElementAtLine(psiFile, lineStart);
 		}

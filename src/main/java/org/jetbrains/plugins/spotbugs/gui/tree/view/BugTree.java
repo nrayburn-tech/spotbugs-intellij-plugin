@@ -156,12 +156,7 @@ public class BugTree extends Tree implements DataProvider, OccurenceNavigator {
 				return null;
 			}
 			final PsiFile psiFile = node.getPsiFile();
-			if (node.isAnonymousClass()) {
-				final PsiElement psiElement = IdeaUtilImpl.findClassPsiElement(psiFile, node.getBugInstance(), _project);
-				if (psiElement != null) {
-					return psiElement;
-				}
-			} else if (node.isFirstLines()) {
+			if (node.isAnonymousClass() || node.isFirstLines()) {
 				final PsiElement psiElement = IdeaUtilImpl.findPsiElement(psiFile, node.getBugInstance(), _project);
 				if (psiElement != null) {
 					return psiElement;
@@ -190,9 +185,7 @@ public class BugTree extends Tree implements DataProvider, OccurenceNavigator {
 			return null;
 		}
 		final int[] lines = node.getSourceLines();
-		if (BugInstanceNode.isAnonymousClass(lines)) {
-			return IdeaUtilImpl.findClassPsiElement(node.getPsiFile(), node.getBugInstance(), _project);
-		} else if (BugInstanceNode.isFirstLines(lines)) {
+		if (BugInstanceNode.isAnonymousClass(lines) || BugInstanceNode.isFirstLines(lines)) {
 			return IdeaUtilImpl.findPsiElement(node.getPsiFile(), node.getBugInstance(), _project);
 		}
 		final PsiFile psiFile = node.getPsiFile();
