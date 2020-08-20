@@ -21,16 +21,12 @@ package org.jetbrains.plugins.spotbugs.actions;
 
 import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.progress.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.wm.ToolWindow;
 import edu.umd.cs.findbugs.*;
-import net.sf.saxon.TransformerFactoryImpl;
-import org.dom4j.Document;
-import org.dom4j.io.DocumentSource;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.plugins.spotbugs.common.EventDispatchThreadHelper;
 import org.jetbrains.plugins.spotbugs.common.util.*;
@@ -39,18 +35,11 @@ import org.jetbrains.plugins.spotbugs.gui.export.ExportBugCollectionDialog;
 import org.jetbrains.plugins.spotbugs.gui.toolwindow.view.ToolWindowPanel;
 import org.jetbrains.plugins.spotbugs.resources.ResourcesLoader;
 
-import javax.xml.transform.*;
-import javax.xml.transform.stream.*;
 import java.io.*;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 public final class ExportBugCollection extends AbstractAction {
-
-	private static final Logger LOGGER = Logger.getInstance(ExportBugCollection.class);
-	private static final String FINDBUGS_PLAIN_XSL = "plain.xsl";
 
 	@Override
 	void updateImpl(
@@ -168,51 +157,19 @@ public final class ExportBugCollection extends AbstractAction {
 			bugCollection.setWithMessages(true);
 			if (exportXml) {
 				final File xml = new File(exportDir, fileName + ".xml");
-				exportXml(bugCollection, xml.getPath());
+				XmlBugCollectionExporter xmlExporter = new XmlBugCollectionExporter();
+				xmlExporter.export(bugCollection, xml);
 			}
 			if (exportHtml) {
 				final File html = new File(exportDir, fileName + ".html");
-				exportHtml(bugCollection, html);
+				HtmlBugCollectionExporter htmlExporter = new HtmlBugCollectionExporter();
+				htmlExporter.export(bugCollection, html);
 				if (openInBrowser) {
 					openInBrowser(html);
 				}
 			}
 		} finally {
 			bugCollection.setWithMessages(withMessages);
-		}
-	}
-
-	private void exportXml(@NotNull final BugCollection bugCollection, @NotNull final String fileName) throws IOException {
-		// Issue 77: workaround internal FindBugs NPE
-		// As of my point of view, the NPE is a FindBugs bug
-		bugCollection.writeXML(fileName);
-	}
-
-	private void exportHtml(@NotNull final BugCollection bugCollection, @NotNull final File file) throws IOException, TransformerException {
-		final Document document = bugCollection.toDocument();
-		final InputStream stylesheet = getStylesheetStream(FINDBUGS_PLAIN_XSL);
-		try {
-			final Source xsl = new StreamSource(stylesheet);
-			xsl.setSystemId(FINDBUGS_PLAIN_XSL);
-
-			// Create a transformer using the stylesheet
-			final TransformerFactoryImpl transformerFactory = new TransformerFactoryImpl();
-			final Transformer transformer = transformerFactory.newTransformer(xsl);
-
-			// Source document is the XML generated from the BugCollection
-			final Source source = new DocumentSource(document);
-
-			// Write result to output stream
-			final OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
-			try {
-				final Result result = new StreamResult(writer);
-				// Do the transformation
-				transformer.transform(source, result);
-			} finally {
-				IoUtil.safeClose(writer);
-			}
-		} finally {
-			IoUtil.safeClose(stylesheet);
 		}
 	}
 
@@ -224,24 +181,5 @@ public final class ExportBugCollection extends AbstractAction {
 		EventDispatchThreadHelper.invokeLater(
 				() -> Messages.showErrorDialog(
 						message, StringUtil.capitalizeWords(ResourcesLoader.getString("export.title"), true)));
-	}
-
-	@NotNull
-	private static InputStream getStylesheetStream(@NotNull final String stylesheet) throws IOException {
-		try {
-			final URL url = new URL(stylesheet);
-			return url.openStream();
-		} catch (final Exception e) {
-			LOGGER.info("xls read failed.", e);
-		}
-		try {
-			return new BufferedInputStream(new FileInputStream(stylesheet));
-		} catch (final Exception ignored) {
-		}
-		final InputStream xslInputStream = HTMLBugReporter.class.getResourceAsStream('/' + stylesheet);
-		if (xslInputStream == null) {
-			throw new IOException("Could not load HTML generation stylesheet " + stylesheet);
-		}
-		return xslInputStream;
 	}
 }
