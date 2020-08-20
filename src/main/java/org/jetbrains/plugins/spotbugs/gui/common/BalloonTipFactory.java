@@ -32,26 +32,6 @@ import javax.swing.event.HyperlinkListener;
 
 public final class BalloonTipFactory {
 
-	public enum Orientation {
-
-		LEFT(Balloon.Position.atLeft),
-		RIGHT(Balloon.Position.atRight),
-		ABOVE(Balloon.Position.above),
-		BELOW(Balloon.Position.below);
-
-		private final Balloon.Position _orientation;
-
-
-		Orientation(final Position orientation) {
-			_orientation = orientation;
-		}
-
-
-		public Balloon.Position getOrientation() {
-			return _orientation;
-		}
-	}
-
 	public static void showToolWindowInfoNotifier(@NotNull final Project project, final String html) {
 		showToolWindowInfoNotifier(project, html, null);
 	}

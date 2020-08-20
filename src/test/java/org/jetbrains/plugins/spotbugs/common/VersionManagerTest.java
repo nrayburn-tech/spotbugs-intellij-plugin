@@ -20,8 +20,6 @@
 
 package org.jetbrains.plugins.spotbugs.common;
 
-import junit.framework.TestCase;
-
 import org.junit.Test;
 
 import java.util.Properties;
