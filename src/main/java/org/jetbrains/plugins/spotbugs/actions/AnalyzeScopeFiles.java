@@ -58,6 +58,7 @@ import org.jetbrains.plugins.spotbugs.common.util.IdeaUtilImpl;
 import org.jetbrains.plugins.spotbugs.core.FindBugsProjects;
 import org.jetbrains.plugins.spotbugs.core.FindBugsStarter;
 import org.jetbrains.plugins.spotbugs.core.FindBugsState;
+import org.jetbrains.plugins.spotbugs.resources.ResourcesLoader;
 
 import javax.swing.Action;
 import java.util.Collection;
@@ -93,8 +94,8 @@ public final class AnalyzeScopeFiles extends AbstractAnalyzeAction {
 		final boolean rememberScope = e.getPlace().equals(ActionPlaces.MAIN_MENU);
 		final AnalysisUIOptions uiOptions = AnalysisUIOptions.getInstance(project);
 		final PsiElement element = LangDataKeys.PSI_ELEMENT.getData(dataContext);
-		final BaseAnalysisActionDialog dlg = new BaseAnalysisActionDialog(AnalysisScopeBundle.message("specify.analysis.scope", "SpotBugs Analyze"),
-				AnalysisScopeBundle.message("analysis.scope.title", "Analyze"),
+		final BaseAnalysisActionDialog dlg = new BaseAnalysisActionDialog(ResourcesLoader.getString("analysis.specify.scope", "SpotBugs Analyze"),
+				ResourcesLoader.getString("analysis.scope.title", "Analyze"),
 				project,
 				scope,
 				module != null && scope.getScopeType() != AnalysisScope.MODULE ? getModuleNameInReadAction(module) : null,
