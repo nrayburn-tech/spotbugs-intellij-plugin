@@ -58,7 +58,7 @@ public class BugCollectionExporterTest extends JavaCodeInsightFixtureTestCase {
 
     @Override
     protected String getTestDataPath() {
-        return "src/test/testData/findBugsStarter";
+        return "src/test/testData/";
     }
 
     @Override

@@ -1,4 +1,4 @@
-package org.jetbrains.plugins.spotbugs.core;/*
+/*
  * Copyright 2020 SpotBugs plugin contributors
  *
  * This file is part of IntelliJ SpotBugs plugin.
@@ -17,6 +17,8 @@ package org.jetbrains.plugins.spotbugs.core;/*
  * along with IntelliJ SpotBugs plugin.
  * If not, see <http://www.gnu.org/licenses/>.
  */
+
+package org.jetbrains.plugins.spotbugs.core;
 
 import com.intellij.openapi.compiler.CompileScope;
 import com.intellij.openapi.compiler.CompilerManager;
@@ -65,7 +67,7 @@ public class FindBugsStarterTest extends JavaCodeInsightFixtureTestCase {
 
     @Override
     protected String getTestDataPath() {
-        return "src/test/testData/findBugsStarter";
+        return "src/test/testData/";
     }
 
     public void writeTestDataWithoutHighlights() throws IOException {
