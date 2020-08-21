@@ -21,22 +21,14 @@ package org.jetbrains.plugins.spotbugs.resources;
 
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.IconLoader;
-import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.PropertyKey;
-import org.jetbrains.plugins.spotbugs.common.util.ErrorUtil;
-import org.jetbrains.plugins.spotbugs.common.util.IoUtil;
 
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.Locale;
-import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
@@ -48,7 +40,7 @@ import java.util.ResourceBundle;
  * @version $Revision$
  * @since 0.0.1
  */
-@SuppressWarnings({"UnusedDeclaration", "HardcodedFileSeparator"})
+@SuppressWarnings("HardcodedFileSeparator")
 public final class ResourcesLoader {
 
 	private static final Logger LOGGER = Logger.getInstance(ResourcesLoader.class.getName());
@@ -56,7 +48,6 @@ public final class ResourcesLoader {
 	private static volatile ResourceBundle _bundle;
 	public static final String BUNDLE = "org.jetbrains.plugins.spotbugs.resources.i18n.Messages";
 	private static final String ICON_RESOURCES_PKG = "/org/jetbrains/plugins/spotbugs/resources/icons";
-	private static final Map<String, Icon> _iconCache = ContainerUtil.createSoftMap();
 
 
 	private ResourcesLoader() {
@@ -101,72 +92,9 @@ public final class ResourcesLoader {
 		}
 	}
 
-
-	@Nullable
-	private static InputStream getResourceStream(@NotNull final String iconResourcePkg, final String filename) {
-		String iconResourcePkg1 = iconResourcePkg;
-		if (!iconResourcePkg1.isEmpty() && iconResourcePkg1.charAt(0) == '/') {
-			iconResourcePkg1 = iconResourcePkg1.replaceFirst("/", "");
-		}
-
-		final String resourceName = '/' + iconResourcePkg1.replace('.', '/') + '/' + filename;
-		final Class<?> clazz = ResourcesLoader.class;
-
-		return clazz.getResourceAsStream(resourceName);
-	}
-
-
-	@Nullable
-	private static Icon queryIconCache(final String pkgName, final String filename) {
-		final String key = pkgName + '/' + filename;
-		synchronized (_iconCache) {
-			return _iconCache.get(key);
-		}
-	}
-
-
-	private static void addIfAbsent(final String pkgName, final String filename, final Icon ret) {
-		synchronized (_iconCache) {
-			_iconCache.put(pkgName + '/' + filename, ret);
-		}
-	}
-
-
 	@NotNull
 	public static Icon loadIcon(final String filename) {
 		return IconLoader.getIcon(ICON_RESOURCES_PKG + '/' + filename);
 	}
-
-
-	@NotNull
-	private static Icon loadIcon(final String pkgName, final String filename) {
-		final Object cacheHit = queryIconCache(pkgName, filename);
-		if (cacheHit != null) {
-			return (Icon) cacheHit;
-		}
-		final InputStream is = getResourceStream(pkgName, filename);
-		if (is == null) {
-			throw new IllegalArgumentException("Could not find " + pkgName + filename);
-		}
-
-		final Icon ret;
-		try {
-			final ByteArrayOutputStream out = new ByteArrayOutputStream();
-			IoUtil.copy(is, out);
-			ret = new ImageIcon(out.toByteArray());
-			addIfAbsent(pkgName, filename, ret);
-		} catch (final IOException e) {
-			throw ErrorUtil.toUnchecked(pkgName + filename, e);
-		} finally {
-			IoUtil.safeClose(is);
-		}
-
-		if (ret.getIconWidth() == 0 || ret.getIconHeight() == 0) {
-			throw new IllegalArgumentException("Could not load " + pkgName + filename);
-		}
-
-		return ret;
-	}
-
 
 }
