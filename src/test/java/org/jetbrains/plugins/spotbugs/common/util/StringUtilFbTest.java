@@ -18,13 +18,20 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.jetbrains.plugins.spotbugs.common.util;import com.intellij.testFramework.fixtures.LightJavaCodeInsightFixtureTestCase;
+package org.jetbrains.plugins.spotbugs.common.util;
 
-public class StringUtilFbTest extends LightJavaCodeInsightFixtureTestCase {
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+
+public class StringUtilFbTest {
+
+    @Test
     public void testTrim() {
         assertEquals(StringUtilFb.trim("spotbugs", 'g', 's', 't'), "potbu");
     }
 
+    @Test
     public void testTrimWithoutCharsArg() {
         String s = "spotbugs";
         assertEquals(StringUtilFb.trim(s), s);
