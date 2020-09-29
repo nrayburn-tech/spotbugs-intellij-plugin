@@ -84,7 +84,9 @@
         <h3>1.2.4</h3>
         <ul>
             <li>SpotBugs dependency updated from 4.0.6 to 4.1.3 (fixed critical issues #50 and #51)</li>
-            <li>Migrated all components to services and resolved some memory leaks, so the plugin can be install without restarting the IDE (since the 2020.2 version IntelliJ Idea) and the plugin can be unload or updating if the analysis has not been started</li>
+            <li>Migrated all components to services and resolved some memory leaks, so the plugin can be installed without
+             restarting the IDE (since the 2020.2 version IntelliJ Idea) and the plugin can be unloaded or updated,
+              unless the analysis has been started</li>
             <li>Improved error highlighting</li>
             <li>Set up continuous integration to build the code in the repository, run the tests and create code coverage reports</li>
             <li>Written a few integration tests</li>
