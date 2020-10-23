@@ -222,6 +222,8 @@ public abstract class FindBugsStarter implements AnalysisAbortingListener {
 				}
 			} catch (final InterruptedException e) {
 				Thread.currentThread().interrupt();
+			} catch (final ProcessCanceledException e) {
+				throw e;
 			} catch (final Throwable e) {
 				error = e;
 			}
@@ -261,74 +263,74 @@ public abstract class FindBugsStarter implements AnalysisAbortingListener {
 			}
 		}
 
-		if (!PluginLoader.load(project, moduleSettings.overrideProjectSettings ? module : null, settings, true)) {
+//		if (!PluginLoader.load(project, moduleSettings.overrideProjectSettings ? module : null, settings, true)) {
 			throw new ProcessCanceledException();
-		}
+//		}
 
-		final DetectorFactoryCollection detectorFactoryCollection = DetectorFactoryCollection.instance();
-
-		final ProjectFilterSettings projectFilterSettings;
-		final UserPreferences userPrefs = UserPreferences.createDefaultUserPreferences();
-		{
-			userPrefs.setEffort(settings.analysisEffort);
-			projectFilterSettings = userPrefs.getFilterSettings();
-			projectFilterSettings.setMinRank(settings.minRank);
-			projectFilterSettings.setMinPriority(settings.minPriority);
-
-			for (final String category : DetectorFactoryCollection.instance().getBugCategories()) {
-				projectFilterSettings.removeCategory(category);
-				projectFilterSettings.addCategory(category);
-			}
-			for (final String category : settings.hiddenBugCategory) {
-				projectFilterSettings.removeCategory(category);
-			}
-
-			userPrefs.setIncludeFilterFiles(new HashMap<>(settings.includeFilterFiles));
-			userPrefs.setExcludeBugsFiles(new HashMap<>(settings.excludeBugsFiles));
-			userPrefs.setExcludeFilterFiles(new HashMap<>(settings.excludeFilterFiles));
-
-			configureDetectors(settings.detectors, detectorFactoryCollection, userPrefs);
-			for (final PluginSettings pluginSettings : settings.plugins) {
-				configureDetectors(pluginSettings.detectors, detectorFactoryCollection, userPrefs);
-			}
-		}
-
-		final SortedBugCollection bugCollection = new SortedBugCollection(findBugsProject);
-
-		final Reporter reporter = new Reporter(
-				project,
-				module,
-				bugCollection,
-				projectFilterSettings,
-				indicator,
-				_cancellingByUser,
-				analyzedClassCountOffset
-		);
-
-		reporter.setPriorityThreshold(userPrefs.getUserDetectorThreshold());
-		reporter.setRankThreshold(projectFilterSettings.getMinRank());
-
-		final FindBugs2 engine = new FindBugs2();
-		{
-			engine.setNoClassOk(true);
-			engine.setMergeSimilarWarnings(false);
-			engine.setBugReporter(reporter);
-			engine.setProject(findBugsProject);
-			engine.setProgressCallback(reporter);
-			configureFilter(engine, userPrefs);
-			engine.setDetectorFactoryCollection(detectorFactoryCollection);
-			engine.setUserPreferences(userPrefs);
-		}
-
-		try {
-			engine.execute();
-		} finally {
-			engine.dispose();
-		}
-
-		bugCollection.setTimestamp(System.currentTimeMillis());
-
-		return Pair.create(bugCollection, reporter);
+//		final DetectorFactoryCollection detectorFactoryCollection = DetectorFactoryCollection.instance();
+//
+//		final ProjectFilterSettings projectFilterSettings;
+//		final UserPreferences userPrefs = UserPreferences.createDefaultUserPreferences();
+//		{
+//			userPrefs.setEffort(settings.analysisEffort);
+//			projectFilterSettings = userPrefs.getFilterSettings();
+//			projectFilterSettings.setMinRank(settings.minRank);
+//			projectFilterSettings.setMinPriority(settings.minPriority);
+//
+//			for (final String category : DetectorFactoryCollection.instance().getBugCategories()) {
+//				projectFilterSettings.removeCategory(category);
+//				projectFilterSettings.addCategory(category);
+//			}
+//			for (final String category : settings.hiddenBugCategory) {
+//				projectFilterSettings.removeCategory(category);
+//			}
+//
+//			userPrefs.setIncludeFilterFiles(new HashMap<>(settings.includeFilterFiles));
+//			userPrefs.setExcludeBugsFiles(new HashMap<>(settings.excludeBugsFiles));
+//			userPrefs.setExcludeFilterFiles(new HashMap<>(settings.excludeFilterFiles));
+//
+//			configureDetectors(settings.detectors, detectorFactoryCollection, userPrefs);
+//			for (final PluginSettings pluginSettings : settings.plugins) {
+//				configureDetectors(pluginSettings.detectors, detectorFactoryCollection, userPrefs);
+//			}
+//		}
+//
+//		final SortedBugCollection bugCollection = new SortedBugCollection(findBugsProject);
+//
+//		final Reporter reporter = new Reporter(
+//				project,
+//				module,
+//				bugCollection,
+//				projectFilterSettings,
+//				indicator,
+//				_cancellingByUser,
+//				analyzedClassCountOffset
+//		);
+//
+//		reporter.setPriorityThreshold(userPrefs.getUserDetectorThreshold());
+//		reporter.setRankThreshold(projectFilterSettings.getMinRank());
+//
+//		final FindBugs2 engine = new FindBugs2();
+//		{
+//			engine.setNoClassOk(true);
+//			engine.setMergeSimilarWarnings(false);
+//			engine.setBugReporter(reporter);
+//			engine.setProject(findBugsProject);
+//			engine.setProgressCallback(reporter);
+//			configureFilter(engine, userPrefs);
+//			engine.setDetectorFactoryCollection(detectorFactoryCollection);
+//			engine.setUserPreferences(userPrefs);
+//		}
+//
+//		try {
+//			engine.execute();
+//		} finally {
+//			engine.dispose();
+//		}
+//
+//		bugCollection.setTimestamp(System.currentTimeMillis());
+//
+//		return Pair.create(bugCollection, reporter);
 	}
 
 	protected abstract void createCompileScope(@NotNull final CompilerManager compilerManager, @NotNull final Consumer<CompileScope> consumer);
