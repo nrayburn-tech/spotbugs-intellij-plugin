@@ -71,7 +71,7 @@ dependencies {
     testImplementation 'org.assertj:assertj-core:3.6.2'
     testImplementation 'org.mockito:mockito-core:2.7.6'
     thirdPartyPlugins 'com.mebigfatguy.fb-contrib:fb-contrib:7.4.7'
-    thirdPartyPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.10.1'
+    thirdPartyPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.11.0'
     fbContribJava6 'com.mebigfatguy.fb-contrib:fb-contrib:6.2.1'
 }
 
