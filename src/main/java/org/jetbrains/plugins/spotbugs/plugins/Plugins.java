@@ -45,8 +45,8 @@ public enum Plugins {
 
 	// http://h3xstream.github.io/find-sec-bugs/
 	// Complete list of versions : https://search.maven.org/artifact/com.h3xstream.findsecbugs/findsecbugs-plugin
-	findsecbugs_plugin("findsecbugs-plugin-1.10.1.jar", "com.h3xstream.findsecbugs", true,
-			"findsecbugs-plugin-1.10.0.jar", "findsecbugs-plugin-1.9.0.jar", "findsecbugs-plugin-1.8.0.jar",
+	findsecbugs_plugin("findsecbugs-plugin-1.11.0.jar","com.h3xstream.findsecbugs", true,
+			"findsecbugs-plugin-1.10.1.jar", "findsecbugs-plugin-1.10.0.jar", "findsecbugs-plugin-1.9.0.jar", "findsecbugs-plugin-1.8.0.jar",
 			"findsecbugs-plugin-1.7.1.jar", "findsecbugs-plugin-1.7.0.jar", "findsecbugs-plugin-1.6.0.jar",
 			"findsecbugs-plugin-1.5.0.jar", "findsecbugs-plugin-1.4.6.jar", "findsecbugs-plugin-1.4.5.jar",
 			"findsecbugs-plugin-1.4.4.jar", "findsecbugs-plugin-1.4.3.jar", "findsecbugs-plugin-1.4.2.jar",
