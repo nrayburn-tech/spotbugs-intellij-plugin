@@ -63,7 +63,7 @@ import java.util.Set;
 public final class IdeaUtilImpl {
 
 	private static final Set<String> SUPPORTED_FILE_TYPES_EXT = new THashSet<>(Arrays
-			.asList("java", "scala", "groovy", "gradle", "aj"));
+			.asList("java", "scala", "groovy", "gradle", "aj","kt"));
 	public static final Set<FileType> SUPPORTED_FILE_TYPES;
 
 	static {
@@ -81,6 +81,10 @@ public final class IdeaUtilImpl {
 		final FileType aspectJ = FileTypeManager.getInstance().getFileTypeByExtension("AJ");
 		if (!(aspectJ instanceof UnknownFileType)) {
 			supported.add(aspectJ);
+		}
+		final FileType kotlin = FileTypeManager.getInstance().getFileTypeByExtension("KT");
+		if (!(kotlin instanceof UnknownFileType)) {
+			supported.add(kotlin);
 		}
 		SUPPORTED_FILE_TYPES = supported;
 	}
@@ -101,6 +105,10 @@ public final class IdeaUtilImpl {
 		final Language aspectJ = Language.findLanguageByID("AspectJ");
 		if (aspectJ != null) {
 			supported.add(aspectJ);
+		}
+		final Language kotlin = Language.findLanguageByID("Kotlin");
+		if (kotlin != null) {
+			supported.add(kotlin);
 		}
 		SUPPORTED_LANGUAGES = supported;
 	}
