@@ -20,9 +20,10 @@
 package org.jetbrains.plugins.spotbugs.gui.tree.model;
 
 import com.intellij.openapi.diagnostic.Logger;
-import edu.umd.cs.findbugs.BugInstance;
 import edu.umd.cs.findbugs.I18N;
-import org.jetbrains.plugins.spotbugs.gui.tree.*;
+import org.jetbrains.plugins.spotbugs.core.Bug;
+import org.jetbrains.plugins.spotbugs.gui.tree.BugInstanceComparator;
+import org.jetbrains.plugins.spotbugs.gui.tree.GroupBy;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -115,18 +116,18 @@ final class Grouper<T> {
 
 
 		/*System.err.println("\n===OOOPS \nindex: " + index + " level: " + level + " i: " + j);
-					System.err.println("Classname: " + ((BugInstance) comparable).getPrimaryClass().getClassName().split("\\$")[0]);
-					System.err.println("Category: " + I18N.instance().getBugCategoryDescription(((BugInstance) comparable).getBugPattern().getCategory()));
-					System.err.println("Type: " + I18N.instance().getBugTypeDescription(((BugInstance) comparable).getBugPattern().getAbbrev()));
-					System.err.println("Short: " + ((BugInstance) comparable).getBugPattern().getShortDescription());*/
+					System.err.println("Classname: " + ((Bug) comparable).getInstance().getPrimaryClass().getClassName().split("\\$")[0]);
+					System.err.println("Category: " + I18N.instance().getBugCategoryDescription(((Bug) comparable).getInstance().getBugPattern().getCategory()));
+					System.err.println("Type: " + I18N.instance().getBugTypeDescription(((Bug) comparable).getInstance().getBugPattern().getAbbrev()));
+					System.err.println("Short: " + ((Bug) comparable).getInstance().getBugPattern().getShortDescription());*/
 
 		int parentIndex = -1;
 		if (index < 0 && depth == 0) { // top level group ##  && level == -1
 			//System.err.println("\n= StartGroup =\nindex: " + index + " depth: " + depth + " i: " + j);
-			//System.err.println("Classname: " + ((BugInstance) comparable).getPrimaryClass().getClassName().split("\\$")[0]);
-			/*System.err.println("Category: " + I18N.instance().getBugCategoryDescription(((BugInstance) comparable).getBugPattern().getCategory()));
-			System.err.println("Type: " + I18N.instance().getBugTypeDescription(((BugInstance) comparable).getBugPattern().getAbbrev()));
-			System.err.println("Short: " + ((BugInstance) comparable).getBugPattern().getShortDescription());*/
+			//System.err.println("Classname: " + ((Bug) comparable).getInstance().getPrimaryClass().getClassName().split("\\$")[0]);
+			/*System.err.println("Category: " + I18N.instance().getBugCategoryDescription(((Bug) comparable).getInstance().getBugPattern().getCategory()));
+			System.err.println("Type: " + I18N.instance().getBugTypeDescription(((Bug) comparable).getInstance().getBugPattern().getAbbrev()));
+			System.err.println("Short: " + ((Bug) comparable).getInstance().getBugPattern().getShortDescription());*/
 			//final T parent = groups.get(index);
 			_callback.startGroup(comparable, depth);
 
@@ -149,12 +150,12 @@ final class Grouper<T> {
 
 			if (LOGGER.isDebugEnabled()) {
 				System.err.println("\n== StartSubGroup ==\nindex: " + index + " depth: " + depth + " i: " + j);
-				System.err.println("Classname: " + ((BugInstance) comparable).getPrimaryClass().getClassName().split("\\$")[0]);
-				System.err.println("PAckage: " + ((BugInstance) comparable).getPrimaryClass().getPackageName());
-				System.err.println("Message: " + ((BugInstance) comparable).getMessage());
-				System.err.println("Category: " + I18N.instance().getBugCategoryDescription(((BugInstance) comparable).getBugPattern().getCategory()));
-				System.err.println("Type: " + I18N.instance().getBugTypeDescription(((BugInstance) comparable).getBugPattern().getAbbrev()));
-				System.err.println("Short: " + ((BugInstance) comparable).getBugPattern().getShortDescription());
+				System.err.println("Classname: " + ((Bug) comparable).getInstance().getPrimaryClass().getClassName().split("\\$")[0]);
+				System.err.println("PAckage: " + ((Bug) comparable).getInstance().getPrimaryClass().getPackageName());
+				System.err.println("Message: " + ((Bug) comparable).getInstance().getMessage());
+				System.err.println("Category: " + I18N.instance().getBugCategoryDescription(((Bug) comparable).getInstance().getBugPattern().getCategory()));
+				System.err.println("Type: " + I18N.instance().getBugTypeDescription(((Bug) comparable).getInstance().getBugPattern().getAbbrev()));
+				System.err.println("Short: " + ((Bug) comparable).getInstance().getBugPattern().getShortDescription());
 			}
 
 			final T parent = groups.get(parentIndex);
@@ -162,10 +163,10 @@ final class Grouper<T> {
 
 			if (LOGGER.isDebugEnabled()) {
 				System.err.println("ParentIndex: " + parentIndex);
-				System.err.println("ParentClassname: " + ((BugInstance) parent).getPrimaryClass().getClassName().split("\\$")[0]);
-				System.err.println("ParentCategory: " + I18N.instance().getBugCategoryDescription(((BugInstance) parent).getBugPattern().getCategory()));
-				System.err.println("ParentType: " + I18N.instance().getBugTypeDescription(((BugInstance) parent).getBugPattern().getAbbrev()));
-				System.err.println("PArentShort: " + ((BugInstance) parent).getBugPattern().getShortDescription());
+				System.err.println("ParentClassname: " + ((Bug) parent).getInstance().getPrimaryClass().getClassName().split("\\$")[0]);
+				System.err.println("ParentCategory: " + I18N.instance().getBugCategoryDescription(((Bug) parent).getInstance().getBugPattern().getCategory()));
+				System.err.println("ParentType: " + I18N.instance().getBugTypeDescription(((Bug) parent).getInstance().getBugPattern().getAbbrev()));
+				System.err.println("PArentShort: " + ((Bug) parent).getInstance().getBugPattern().getShortDescription());
 			}
 
 
@@ -174,14 +175,14 @@ final class Grouper<T> {
 			if (LOGGER.isDebugEnabled()) {
 				System.err.println("\n#### AddToGroup");
 				System.err.println("=== index: " + index + " depth: " + depth + " i: " + j);
-				System.err.println("Classname: " + ((BugInstance) comparable).getPrimaryClass().getClassName().split("\\$")[0]);
-				System.err.println("Classname: " + ((BugInstance) comparable).getPrimaryClass().getClassName());
-				System.err.println("Category: " + I18N.instance().getBugCategoryDescription(((BugInstance) comparable).getBugPattern().getCategory()));
-				System.err.println("Type: " + I18N.instance().getBugTypeDescription(((BugInstance) comparable).getBugPattern().getAbbrev()));
-				System.err.println("Short: " + ((BugInstance) comparable).getBugPattern().getShortDescription());
-				System.err.println("PriorityAbb: " + ((BugInstance) comparable).getPriorityAbbreviation());
-				System.err.println("PriorityString: " + ((BugInstance) comparable).getPriorityString());
-				System.err.println("PriorityTypeString: " + ((BugInstance) comparable).getPriorityTypeString());
+				System.err.println("Classname: " + ((Bug) comparable).getInstance().getPrimaryClass().getClassName().split("\\$")[0]);
+				System.err.println("Classname: " + ((Bug) comparable).getInstance().getPrimaryClass().getClassName());
+				System.err.println("Category: " + I18N.instance().getBugCategoryDescription(((Bug) comparable).getInstance().getBugPattern().getCategory()));
+				System.err.println("Type: " + I18N.instance().getBugTypeDescription(((Bug) comparable).getInstance().getBugPattern().getAbbrev()));
+				System.err.println("Short: " + ((Bug) comparable).getInstance().getBugPattern().getShortDescription());
+				System.err.println("PriorityAbb: " + ((Bug) comparable).getInstance().getPriorityAbbreviation());
+				System.err.println("PriorityString: " + ((Bug) comparable).getInstance().getPriorityString());
+				System.err.println("PriorityTypeString: " + ((Bug) comparable).getInstance().getPriorityTypeString());
 			}
 
 			final Comparator<T> c = _callback.currentGroupComparatorChain(depth); // FIXME: -1 ???
@@ -193,10 +194,10 @@ final class Grouper<T> {
 
 			if (LOGGER.isDebugEnabled()) {
 				System.err.println("ParentIndex: " + parentIndex);
-				System.err.println("ParentClassname: " + ((BugInstance) parent).getPrimaryClass().getClassName().split("\\$")[0]);
-				System.err.println("ParentCategory: " + I18N.instance().getBugCategoryDescription(((BugInstance) parent).getBugPattern().getCategory()));
-				System.err.println("ParentType: " + I18N.instance().getBugTypeDescription(((BugInstance) parent).getBugPattern().getAbbrev()));
-				System.err.println("PArentShort: " + ((BugInstance) parent).getBugPattern().getShortDescription());
+				System.err.println("ParentClassname: " + ((Bug) parent).getInstance().getPrimaryClass().getClassName().split("\\$")[0]);
+				System.err.println("ParentCategory: " + I18N.instance().getBugCategoryDescription(((Bug) parent).getInstance().getBugPattern().getCategory()));
+				System.err.println("ParentType: " + I18N.instance().getBugTypeDescription(((Bug) parent).getInstance().getBugPattern().getAbbrev()));
+				System.err.println("PArentShort: " + ((Bug) parent).getInstance().getBugPattern().getShortDescription());
 			}
 
 			_callback.addToGroup(depth, comparable, parent);
