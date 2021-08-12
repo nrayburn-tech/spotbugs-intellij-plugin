@@ -23,18 +23,18 @@ import com.intellij.ide.highlighter.XmlFileType;
 import com.intellij.openapi.fileChooser.FileChooserFactory;
 import com.intellij.openapi.fileChooser.FileSaverDescriptor;
 import com.intellij.openapi.options.ConfigurationException;
+import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFileWrapper;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.plugins.spotbugs.common.ExportErrorType;
 import org.jetbrains.plugins.spotbugs.common.util.ErrorUtil;
 import org.jetbrains.plugins.spotbugs.core.AbstractSettings;
 import org.jetbrains.plugins.spotbugs.resources.ResourcesLoader;
 
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.JPanel;
-import java.awt.BorderLayout;
+import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 
 final class FilterTab extends JPanel implements SettingsOwner<AbstractSettings> {
@@ -100,6 +100,13 @@ final class FilterTab extends JPanel implements SettingsOwner<AbstractSettings> 
 		}
 
 		final File file = wrapper.getFile();
+		final File exportDirPath = file.getAbsoluteFile().getParentFile();
+		ExportErrorType errorType = ExportErrorType.from(exportDirPath);
+		if (errorType != null) {
+			Messages.showErrorDialog(errorType.getText(exportDirPath), StringUtil.capitalizeWords("filter.rFile.save.title", true));
+			addRFilerFilter();
+			return;
+		}
 		try {
 			FileUtil.writeToFile(file, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
 					"<FindBugsFilter>\n" +

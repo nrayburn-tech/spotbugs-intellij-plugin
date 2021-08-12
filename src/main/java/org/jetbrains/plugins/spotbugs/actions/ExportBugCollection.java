@@ -21,23 +21,31 @@ package org.jetbrains.plugins.spotbugs.actions;
 
 import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.progress.*;
+import com.intellij.openapi.progress.ProgressIndicator;
+import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.wm.ToolWindow;
-import edu.umd.cs.findbugs.*;
+import edu.umd.cs.findbugs.SortedBugCollection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.plugins.spotbugs.common.EventDispatchThreadHelper;
-import org.jetbrains.plugins.spotbugs.common.util.*;
-import org.jetbrains.plugins.spotbugs.core.*;
+import org.jetbrains.plugins.spotbugs.common.ExportErrorType;
+import org.jetbrains.plugins.spotbugs.common.util.ErrorUtil;
+import org.jetbrains.plugins.spotbugs.common.util.FileUtilFb;
+import org.jetbrains.plugins.spotbugs.core.FindBugsProject;
+import org.jetbrains.plugins.spotbugs.core.FindBugsResult;
+import org.jetbrains.plugins.spotbugs.core.FindBugsState;
+import org.jetbrains.plugins.spotbugs.core.WorkspaceSettings;
 import org.jetbrains.plugins.spotbugs.gui.export.ExportBugCollectionDialog;
 import org.jetbrains.plugins.spotbugs.gui.toolwindow.view.ToolWindowPanel;
 import org.jetbrains.plugins.spotbugs.resources.ResourcesLoader;
 
-import java.io.*;
+import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Map;
 
 public final class ExportBugCollection extends AbstractAction {
 
@@ -89,16 +97,12 @@ public final class ExportBugCollection extends AbstractAction {
 		final boolean createSubDir = workspaceSettings.exportBugCollectionCreateSubDirectory;
 		final boolean openInBrowser = workspaceSettings.openExportedHtmlBugCollectionInBrowser;
 
-		if (StringUtil.isEmptyOrSpaces(exportDir)) {
-			showError(ResourcesLoader.getString("export.error.emptyPath"));
-			return;
-		}
 		final File exportDirPath = new File(exportDir);
-		if (exportDirPath.exists()) {
-			if (!exportDirPath.isDirectory()) {
-				showError(ResourcesLoader.getString("error.directory.type", exportDirPath));
-				return;
-			}
+		ExportErrorType errorType = ExportErrorType.from(exportDirPath);
+		if (errorType != null) {
+			showError(errorType.getText(exportDirPath));
+			actionPerformedImpl(e, project, toolWindow, state);
+			return;
 		}
 
 		final FindBugsResult result = panel.getResult();

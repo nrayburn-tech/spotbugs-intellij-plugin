@@ -22,24 +22,36 @@ package org.jetbrains.plugins.spotbugs.gui.settings;
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.actions.RevealFileAction;
 import com.intellij.ide.highlighter.XmlFileType;
-import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.fileChooser.*;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.openapi.project.*;
+import com.intellij.openapi.project.DumbAware;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.JDOMUtil;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.*;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.VirtualFileWrapper;
 import com.intellij.util.xmlb.SmartSerializer;
-import org.jdom.*;
-import org.jetbrains.annotations.*;
-import org.jetbrains.plugins.spotbugs.common.util.*;
-import org.jetbrains.plugins.spotbugs.core.*;
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.plugins.spotbugs.common.ExportErrorType;
+import org.jetbrains.plugins.spotbugs.common.util.ErrorUtil;
+import org.jetbrains.plugins.spotbugs.common.util.IdeaUtilImpl;
+import org.jetbrains.plugins.spotbugs.common.util.IoUtil;
+import org.jetbrains.plugins.spotbugs.core.ProjectSettings;
+import org.jetbrains.plugins.spotbugs.core.WorkspaceSettings;
 import org.jetbrains.plugins.spotbugs.resources.ResourcesLoader;
 
 import javax.swing.*;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
 final class AdvancedSettingsAction extends DefaultActionGroup {
 
@@ -177,6 +189,13 @@ final class AdvancedSettingsAction extends DefaultActionGroup {
 			new SmartSerializer().writeExternal(settings, root, false);
 			try {
 				final File file = wrapper.getFile();
+				final File exportDirPath = file.getAbsoluteFile().getParentFile();
+				ExportErrorType errorType = ExportErrorType.from(exportDirPath);
+				if (errorType != null) {
+					Messages.showErrorDialog(settingsPane, errorType.getText(exportDirPath), StringUtil.capitalizeWords(ResourcesLoader.getString("settings.action.export.title"), true));
+					actionPerformed(e);
+					return;
+				}
 				JDOMUtil.writeDocument(new Document(root), file, "\n");
 				RevealFileAction.showDialog(
 						project,
