@@ -15,6 +15,9 @@ jobs:
       - uses: actions/checkout@v1
       - name: Clone intellij-community
         run: git clone https://github.com/JetBrains/intellij-community.git ~/intellij-community
+      - name: Set IDEA_HOME_PATH
+        run: |
+          echo "IDEA_HOME_PATH=~/intellij-community" >> $GITHUB_ENV
       - uses: actions/checkout@v2
       - name: Set up JDK 1.8
         uses: actions/setup-java@v1

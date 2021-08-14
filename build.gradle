@@ -106,9 +106,11 @@ tasks.jacocoTestReport.dependsOn(deleteThirdPartyPlugins)
 tasks.jacocoTestCoverageVerification.dependsOn(deleteThirdPartyPlugins)
 
 test {
-    // Set idea.home.path to the absolute path to the intellij-community source
-    // on your local machine.
-    systemProperty "idea.home.path", "~/intellij-community"
+    def ideaHomePath = System.getenv().get('IDEA_HOME_PATH') ?: project.findProperty('idea.home.path')
+    if (ideaHomePath == null) {
+        throw new RuntimeException("Please set the 'idea.home.path' property at gradle.properties")
+    }
+    systemProperty "idea.home.path", ideaHomePath
     finalizedBy jacocoTestReport
 }
 
