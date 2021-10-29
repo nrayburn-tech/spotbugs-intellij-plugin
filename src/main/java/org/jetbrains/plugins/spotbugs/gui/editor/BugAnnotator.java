@@ -60,7 +60,7 @@ public final class BugAnnotator implements Annotator {
 	public void annotate(@NotNull final PsiElement psiElement, @NotNull final AnnotationHolder annotationHolder) {
 		final Project project = psiElement.getProject();
 		final WorkspaceSettings workspaceSettings = WorkspaceSettings.getInstance(project);
-		if (!workspaceSettings.annotationTextRangeMarkup) {
+		if (workspaceSettings != null && !workspaceSettings.annotationTextRangeMarkup) {
 			return;
 		}
 		if (!FindBugsState.get(project).isIdle()) {
@@ -79,7 +79,7 @@ public final class BugAnnotator implements Annotator {
 	}
 
 	private static void addAnnotation(@NotNull final PsiElement psiElement, final Iterable<ExtendedProblemDescriptor> problemDescriptors, @NotNull final AnnotationHolder annotationHolder) {
-		final List<ExtendedProblemDescriptor> matchingDescriptors = new ArrayList<ExtendedProblemDescriptor>();
+		final List<ExtendedProblemDescriptor> matchingDescriptors = new ArrayList<>();
 		for (final ExtendedProblemDescriptor descriptor : problemDescriptors) {
 			final PsiElement problemPsiElement = descriptor.getPsiElement();
 
@@ -238,28 +238,4 @@ public final class BugAnnotator implements Annotator {
 
 		return StringUtilFb.addLineSeparatorAt(buffer, 250).toString();
 	}
-
-	/*private static class AnonymousInnerClassMayBeStaticVisitor extends BaseInspectionVisitor {
-
-		@Override
-		public void visitClass(@NotNull PsiClass aClass) {
-			if (!(aClass instanceof PsiAnonymousClass)) {
-				return;
-			}
-			if (aClass instanceof PsiEnumConstantInitializer) {
-				return;
-			}
-			final PsiMember containingMember = PsiTreeUtil.getParentOfType(aClass, PsiMember.class);
-			if (containingMember == null || containingMember.hasModifierProperty(PsiModifier.STATIC)) {
-				return;
-			}
-			final PsiAnonymousClass anAnonymousClass = (PsiAnonymousClass) aClass;
-			final InnerClassReferenceVisitor visitor = new InnerClassReferenceVisitor(anAnonymousClass);
-			anAnonymousClass.accept(visitor);
-			if (!visitor.canInnerClassBeStatic()) {
-				return;
-			}
-			registerClassError(aClass);
-		}
-	}*/
 }
