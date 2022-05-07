@@ -71,6 +71,10 @@ public interface PluginIcons {
     );
     Icon GROUP_BY_CLASS_ICON = AllIcons.Actions.GroupByClass;
     Icon GROUP_BY_PRIORITY_ICON = AllIcons.Nodes.SortBySeverity;
+    Icon GROUP_BY_RANK_ICON = LayeredIcon.create(
+            ResourcesLoader.loadIcon("actions/groupByRank.svg"),
+            ResourcesLoader.loadIcon("actions/groupByTemplate.svg")
+    );
     Icon GROUP_BY_PACKAGE_ICON = AllIcons.Actions.GroupByPackage;
 
     Icon GROUP_BY_RANK_SCARIEST_ICON = LayeredIcon.create(
@@ -92,11 +96,27 @@ public interface PluginIcons {
 
     Map<String, Icon> GROUP_BY_RANK_ICONS = InitIcons.initGroupByRankIconsMap();
 
-    Icon GROUP_BY_PRIORITY_HIGH_ICON = ResourcesLoader.loadIcon("priority/priorityHigh.png");
-    Icon GROUP_BY_PRIORITY_MEDIUM_ICON = ResourcesLoader.loadIcon("priority/priorityMedium.png");
-    Icon GROUP_BY_PRIORITY_LOW_ICON = ResourcesLoader.loadIcon("priority/priorityLow.png");
-    Icon GROUP_BY_PRIORITY_EXP_ICON = ResourcesLoader.loadIcon("priority/priorityExp.png");
-    Icon GROUP_BY_PRIORITY_IGNORE_ICON = ResourcesLoader.loadIcon("priority/priorityIgnore.png");
+    Icon GROUP_BY_PRIORITY_HIGH_ICON = LayeredIcon.create(
+            ResourcesLoader.loadIcon("priority/priorityHigh.svg"),
+            ResourcesLoader.loadIcon("actions/groupByTemplate.svg")
+    );
+
+    Icon GROUP_BY_PRIORITY_MEDIUM_ICON = LayeredIcon.create(
+            ResourcesLoader.loadIcon("priority/priorityMedium.svg"),
+            ResourcesLoader.loadIcon("actions/groupByTemplate.svg")
+    );
+
+    Icon GROUP_BY_PRIORITY_LOW_ICON = LayeredIcon.create(
+            ResourcesLoader.loadIcon("priority/priorityLow.svg"),
+            ResourcesLoader.loadIcon("actions/groupByTemplate.svg")
+    );
+
+    Icon GROUP_BY_PRIORITY_EXP_ICON = LayeredIcon.create(
+            ResourcesLoader.loadIcon("priority/priorityExp.svg"),
+            ResourcesLoader.loadIcon("actions/groupByTemplate.svg")
+    );
+
+    Icon GROUP_BY_PRIORITY_IGNORE_ICON = ResourcesLoader.loadIcon("priority/priorityIgnore.svg");
 
     Map<String, Icon> GROUP_BY_PRIORITY_ICONS = InitIcons.initGroupByPriorityIconsMap();
 

@@ -365,20 +365,19 @@
                     text="Group by Package"
                     description="Group by package."
                     icon="PluginIcons.GROUP_BY_PACKAGE_ICON"/>
-<!--
 
             <action id="SpotBugs.GroupByPriority"
                     class="org.jetbrains.plugins.spotbugs.actions.GroupByPriority"
-                    text="Group by priority"
+                    text="Group by Priority"
                     description="Group by priority."
-                    icon="/org/jetbrains/plugins/spotbugs/resources/icons/actions/groupByPriority.png"/>
--->
+                    icon="PluginIcons.GROUP_BY_PRIORITY_ICON"/>
+
 
             <action id="SpotBugs.GroupByRank"
                     class="org.jetbrains.plugins.spotbugs.actions.GroupByRank"
                     text="Group by Bug Rank"
                     description="Group by bug rank."
-                    icon="PluginIcons.GROUP_BY_PRIORITY_ICON"/>
+                    icon="PluginIcons.GROUP_BY_RANK_ICON"/>
 
             <!-- <action id="SpotBugs.GroupByFilter"
                class="org.jetbrains.plugins.spotbugs.actions.GroupByFilter"
