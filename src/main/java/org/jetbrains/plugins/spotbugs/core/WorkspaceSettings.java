@@ -19,11 +19,7 @@
  */
 package org.jetbrains.plugins.spotbugs.core;
 
-import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.components.State;
-import com.intellij.openapi.components.Storage;
-import com.intellij.openapi.components.StoragePathMacros;
+import com.intellij.openapi.components.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import com.intellij.util.xmlb.annotations.MapAnnotation;
@@ -34,9 +30,10 @@ import org.jetbrains.plugins.spotbugs.gui.tree.GroupBy;
 import java.util.HashMap;
 import java.util.Map;
 
+@Service(Service.Level.PROJECT)
 @State(
 		name = "FindBugs-IDEA-Workspace",
-		storages = {@Storage(file /*IDEA 2016: switch to value()*/ = StoragePathMacros.WORKSPACE_FILE)}
+		storages = {@Storage(StoragePathMacros.WORKSPACE_FILE)}
 )
 public final class WorkspaceSettings implements PersistentStateComponent<WorkspaceSettings> {
 
@@ -131,6 +128,6 @@ public final class WorkspaceSettings implements PersistentStateComponent<Workspa
 	}
 
 	public static WorkspaceSettings getInstance(@NotNull final Project project) {
-		return ServiceManager.getService(project, WorkspaceSettings.class);
+		return project.getService(WorkspaceSettings.class);
 	}
 }

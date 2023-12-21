@@ -106,7 +106,7 @@ public class BugTree extends Tree implements DataProvider, OccurenceNavigator {
 		defaultactiongroup.add(ActionManager.getInstance().getAction("EditSource"));
 		defaultactiongroup.addSeparator();
 		defaultactiongroup.add(ActionManager.getInstance().getAction("VersionControlsGroup"));
-		PopupHandler.installPopupHandler(this, defaultactiongroup, "FoundBugsViewPopup", ActionManager.getInstance());
+		PopupHandler.installPopupMenu(this, defaultactiongroup, "FoundBugsViewPopup");
 		addKeyListener(createKeyAdapter());
 
 		EditSourceOnDoubleClickHandler.install(this);

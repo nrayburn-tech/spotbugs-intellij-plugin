@@ -19,9 +19,7 @@
  */
 package org.jetbrains.plugins.spotbugs.gui.editor;
 
-import com.intellij.lang.annotation.Annotation;
-import com.intellij.lang.annotation.AnnotationHolder;
-import com.intellij.lang.annotation.Annotator;
+import com.intellij.lang.annotation.*;
 import com.intellij.openapi.editor.markup.EffectType;
 import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.openapi.project.Project;
@@ -93,7 +91,7 @@ public final class BugAnnotator implements Annotator {
 	private static void addAnnotation(final ExtendedProblemDescriptor problemDescriptor, final List<ExtendedProblemDescriptor> matchingDescriptors, final PsiElement psiElement, @NotNull final AnnotationHolder annotationHolder) {
 		final BugInstance bugInstance = problemDescriptor.getBug().getInstance();
 		final int priority = bugInstance.getPriority();
-		final Annotation annotation;
+		final AnnotationBuilder annotation;
 		final PsiElement problemElement = problemDescriptor.getPsiElement();
 		final TextRange textRange = problemElement.getTextRange();
 
@@ -109,19 +107,22 @@ public final class BugAnnotator implements Annotator {
 						elementToAnnotation = ((PsiClass) psiElement).getNameIdentifier();
 					}
 
-					annotation = annotationHolder.createWarningAnnotation(elementToAnnotation == null ? psiElement : elementToAnnotation, getAnnotationText(matchingDescriptors));
-					// FIXME: use color from annotation configuration
-					annotation.setEnforcedTextAttributes(new TextAttributes(null, null, JBColor.RED.brighter(), EffectType.BOXED, Font.PLAIN));
+					annotation = annotationHolder.newAnnotation(HighlightSeverity.WARNING, getAnnotationText(matchingDescriptors))
+									.range(elementToAnnotation == null ? psiElement : elementToAnnotation)
+									// FIXME: use color from annotation configuration
+									.enforcedTextAttributes(new TextAttributes(null, null, JBColor.RED.brighter(), EffectType.BOXED, Font.PLAIN));
 				} else {
-					annotation = annotationHolder.createWarningAnnotation(textRange, getAnnotationText(matchingDescriptors));
-					// FIXME: use color from annotation configuration
-					annotation.setEnforcedTextAttributes(new TextAttributes(null, null, JBColor.RED, EffectType.WAVE_UNDERSCORE, Font.PLAIN));
+					annotation = annotationHolder.newAnnotation(HighlightSeverity.WARNING, getAnnotationText(matchingDescriptors))
+									.range(textRange)
+									// FIXME: use color from annotation configuration
+									.enforcedTextAttributes(new TextAttributes(null, null, JBColor.RED, EffectType.WAVE_UNDERSCORE, Font.PLAIN));
 				}
 
-				annotation.registerFix(new SuppressReportBugIntentionAction(problemDescriptor), textRange);
-				annotation.registerFix(new SuppressReportBugForClassIntentionAction(problemDescriptor), textRange);
-				annotation.registerFix(new ClearBugIntentionAction(problemDescriptor), textRange);
-				annotation.registerFix(new ClearAndSuppressBugIntentionAction(problemDescriptor), textRange);
+				annotation.newFix(new SuppressReportBugIntentionAction(problemDescriptor)).range(textRange).registerFix()
+								.newFix(new SuppressReportBugForClassIntentionAction(problemDescriptor)).range(textRange).registerFix()
+								.newFix(new ClearBugIntentionAction(problemDescriptor)).range(textRange).registerFix()
+								.newFix(new ClearAndSuppressBugIntentionAction(problemDescriptor)).range(textRange).registerFix()
+								.create();
 
 				break;
 
@@ -134,18 +135,23 @@ public final class BugAnnotator implements Annotator {
 					} else {
 						elementToAnnotation = ((PsiClass) psiElement).getNameIdentifier();
 					}
-					annotation = annotationHolder.createWarningAnnotation(elementToAnnotation == null ? psiElement : elementToAnnotation, getAnnotationText(matchingDescriptors));
+					annotation = annotationHolder.newAnnotation(HighlightSeverity.WARNING, getAnnotationText(matchingDescriptors))
+									.range(elementToAnnotation == null ? psiElement : elementToAnnotation);
 				} else {
-					annotation = annotationHolder.createWarningAnnotation(textRange, getAnnotationText(matchingDescriptors));
+					annotation = annotationHolder.newAnnotation(HighlightSeverity.WARNING, getAnnotationText(matchingDescriptors))
+									.range(textRange);
 				}
 
 				// FIXME: use color from annotation configuration
-				annotation.setEnforcedTextAttributes(new TextAttributes(null, null, JBColor.YELLOW.darker(), EffectType.WAVE_UNDERSCORE, Font.PLAIN));
+				annotation
+								.enforcedTextAttributes(
+												new TextAttributes(null, null, JBColor.YELLOW.darker(), EffectType.WAVE_UNDERSCORE, Font.PLAIN))
 
-				annotation.registerFix(new SuppressReportBugIntentionAction(problemDescriptor), textRange);
-				annotation.registerFix(new SuppressReportBugForClassIntentionAction(problemDescriptor), textRange);
-				annotation.registerFix(new ClearBugIntentionAction(problemDescriptor), textRange);
-				annotation.registerFix(new ClearAndSuppressBugIntentionAction(problemDescriptor), textRange);
+								.newFix(new SuppressReportBugIntentionAction(problemDescriptor)).range(textRange).registerFix()
+								.newFix(new SuppressReportBugForClassIntentionAction(problemDescriptor)).range(textRange).registerFix()
+								.newFix(new ClearBugIntentionAction(problemDescriptor)).range(textRange).registerFix()
+								.newFix(new ClearAndSuppressBugIntentionAction(problemDescriptor)).range(textRange).registerFix()
+								.create();
 
 				break;
 
@@ -158,18 +164,20 @@ public final class BugAnnotator implements Annotator {
 					} else {
 						elementToAnnotation = ((PsiClass) problemElement).getNameIdentifier();
 					}
-					annotation = annotationHolder.createWarningAnnotation(elementToAnnotation == null ? psiElement : elementToAnnotation, getAnnotationText(matchingDescriptors));
+					annotation = annotationHolder.newAnnotation(HighlightSeverity.WARNING, getAnnotationText(matchingDescriptors))
+									.range(elementToAnnotation == null ? psiElement : elementToAnnotation);
 				} else {
-					annotation = annotationHolder.createWarningAnnotation(textRange, getAnnotationText(matchingDescriptors));
+					annotation = annotationHolder.newAnnotation(HighlightSeverity.WARNING, getAnnotationText(matchingDescriptors))
+									.range(textRange);
 				}
 
 				// FIXME: use color from annotation configuration
-				annotation.setEnforcedTextAttributes(new TextAttributes(null, null, JBColor.GRAY, EffectType.WAVE_UNDERSCORE, Font.PLAIN));
-
-				annotation.registerFix(new SuppressReportBugIntentionAction(problemDescriptor), textRange);
-				annotation.registerFix(new SuppressReportBugForClassIntentionAction(problemDescriptor), textRange);
-				annotation.registerFix(new ClearBugIntentionAction(problemDescriptor), textRange);
-				annotation.registerFix(new ClearAndSuppressBugIntentionAction(problemDescriptor), textRange);
+				annotation.enforcedTextAttributes(new TextAttributes(null, null, JBColor.GRAY, EffectType.WAVE_UNDERSCORE, Font.PLAIN))
+								.newFix(new SuppressReportBugIntentionAction(problemDescriptor)).range(textRange).registerFix()
+								.newFix(new SuppressReportBugForClassIntentionAction(problemDescriptor)).range(textRange).registerFix()
+								.newFix(new ClearBugIntentionAction(problemDescriptor)).range(textRange).registerFix()
+								.newFix(new ClearAndSuppressBugIntentionAction(problemDescriptor)).range(textRange).registerFix()
+								.create();
 
 				break;
 			case Detector.LOW_PRIORITY:
@@ -181,18 +189,20 @@ public final class BugAnnotator implements Annotator {
 					} else {
 						elementToAnnotation = ((PsiClass) psiElement).getNameIdentifier();
 					}
-					annotation = annotationHolder.createInfoAnnotation(elementToAnnotation == null ? psiElement : elementToAnnotation, getAnnotationText(matchingDescriptors));
+					annotation = annotationHolder.newAnnotation(HighlightSeverity.INFORMATION, getAnnotationText(matchingDescriptors))
+									.range(elementToAnnotation == null ? psiElement : elementToAnnotation);
 				} else {
-					annotation = annotationHolder.createInfoAnnotation(textRange, getAnnotationText(matchingDescriptors));
+					annotation = annotationHolder.newAnnotation(HighlightSeverity.INFORMATION, getAnnotationText(matchingDescriptors))
+									.range(textRange);
 				}
 
 				// FIXME: use color from annotation configuration
-				annotation.setEnforcedTextAttributes(new TextAttributes(null, null, JBColor.GREEN, EffectType.WAVE_UNDERSCORE, Font.PLAIN));
-
-				annotation.registerFix(new SuppressReportBugIntentionAction(problemDescriptor), textRange);
-				annotation.registerFix(new SuppressReportBugForClassIntentionAction(problemDescriptor), textRange);
-				annotation.registerFix(new ClearBugIntentionAction(problemDescriptor), textRange);
-				annotation.registerFix(new ClearAndSuppressBugIntentionAction(problemDescriptor), textRange);
+				annotation.enforcedTextAttributes(new TextAttributes(null, null, JBColor.GREEN, EffectType.WAVE_UNDERSCORE, Font.PLAIN))
+								.newFix(new SuppressReportBugIntentionAction(problemDescriptor)).range(textRange).registerFix()
+								.newFix(new SuppressReportBugForClassIntentionAction(problemDescriptor)).range(textRange).registerFix()
+								.newFix(new ClearBugIntentionAction(problemDescriptor)).range(textRange).registerFix()
+								.newFix(new ClearAndSuppressBugIntentionAction(problemDescriptor)).range(textRange).registerFix()
+								.create();
 
 				break;
 			case Detector.IGNORE_PRIORITY:
@@ -203,19 +213,21 @@ public final class BugAnnotator implements Annotator {
 					} else {
 						elementToAnnotation = ((PsiClass) problemElement).getNameIdentifier();
 					}
-					annotation = annotationHolder.createWarningAnnotation(elementToAnnotation == null ? psiElement : elementToAnnotation, getAnnotationText(matchingDescriptors));
-					annotation.setEnforcedTextAttributes(new TextAttributes(null, null, JBColor.MAGENTA.brighter(), EffectType.WAVE_UNDERSCORE, Font.PLAIN));
+					annotation = annotationHolder.newAnnotation(HighlightSeverity.WARNING, getAnnotationText(matchingDescriptors))
+									.range(elementToAnnotation == null ? psiElement : elementToAnnotation)
+									.enforcedTextAttributes(new TextAttributes(null, null, JBColor.MAGENTA.brighter(), EffectType.WAVE_UNDERSCORE, Font.PLAIN));
 				} else {
-					annotation = annotationHolder.createWarningAnnotation(textRange, getAnnotationText(matchingDescriptors));
+					annotation = annotationHolder.newAnnotation(HighlightSeverity.WARNING, getAnnotationText(matchingDescriptors))
+									.range(textRange);
 				}
 
 				// FIXME: use color from annotation configuration
-				annotation.setEnforcedTextAttributes(new TextAttributes(null, null, JBColor.MAGENTA, EffectType.WAVE_UNDERSCORE, Font.PLAIN));
-
-				annotation.registerFix(new SuppressReportBugIntentionAction(problemDescriptor), textRange);
-				annotation.registerFix(new SuppressReportBugForClassIntentionAction(problemDescriptor), textRange);
-				annotation.registerFix(new ClearBugIntentionAction(problemDescriptor), textRange);
-				annotation.registerFix(new ClearAndSuppressBugIntentionAction(problemDescriptor), textRange);
+				annotation.enforcedTextAttributes(new TextAttributes(null, null, JBColor.MAGENTA, EffectType.WAVE_UNDERSCORE, Font.PLAIN))
+								.newFix(new SuppressReportBugIntentionAction(problemDescriptor)).range(textRange).registerFix()
+								.newFix(new SuppressReportBugForClassIntentionAction(problemDescriptor)).range(textRange).registerFix()
+								.newFix(new ClearBugIntentionAction(problemDescriptor)).range(textRange).registerFix()
+								.newFix(new ClearAndSuppressBugIntentionAction(problemDescriptor)).range(textRange).registerFix()
+								.create();
 
 				break;
 			default:

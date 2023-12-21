@@ -119,7 +119,7 @@ public final class BugsLineMarkerProvider implements LineMarkerProvider {
 		return firstLeaf != null ? firstLeaf.getPsi() : null;
 	}
 
-	public void collectSlowLineMarkers(@NotNull final List<PsiElement> elements, @NotNull final Collection<LineMarkerInfo> result) {
+	public void collectSlowLineMarkers(final @NotNull List<? extends PsiElement> elements, final @NotNull Collection<? super LineMarkerInfo<?>> result) {
 	}
 
 	private static class BugGutterIconNavigationHandler implements GutterIconNavigationHandler<PsiElement> {

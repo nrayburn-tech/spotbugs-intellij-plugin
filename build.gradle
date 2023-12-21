@@ -20,7 +20,7 @@
  */
 
 plugins {
-    id "org.jetbrains.intellij" version "0.4.21"
+    id "org.jetbrains.intellij" version "1.16.1"
     id 'jacoco'
 }
 
@@ -28,8 +28,8 @@ apply plugin: 'org.jetbrains.intellij'
 apply plugin: 'maven-publish'
 apply plugin: 'java'
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = 11
+targetCompatibility = 11
 
 repositories {
     mavenLocal()
@@ -37,14 +37,13 @@ repositories {
 }
 
 intellij {
-    version ijVersion
+    version = ijVersion
 
-    pluginName 'spotbugs-idea'
-    updateSinceUntilBuild false
-    type 'IC'
+    pluginName = 'spotbugs-idea'
+    updateSinceUntilBuild = false
+    type = 'IC'
 
-    plugins 'git4idea'
-    plugins 'java'
+    plugins = ['git4idea', 'java']
 }
 
 jacoco {
@@ -61,42 +60,42 @@ configurations {
 }
 
 dependencies {
-    implementation ('com.github.spotbugs:spotbugs:4.4.2') {
+    implementation ('com.github.spotbugs:spotbugs:4.7.3') {
         exclude group: 'xml-apis', module: 'xml-apis'
     }
-    implementation 'net.sf.saxon:Saxon-HE:9.9.1-2'
-    implementation 'org.jsoup:jsoup:1.8.3'
+    implementation 'net.sf.saxon:Saxon-HE:12.3'
+    implementation 'org.jsoup:jsoup:1.16.1'
     implementation 'info.clearthought:table-layout:4.3.0'
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.assertj:assertj-core:3.21.0'
     testImplementation 'org.mockito:mockito-core:4.0.0'
-    thirdPartyPlugins 'com.mebigfatguy.fb-contrib:fb-contrib:7.4.7'
-    thirdPartyPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.11.0'
+    thirdPartyPlugins 'com.mebigfatguy.fb-contrib:fb-contrib:7.6.0'
+    thirdPartyPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.12.0'
     fbContribJava6 'com.mebigfatguy.fb-contrib:fb-contrib:6.2.1'
 }
 
-task copyGradleProperties(type: Copy) {
+tasks.register('copyGradleProperties', Copy) {
     description 'Copy gradle.properties to project resources.'
     from 'gradle.properties'
     into 'build/resources/main/org/jetbrains/plugins/spotbugs/common'
     rename { _ -> 'version.properties' }
 }
 
-task downloadThirdPartyPlugins(type: Copy) {
+tasks.register('downloadThirdPartyPlugins', Copy) {
     description 'Downloads third-party plugins Find Security Bugs and FB-Contrib.'
     from configurations.thirdPartyPlugins
     from configurations.fbContribJava6
     into 'build/resources/main/org/jetbrains/plugins/spotbugs/plugins'
 }
 
-task copyThirdPartyPlugins(type: Copy) {
+tasks.register('copyThirdPartyPlugins', Copy) {
     dependsOn(downloadThirdPartyPlugins, prepareSandbox)
     description 'Copy plugins into sandbox.'
     from 'build/resources/main/org/jetbrains/plugins/spotbugs/plugins'
     into 'build/idea-sandbox/plugins/spotbugs-idea/customPlugins'
 }
 
-task deleteThirdPartyPlugins(type: Delete) {
+tasks.register('deleteThirdPartyPlugins', Delete) {
     delete 'build/resources/main/org/jetbrains/plugins/spotbugs/plugins'
 }
 

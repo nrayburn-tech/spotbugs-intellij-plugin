@@ -26,6 +26,7 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.compiler.*;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.*;
+import com.intellij.openapi.module.Module;
 import com.intellij.openapi.progress.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.*;
@@ -34,7 +35,6 @@ import com.intellij.openapi.util.*;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.wm.ToolWindow;
-import com.intellij.openapi.wm.impl.ToolWindowImpl;
 import com.intellij.util.Consumer;
 import edu.umd.cs.findbugs.*;
 import edu.umd.cs.findbugs.config.*;
@@ -151,10 +151,9 @@ public abstract class FindBugsStarter implements AnalysisAbortingListener {
 			}
 			/*
 			 * Important: Make sure the tool window is initialized.
-			 * This call is to important to make it just in case of false = toolWindowToFront
+			 * This call is important to make it just in case of false = toolWindowToFront
 			 * because we have no guarantee that activateToolWindow works.
 			 */
-			((ToolWindowImpl) toolWindow).ensureContentInitialized();
 			if (workspaceSettings.toolWindowToFront) {
 				ToolWindowPanel.showWindow(toolWindow);
 			}
@@ -225,6 +224,9 @@ public abstract class FindBugsStarter implements AnalysisAbortingListener {
 			} catch (final ProcessCanceledException e) {
 				throw e;
 			} catch (final Throwable e) {
+				if (ApplicationManager.getApplication().isUnitTestMode()) {
+					throw new RuntimeException(e);
+				}
 				error = e;
 			}
 		}

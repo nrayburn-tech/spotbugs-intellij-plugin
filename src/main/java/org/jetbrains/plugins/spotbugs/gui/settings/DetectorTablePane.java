@@ -107,8 +107,7 @@ final class DetectorTablePane extends JPanel {
 			TreeUtil.expandAll(table.getTree());
 			final TreePath lastSelected = table.getTree().getSelectionPath();
 			if (lastSelected == null || !(lastSelected.getLastPathComponent() instanceof DetectorNode)) {
-				final TreePath path = TreeUtil.getFirstLeafNodePath(table.getTree());
-				TreeUtil.selectPath(table.getTree(), path);
+				TreeUtil.promiseSelectFirstLeaf(table.getTree());
 			}
 		}
 	}

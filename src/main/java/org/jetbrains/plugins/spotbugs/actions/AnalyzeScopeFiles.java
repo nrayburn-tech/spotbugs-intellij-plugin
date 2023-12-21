@@ -272,10 +272,6 @@ public final class AnalyzeScopeFiles extends AbstractAnalyzeAction {
 	}
 
 	private static String getModuleNameInReadAction(@NotNull final Module module) {
-		return new ReadAction<String>() {
-			protected void run(@NotNull final Result<String> result) throws Throwable {
-				result.setResult(module.getName());
-			}
-		}.execute().getResultObject();
+		return ReadAction.compute(module::getName);
 	}
 }

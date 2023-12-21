@@ -94,7 +94,7 @@ public final class ResourcesLoader {
 
 	@NotNull
 	public static Icon loadIcon(final String filename) {
-		return IconLoader.getIcon(ICON_RESOURCES_PKG + '/' + filename);
+		return IconLoader.getIcon(ICON_RESOURCES_PKG + '/' + filename, ResourcesLoader.class);
 	}
 
 }

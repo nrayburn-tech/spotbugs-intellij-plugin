@@ -38,9 +38,9 @@ import java.awt.*;
 import java.io.File;
 
 final class FilterTab extends JPanel implements SettingsOwner<AbstractSettings> {
-	private FilterPane include;
-	private FilterPane exclude;
-	private FilterPane bugs;
+	private final FilterPane include;
+	private final FilterPane exclude;
+	private final FilterPane bugs;
 
 	FilterTab() {
 		super(new BorderLayout());
@@ -94,7 +94,7 @@ final class FilterTab extends JPanel implements SettingsOwner<AbstractSettings> 
 						StringUtil.capitalizeWords(ResourcesLoader.getString("filter.rFile.save.title"), true),
 						ResourcesLoader.getString("filter.rFile.save.text"),
 						XmlFileType.DEFAULT_EXTENSION
-				), this).save(null, "findbugs-android-exclude");
+				), this).save("findbugs-android-exclude");
 		if (wrapper == null) {
 			return;
 		}

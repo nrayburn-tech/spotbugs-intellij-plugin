@@ -118,7 +118,7 @@ abstract class SettingsPane extends JPanel implements Disposable {
 	@NotNull
 	private ActionToolbar createToolbar(@NotNull final Project project, @Nullable final Module module) {
 		advancedSettingsAction = new AdvancedSettingsAction(this, project, module);
-		final ActionToolbar actionToolbar = ActionManager.getInstance().createActionToolbar(ActionPlaces.UNKNOWN, advancedSettingsAction, true);
+		final ActionToolbar actionToolbar = ActionManager.getInstance().createActionToolbar("SpotBugs", advancedSettingsAction, true);
 		actionToolbar.setTargetComponent(this);
 		return actionToolbar;
 	}

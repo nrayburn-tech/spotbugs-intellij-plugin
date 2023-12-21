@@ -248,7 +248,7 @@ public class SuppressReportBugIntentionAction extends SuppressIntentionAction im
 				annotation.replace(createAnnotationFromText(project, annotationText, container));
 			} else {
 				if (!ApplicationManager.getApplication().isUnitTestMode() && editor != null) {
-					Messages.showErrorDialog(editor.getComponent(), InspectionsBundle.message("suppress.inspection.annotation.syntax.error", annotation.getText()));
+					Messages.showErrorDialog(editor.getComponent(), "Incorrect annotation syntax: " + annotation.getText());
 				}
 			}
 
@@ -278,7 +278,7 @@ public class SuppressReportBugIntentionAction extends SuppressIntentionAction im
 										 @NotNull final Module moduleWithoutAnnotations) {
 		if (Messages.showOkCancelDialog(project, "SpotBugs annotations library is missing.\n" +
 						"Would you like to add it?",
-				"Add Missing Dependency", Messages.OK_BUTTON, Messages.CANCEL_BUTTON, Messages.getErrorIcon()) == Messages.OK) {
+				"Add Missing Dependency", Messages.getOkButton(), Messages.getCancelButton(), Messages.getErrorIcon()) == Messages.OK) {
 			final ExternalLibraryDescriptor spotbugsAnnotations = new ExternalLibraryDescriptor(
 					"com.github.spotbugs", "spotbugs-annotations", null, null, "4.0.1"
 			);

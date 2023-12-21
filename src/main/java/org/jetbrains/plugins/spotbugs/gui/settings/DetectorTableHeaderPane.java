@@ -94,7 +94,7 @@ final class DetectorTableHeaderPane extends JPanel implements Disposable {
 		actions.add(actionManager.createCollapseAllAction(treeExpander, tablePane.getTable()));
 		actions.add(new GroupByAction());
 
-		final ActionToolbar actionToolbar = ActionManager.getInstance().createActionToolbar(ActionPlaces.UNKNOWN, actions, true);
+		final ActionToolbar actionToolbar = ActionManager.getInstance().createActionToolbar("SpotBugs", actions, true);
 		actionToolbar.setTargetComponent(this);
 		return actionToolbar;
 	}

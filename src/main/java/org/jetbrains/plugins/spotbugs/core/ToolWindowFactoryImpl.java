@@ -19,6 +19,7 @@
  */
 package org.jetbrains.plugins.spotbugs.core;
 
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
@@ -30,6 +31,7 @@ public final class ToolWindowFactoryImpl implements ToolWindowFactory {
 	@Override
 	public void createToolWindowContent(@NotNull final Project project, @NotNull final ToolWindow toolWindow) {
 		final ToolWindowPanel win = new ToolWindowPanel(project);
-		toolWindow.getContentManager().addContent(ContentFactory.SERVICE.getInstance().createContent(win, "", false));
+		toolWindow.getContentManager().addContent(ApplicationManager.getApplication().getService(ContentFactory.class)
+						.createContent(win, "", false));
 	}
 }

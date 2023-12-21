@@ -269,8 +269,9 @@ public final class ToolWindowPanel extends JPanel implements AnalysisStateListen
 			}
 			String errorText = "An " + impl + " error occurred.";
 
-			final StatusBar statusBar = WindowManager.getInstance().getIdeFrame(_project).getStatusBar();
-			final StatusBarWidget widget = statusBar.getWidget(IdeMessagePanel.FATAL_ERROR);
+			IdeFrame ideFrame = WindowManager.getInstance().getIdeFrame(_project);
+			final StatusBar statusBar = ideFrame == null ? null : ideFrame.getStatusBar();
+			final StatusBarWidget widget = statusBar == null ? null : statusBar.getWidget(IdeMessagePanel.FATAL_ERROR);
 			IdeMessagePanel ideMessagePanel = null; // openFatals like ErrorNotifier
 			if (widget instanceof IdeMessagePanel) {
 				ideMessagePanel = (IdeMessagePanel) widget;
@@ -284,11 +285,10 @@ public final class ToolWindowPanel extends JPanel implements AnalysisStateListen
 		} else {
 			message.append("<a href='").append(A_HREF_DISABLE_ANCHOR).append("'>Disable notification").append("</a>");
 			NOTIFICATION_GROUP_ANALYSIS_FINISHED.createNotification(
-					VersionManager.getName() + ": Analysis Finished",
-					message.toString(),
-					notificationType,
-					new NotificationListenerImpl(ToolWindowPanel.this, result)
-			).setImportant(false).notify(_project);
+							VersionManager.getName() + ": Analysis Finished", message.toString(), notificationType)
+							.setImportant(false)
+							.setListener(new NotificationListenerImpl(ToolWindowPanel.this, result))
+							.notify(_project);
 		}
 
 		EditorFactory.getInstance().refreshAllEditors();
@@ -372,9 +372,6 @@ public final class ToolWindowPanel extends JPanel implements AnalysisStateListen
 			return null;
 		}
 		final ContentManager contentManager = toolWindow.getContentManager();
-		if (contentManager == null) {
-			return null;
-		}
 		final Content[] contents = contentManager.getContents();
 		if (contents.length == 0) {
 			return null;

@@ -19,10 +19,7 @@
  */
 package org.jetbrains.plugins.spotbugs.gui.preferences;
 
-import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.components.State;
-import com.intellij.openapi.components.Storage;
+import com.intellij.openapi.components.*;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
@@ -36,11 +33,12 @@ import org.jetbrains.plugins.spotbugs.preferences.PersistencePreferencesBean;
  * Legacy settings are converted (by {@link LegacyProjectSettingsConverter}) to {@link ProjectSettings}.
  * The settings are removed when the .ipr or config xml is stored next time.
  */
+@Service(Service.Level.PROJECT)
 @State(
 		name = FindBugsPluginConstants.PLUGIN_ID,
 		storages = {
-				@Storage(file = "$PROJECT_FILE$", deprecated = true),
-				@Storage(file = "$PROJECT_CONFIG_DIR$/findbugs-idea.xml", deprecated = true)})
+				@Storage(value = "$PROJECT_FILE$", deprecated = true),
+				@Storage(value = "$PROJECT_CONFIG_DIR$/findbugs-idea.xml", deprecated = true)})
 public final class LegacyProjectSettings implements PersistentStateComponent<PersistencePreferencesBean> {
 
 	private static final Logger LOGGER = Logger.getInstance(LegacyProjectSettings.class);
@@ -59,7 +57,7 @@ public final class LegacyProjectSettings implements PersistentStateComponent<Per
 	}
 
 	public static LegacyProjectSettings getInstance(@NotNull final Project project) {
-		return ServiceManager.getService(project, LegacyProjectSettings.class);
+		return project.getService(LegacyProjectSettings.class);
 	}
 
 	void applyTo(@NotNull final ProjectSettings settings, @NotNull final WorkspaceSettings workspaceSettings) {

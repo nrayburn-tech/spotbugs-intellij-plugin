@@ -52,7 +52,7 @@ import java.util.stream.Collectors;
 public class BugCollectionExporterTest extends JavaCodeInsightFixtureTestCase {
 
     @Rule
-    private final TemporaryFolder folder = new TemporaryFolder();
+    public final TemporaryFolder folder = new TemporaryFolder();
     private File out;
     private ToolWindowPanel toolWindowPanel;
 
