@@ -57,17 +57,11 @@ public class GroupBugIntentionListPopupStep extends BaseListPopupStep<SuppressRe
 	@Override
 	public PopupStep<?> onChosen(final SuppressReportBugIntentionAction selectedValue, final boolean finalChoice) {
 		final Project project = _psiElement.getProject();
-		ReadonlyStatusHandler.getInstance(project).ensureFilesWritable();
 
-
-		new WriteCommandAction.Simple/*<Object>*/(project, "Add findbugs-idea Suppress warning", _psiElement.getContainingFile()) {
-
-			@Override
-			protected void run() {
-				final Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
-				selectedValue.invoke(project, editor, _psiElement);
-			}
-		}.execute();
+		WriteCommandAction.runWriteCommandAction(project, "Add findbugs-idea Suppress warning", null, () -> {
+			final Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
+			selectedValue.invoke(project, editor, _psiElement);
+		}, _psiElement.getContainingFile());
 
 		return super.onChosen(selectedValue, finalChoice);
 	}

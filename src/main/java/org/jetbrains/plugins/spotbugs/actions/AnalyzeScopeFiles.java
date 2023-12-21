@@ -20,6 +20,7 @@
 package org.jetbrains.plugins.spotbugs.actions;
 
 import com.intellij.analysis.*;
+import com.intellij.analysis.dialog.ModelScopeItem;
 import com.intellij.ide.highlighter.ArchiveFileType;
 import com.intellij.injected.editor.VirtualFileWindow;
 import com.intellij.openapi.actionSystem.ActionPlaces;
@@ -28,12 +29,12 @@ import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.application.ReadAction;
-import com.intellij.openapi.application.Result;
 import com.intellij.openapi.compiler.CompileScope;
 import com.intellij.openapi.compiler.CompilerManager;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.help.HelpManager;
 import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.progress.ProcessCanceledException;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.project.Project;
@@ -63,6 +64,7 @@ import org.jetbrains.plugins.spotbugs.resources.ResourcesLoader;
 import javax.swing.Action;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public final class AnalyzeScopeFiles extends AbstractAnalyzeAction {
@@ -94,12 +96,13 @@ public final class AnalyzeScopeFiles extends AbstractAnalyzeAction {
 		final boolean rememberScope = e.getPlace().equals(ActionPlaces.MAIN_MENU);
 		final AnalysisUIOptions uiOptions = AnalysisUIOptions.getInstance(project);
 		final PsiElement element = LangDataKeys.PSI_ELEMENT.getData(dataContext);
+		String moduleName = module != null && scope.getScopeType() != AnalysisScope.MODULE ? getModuleNameInReadAction(module) : null;
+		List<ModelScopeItem> modelScopeItems = BaseAnalysisActionDialog.standardItems(project, scope, moduleName != null ? ModuleManager.getInstance(project).findModuleByName(moduleName) : null, element);
 		final BaseAnalysisActionDialog dlg = new BaseAnalysisActionDialog(ResourcesLoader.getString("analysis.specify.scope", "SpotBugs Analyze"),
 				ResourcesLoader.getString("analysis.scope.title", "Analyze"),
 				project,
-				scope,
-				module != null && scope.getScopeType() != AnalysisScope.MODULE ? getModuleNameInReadAction(module) : null,
-				rememberScope, AnalysisUIOptions.getInstance(project), element) {
+				modelScopeItems, 
+				AnalysisUIOptions.getInstance(project), rememberScope) {
 
 			@Override
 			protected void doHelpAction() {
@@ -109,7 +112,7 @@ public final class AnalyzeScopeFiles extends AbstractAnalyzeAction {
 			@SuppressFBWarnings({"RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE"})
 			@NotNull
 			@Override
-			protected Action[] createActions() {
+			protected Action @NotNull [] createActions() {
 				return new Action[]{getOKAction(), getCancelAction(), getHelpAction()};
 			}
 		};
@@ -118,7 +121,7 @@ public final class AnalyzeScopeFiles extends AbstractAnalyzeAction {
 			return;
 		}
 		final int oldScopeType = uiOptions.SCOPE_TYPE;
-		scope = dlg.getScope(uiOptions, scope, project, module);
+		scope = dlg.getScope(scope);
 		if (!rememberScope) {
 			uiOptions.SCOPE_TYPE = oldScopeType;
 		}
@@ -158,12 +161,11 @@ public final class AnalyzeScopeFiles extends AbstractAnalyzeAction {
 	) {
 
 		final PsiManager psiManager = PsiManager.getInstance(project);
-		psiManager.startBatchFilesProcessingMode();
-		final int[] count = new int[1];
-		try {
+		psiManager.runInBatchFilesMode(() -> {
+			final int[] count = new int[1];
 			scope.accept(new PsiRecursiveElementVisitor() {
 				@Override
-				public void visitFile(final PsiFile file) {
+				public void visitFile(final @NotNull PsiFile file) {
 					if (indicator.isCanceled() || FindBugsState.get(project).isAborting()) {
 						throw new ProcessCanceledException();
 					}
@@ -174,9 +176,8 @@ public final class AnalyzeScopeFiles extends AbstractAnalyzeAction {
 					}
 				}
 			});
-		} finally {
-			psiManager.finishBatchFilesProcessingMode();
-		}
+			return null;
+		});
 	}
 
 	@NonNls
@@ -240,7 +241,7 @@ public final class AnalyzeScopeFiles extends AbstractAnalyzeAction {
 					return new AnalysisScope(psiDirectory);
 				}
 			}
-			final Set<VirtualFile> files = new HashSet<VirtualFile>();
+			final Set<VirtualFile> files = new HashSet<>();
 			for (VirtualFile vFile : virtualFiles) {
 				if (fileIndex.isInContent(vFile)) {
 					if (vFile instanceof VirtualFileWindow) {
@@ -260,7 +261,7 @@ public final class AnalyzeScopeFiles extends AbstractAnalyzeAction {
 	}
 
 	private static void collectFilesUnder(@NotNull final VirtualFile vFile, @NotNull final Collection<VirtualFile> files) {
-		VfsUtilCore.visitChildrenRecursively(vFile, new VirtualFileVisitor() {
+		VfsUtilCore.visitChildrenRecursively(vFile, new VirtualFileVisitor<Void>() {
 			@Override
 			public boolean visitFile(@NotNull final VirtualFile file) {
 				if (!file.isDirectory()) {

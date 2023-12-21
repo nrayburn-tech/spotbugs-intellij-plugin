@@ -19,6 +19,8 @@
  */
 package org.jetbrains.plugins.spotbugs.common.util;
 
+import com.intellij.ide.highlighter.JavaClassFileType;
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.lang.Language;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.actionSystem.*;
@@ -68,8 +70,8 @@ public final class IdeaUtilImpl {
 
 	static {
 		final THashSet<FileType> supported = new THashSet<>(4);
-		supported.add(StdFileTypes.JAVA);
-		supported.add(StdFileTypes.CLASS);
+		supported.add(JavaFileType.INSTANCE);
+		supported.add(JavaClassFileType.INSTANCE);
 		final FileType scala = FileTypeManager.getInstance().getFileTypeByExtension("SCALA");
 		if (!(scala instanceof UnknownFileType)) {
 			supported.add(scala);

@@ -23,32 +23,30 @@ import com.intellij.openapi.components.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 @Service(Service.Level.PROJECT)
 @State(
 		name = "FindBugs-IDEA",
 		storages = {
 				// Remove both @Storage entry below and use only this if IDEA 15 support is gone: @Storage("findbugs-idea.xml")
-				@Storage(file = "$PROJECT_FILE$"),
-				@Storage(file = "$PROJECT_CONFIG_DIR$/findbugs-idea.xml")
+				@Storage("$PROJECT_FILE$"),
+				@Storage("$PROJECT_CONFIG_DIR$/findbugs-idea.xml")
 		}
 )
 public final class ProjectSettings extends AbstractSettings implements PersistentStateComponent<ProjectSettings> {
 
-	@Nullable
 	@Override
-	public ProjectSettings getState() {
+	public @NotNull ProjectSettings getState() {
 		return this;
 	}
 
 	@Override
-	public void loadState(final ProjectSettings state) {
+	public void loadState(final @NotNull ProjectSettings state) {
 		XmlSerializerUtil.copyBean(state, this);
 	}
 
 	@NotNull
 	public static ProjectSettings getInstance(@NotNull final Project project) {
-		return ServiceManager.getService(project, ProjectSettings.class);
+		return project.getService(ProjectSettings.class);
 	}
 }

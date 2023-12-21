@@ -88,7 +88,7 @@ final class Changes {
 			ProjectFileIndex index;
 			Set<VirtualFile> changesPerProject;
 			for (Project project : _listeners) {
-				index = ProjectFileIndex.SERVICE.getInstance( project );
+				index = ProjectFileIndex.getInstance( project );
 				changesPerProject = null;
 				for (VirtualFile f : vfs) {
 					if (index.isInSource(f)) {
