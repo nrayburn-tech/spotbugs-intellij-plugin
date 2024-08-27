@@ -28,8 +28,8 @@ apply plugin: 'org.jetbrains.intellij'
 apply plugin: 'maven-publish'
 apply plugin: 'java'
 
-sourceCompatibility = 11
-targetCompatibility = 11
+sourceCompatibility = 17
+targetCompatibility = 17
 
 repositories {
     mavenLocal()
@@ -60,7 +60,7 @@ configurations {
 }
 
 dependencies {
-    implementation ('com.github.spotbugs:spotbugs:4.7.3') {
+    implementation ('com.github.spotbugs:spotbugs:4.8.6') {
         exclude group: 'xml-apis', module: 'xml-apis'
         exclude group: 'org.apache.logging.log4j', module: 'log4j-api'
         exclude group: 'org.apache.logging.log4j', module: 'log4j-core'
