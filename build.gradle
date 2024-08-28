@@ -4,13 +4,13 @@
  *
  * This file is part of IntelliJ SpotBugs plugin.
  *
- * IntelliJ SpotBugs plugin is free software: you can redistribute it 
+ * IntelliJ SpotBugs plugin is free software: you can redistribute it
  * and/or modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation, either version 3 of 
+ * as published by the Free Software Foundation, either version 3 of
  * the License, or (at your option) any later version.
  *
  * IntelliJ SpotBugs plugin is distributed in the hope that it will
- * be useful, but WITHOUT ANY WARRANTY; without even the implied 
+ * be useful, but WITHOUT ANY WARRANTY; without even the implied
  * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  *
@@ -47,7 +47,7 @@ intellij {
 }
 
 jacoco {
-    toolVersion = "0.8.5"
+    toolVersion = "0.8.12"
 }
 
 runIde {
@@ -66,7 +66,9 @@ dependencies {
         exclude group: 'org.apache.logging.log4j', module: 'log4j-core'
         exclude group: 'org.slf4j', module: 'slf4j-api'
     }
-    implementation 'net.sf.saxon:Saxon-HE:12.3'
+    implementation ('net.sf.saxon:Saxon-HE:12.3') {
+        exclude group: 'org.slf4j', module: 'slf4j-api'
+    }
     implementation 'org.jsoup:jsoup:1.16.1'
     implementation 'info.clearthought:table-layout:4.3.0'
     testImplementation 'junit:junit:4.13.2'
