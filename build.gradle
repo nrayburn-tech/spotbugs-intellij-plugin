@@ -20,7 +20,7 @@
  */
 
 plugins {
-    id "org.jetbrains.intellij" version "1.16.1"
+    id "org.jetbrains.intellij" version "1.17.4"
     id 'jacoco'
 }
 
@@ -43,7 +43,7 @@ intellij {
     updateSinceUntilBuild = false
     type = 'IC'
 
-    plugins = ['git4idea', 'java']
+    plugins = ['Git4Idea', 'java']
 }
 
 jacoco {
