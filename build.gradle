@@ -106,6 +106,7 @@ tasks.register('deleteThirdPartyPlugins', Delete) {
 
 tasks.compileJava.dependsOn(downloadThirdPartyPlugins, copyGradleProperties)
 tasks.buildPlugin.dependsOn(copyThirdPartyPlugins)
+tasks.buildSearchableOptions.dependsOn(copyThirdPartyPlugins)
 tasks.jacocoTestReport.dependsOn(deleteThirdPartyPlugins)
 tasks.jacocoTestCoverageVerification.dependsOn(deleteThirdPartyPlugins)
 
