@@ -3,13 +3,13 @@
  *
  * This file is part of IntelliJ SpotBugs plugin.
  *
- * IntelliJ SpotBugs plugin is free software: you can redistribute it 
+ * IntelliJ SpotBugs plugin is free software: you can redistribute it
  * and/or modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation, either version 3 of 
+ * as published by the Free Software Foundation, either version 3 of
  * the License, or (at your option) any later version.
  *
  * IntelliJ SpotBugs plugin is distributed in the hope that it will
- * be useful, but WITHOUT ANY WARRANTY; without even the implied 
+ * be useful, but WITHOUT ANY WARRANTY; without even the implied
  * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  *
@@ -31,7 +31,8 @@ import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.*;
 import com.intellij.openapi.vfs.newvfs.NewVirtualFile;
 import com.intellij.util.Function;
-import gnu.trove.THashSet;
+import com.intellij.util.containers.CollectionFactory;
+import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -151,13 +152,13 @@ final class ChangeCollector implements VirtualFileListener {
 
 
 	private static void collectPathsAndNotify(final VirtualFile file, final Function<Collection<File>, Void> notification) {
-		final Set<File> pathsToMark = new THashSet<>(FileUtil.FILE_HASHING_STRATEGY);
+		final Set<String> pathsToMark = CollectionFactory.createFilePathSet();
 		if (!isIgnoredOrUnderIgnoredDirectory(file)) {
 			final boolean inContent = isInContentOfOpenedProject(file);
-			processRecursively(file, !inContent, file1 -> pathsToMark.add(new File(file1.getPath())));
+			processRecursively(file, !inContent, file1 -> pathsToMark.add(file1.getPath()));
 		}
 		if (!pathsToMark.isEmpty()) {
-			notification.fun(pathsToMark);
+			notification.fun(pathsToMark.stream().map(File::new).collect(Collectors.toSet()));
 		}
 	}
 
