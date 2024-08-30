@@ -30,27 +30,27 @@ public class VersionManagerTest {
   @Test
   public void testVersion() {
     Properties properties = new Properties();
-    properties.setProperty("version", "1.0.2");
+    properties.setProperty("pluginVersion", "1.0.2");
     VersionManager.Version ver = VersionManager.Version.load(properties);
     assertEquals("1.0.2", ver.toString());
   }
-  
+
   @Test(expected = RuntimeException.class)
   public void testVersionAbsent() {
     VersionManager.Version.load(new Properties());
   }
-  
+
   @Test(expected = RuntimeException.class)
   public void testVersionCorrupted() {
     Properties properties = new Properties();
-    properties.setProperty("version", "1.0.1.2");
+    properties.setProperty("pluginVersion", "1.0.1.2");
     VersionManager.Version.load(properties);
   }
-  
+
   @Test(expected = RuntimeException.class)
   public void testVersionCorrupted2() {
     Properties properties = new Properties();
-    properties.setProperty("version", "1.0.x");
+    properties.setProperty("pluginVersion ", "1.0.x");
     VersionManager.Version.load(properties);
   }
 }

@@ -29,6 +29,7 @@ import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.testFramework.ExpectedHighlightingData;
+import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.PsiTestUtil;
 import com.intellij.testFramework.fixtures.JavaCodeInsightFixtureTestCase;
 import com.intellij.util.Consumer;
@@ -37,13 +38,8 @@ import org.jetbrains.plugins.spotbugs.gui.toolwindow.view.ToolWindowPanel;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
 
-import javax.tools.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
 
 public class FindBugsStarterTest extends JavaCodeInsightFixtureTestCase {
@@ -81,20 +77,8 @@ public class FindBugsStarterTest extends JavaCodeInsightFixtureTestCase {
     }
 
     private void compile() throws IOException {
-        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-        DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
-        StandardJavaFileManager manager = compiler.getStandardFileManager(diagnostics, null, null);
         writeTestDataWithoutHighlights();
-        List<File> files = Arrays.stream(folder.getRoot().listFiles()).filter(file -> !file.isDirectory()).collect(Collectors.toList());
-
-        Iterable<? extends JavaFileObject> sources = manager.getJavaFileObjectsFromFiles(files);
-
-        manager.setLocation(StandardLocation.CLASS_OUTPUT, Collections.singleton(out));
-        JavaCompiler.CompilationTask task = compiler.getTask(null, manager, diagnostics, null, null, sources);
-
-        if (!task.call()) {
-            fail(diagnostics.getDiagnostics().toString());
-        }
+        IdeaTestUtil.compileFile(new File(folder.getRoot().getPath() + "/" + myFixture.getFile().getName()), out);
     }
 
     public void testNPE() throws IOException {

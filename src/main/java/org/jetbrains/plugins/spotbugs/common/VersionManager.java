@@ -3,13 +3,13 @@
  *
  * This file is part of IntelliJ SpotBugs plugin.
  *
- * IntelliJ SpotBugs plugin is free software: you can redistribute it 
+ * IntelliJ SpotBugs plugin is free software: you can redistribute it
  * and/or modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation, either version 3 of 
+ * as published by the Free Software Foundation, either version 3 of
  * the License, or (at your option) any later version.
  *
  * IntelliJ SpotBugs plugin is distributed in the hope that it will
- * be useful, but WITHOUT ANY WARRANTY; without even the implied 
+ * be useful, but WITHOUT ANY WARRANTY; without even the implied
  * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  *
@@ -45,7 +45,7 @@ public class VersionManager {
 			this.minor = minor;
 			this.build = build;
 		}
-		
+
 		@Override
 		public String toString() {
 			return major + "." + minor + "." + build;
@@ -61,9 +61,9 @@ public class VersionManager {
 			}
 			return load(properties);
 		}
-		
+
 		static Version load(Properties properties) {
-			String version = properties.getProperty("version");
+			String version = properties.getProperty("pluginVersion");
 			if (version == null) {
 				throw new RuntimeException("Unable to read version from '"+PROPERTIES_FILE+"': build corrupted");
 			}
@@ -80,7 +80,7 @@ public class VersionManager {
 	}
 
 	private static final String NAME = FindBugsPluginConstants.PLUGIN_NAME;
-	
+
 	private static final String WEBSITE = "https://github.com/JetBrains/spotbugs-intellij-plugin/";
 
 	private static final String DOWNLOAD_WEBSITE = "https://plugins.jetbrains.com/plugin/14014-spotbugs";

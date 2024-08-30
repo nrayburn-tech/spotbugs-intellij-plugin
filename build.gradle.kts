@@ -146,6 +146,12 @@ tasks.buildSearchableOptions {
     dependsOn(tasks["copyThirdPartyPlugins"])
 }
 
+tasks.withType<Test> {
+    val ideaHomePath = "idea.home.path"
+    // Set the IDEA_HOME_PATH environment variable to the IntelliJ IDEA Community sources that have been cloned locally.
+    systemProperty(ideaHomePath, project.properties[ideaHomePath] ?: System.getenv("IDEA_HOME_PATH"))
+}
+
 intellijPlatformTesting {
     runIde {
         register("runIdeForUiTests") {
