@@ -1,0 +1,39 @@
+[versions]
+# libraries
+assertj-core = "3.21.0"
+jsoup = "1.16.1"
+junit = "4.13.2"
+mockito-core = "4.0.0"
+saxon-he = "12.3"
+spotbugs = "4.8.6"
+table-layout = "4.3.0"
+
+# spotbugs plugins
+fb-contrib = "7.6.0"
+fb-contrib6 = "6.2.1"
+findsecbugs = "1.12.0"
+
+# plugins
+intelliJPlatform = "2.0.1"
+kotlin = "1.9.25"
+kover = "0.8.3"
+
+[libraries]
+# libraries
+assertjcore = { group = "org.assertj", name = "assertj-core", version.ref = "assertj-core" }
+jsoup = { group = "org.jsoup", name = "jsoup", version.ref = "jsoup" }
+mockitocore = { group = "org.mockito", name = "mockito-core", version.ref = "mockito-core" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+saxonhe = { group = "net.sf.saxon", name = "Saxon-HE", version.ref = "saxon-he" }
+spotbugs = { group = "com.github.spotbugs", name = "spotbugs", version.ref = "spotbugs" }
+tablelayout = { group = "info.clearthought", name = "table-layout", version.ref = "table-layout" }
+
+# spotbugs plugins
+fbcontrib = { group = "com.mebigfatguy.fb-contrib", name = "fb-contrib", version.ref = "fb-contrib" }
+fbcontrib6 = { group = "com.mebigfatguy.fb-contrib", name = "fb-contrib", version.ref = "fb-contrib6" }
+findsecbugs = { group = "com.h3xstream.findsecbugs", name = "findsecbugs-plugin", version.ref = "findsecbugs" }
+
+[plugins]
+intelliJPlatform = { id = "org.jetbrains.intellij.platform", version.ref = "intelliJPlatform" }
+kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
