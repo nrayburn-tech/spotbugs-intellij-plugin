@@ -3,13 +3,13 @@
  *
  * This file is part of IntelliJ SpotBugs plugin.
  *
- * IntelliJ SpotBugs plugin is free software: you can redistribute it 
+ * IntelliJ SpotBugs plugin is free software: you can redistribute it
  * and/or modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation, either version 3 of 
+ * as published by the Free Software Foundation, either version 3 of
  * the License, or (at your option) any later version.
  *
  * IntelliJ SpotBugs plugin is distributed in the hope that it will
- * be useful, but WITHOUT ANY WARRANTY; without even the implied 
+ * be useful, but WITHOUT ANY WARRANTY; without even the implied
  * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  *
@@ -20,6 +20,8 @@
 package org.jetbrains.plugins.spotbugs.actions;
 
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.application.ReadAction;
 import com.intellij.openapi.compiler.CompileScope;
 import com.intellij.openapi.compiler.CompilerManager;
 import com.intellij.openapi.module.Module;
@@ -48,17 +50,22 @@ public final class AnalyzeClassUnderCursor extends AbstractAnalyzeAction {
 			@NotNull final ToolWindow toolWindow,
 			@NotNull final FindBugsState state
 	) {
+    ApplicationManager.getApplication().executeOnPooledThread(() -> {
+      final boolean enabled;
+      if (state.isIdle()) {
+        final VirtualFile selectedFile = IdeaUtilImpl.getVirtualFile(e.getDataContext());
+        enabled = ReadAction.compute(() -> selectedFile != null &&
+                                           IdeaUtilImpl.isValidFileType(selectedFile.getFileType()) &&
+                                           IdeaUtilImpl.getCurrentClass(e.getDataContext()) != null);
+      } else {
+        enabled = false;
+      }
 
-		boolean enabled = false;
-		if (state.isIdle()) {
-			final VirtualFile selectedFile = IdeaUtilImpl.getVirtualFile(e.getDataContext());
-			enabled = selectedFile != null &&
-					IdeaUtilImpl.isValidFileType(selectedFile.getFileType()) &&
-					IdeaUtilImpl.getCurrentClass(e.getDataContext()) != null;
-		}
-
-		e.getPresentation().setEnabled(enabled);
-		e.getPresentation().setVisible(true);
+      ApplicationManager.getApplication().invokeLater(() -> {
+        e.getPresentation().setEnabled(enabled);
+        e.getPresentation().setVisible(true);
+      });
+    });
 	}
 
 	@SuppressFBWarnings("SIC_INNER_SHOULD_BE_STATIC_ANON")

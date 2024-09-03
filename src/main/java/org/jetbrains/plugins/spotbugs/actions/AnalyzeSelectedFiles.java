@@ -3,13 +3,13 @@
  *
  * This file is part of IntelliJ SpotBugs plugin.
  *
- * IntelliJ SpotBugs plugin is free software: you can redistribute it 
+ * IntelliJ SpotBugs plugin is free software: you can redistribute it
  * and/or modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation, either version 3 of 
+ * as published by the Free Software Foundation, either version 3 of
  * the License, or (at your option) any later version.
  *
  * IntelliJ SpotBugs plugin is distributed in the hope that it will
- * be useful, but WITHOUT ANY WARRANTY; without even the implied 
+ * be useful, but WITHOUT ANY WARRANTY; without even the implied
  * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  *
@@ -22,6 +22,7 @@ package org.jetbrains.plugins.spotbugs.actions;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.compiler.CompileScope;
 import com.intellij.openapi.compiler.CompilerManager;
 import com.intellij.openapi.progress.ProgressIndicator;
@@ -47,19 +48,23 @@ public final class AnalyzeSelectedFiles extends AbstractAnalyzeAction {
 			@NotNull final FindBugsState state
 	) {
 
-		final VirtualFile[] selectedFiles = IdeaUtilImpl.getVirtualFiles(e.getDataContext());
+    ApplicationManager.getApplication().executeOnPooledThread(() -> {
+      final VirtualFile[] selectedFiles = IdeaUtilImpl.getVirtualFiles(e.getDataContext());
 
-		boolean enable = false;
-		if (state.isIdle()) {
-			enable = selectedFiles != null &&
-					selectedFiles.length > 0 &&
-					!selectedFiles[0].isDirectory() &&
-					IdeaUtilImpl.isValidFileType(selectedFiles[0].getFileType());
-		}
+      ApplicationManager.getApplication().invokeLater(() -> {
+        boolean enable = false;
+        if (state.isIdle()) {
+          enable = selectedFiles != null &&
+                   selectedFiles.length > 0 &&
+                   !selectedFiles[0].isDirectory() &&
+                   IdeaUtilImpl.isValidFileType(selectedFiles[0].getFileType());
+        }
 
-		e.getPresentation().setEnabled(enable);
-		e.getPresentation().setVisible(true);
-		setTextAndDescription(e, selectedFiles);
+        e.getPresentation().setEnabled(enable);
+        e.getPresentation().setVisible(true);
+        setTextAndDescription(e, selectedFiles);
+      });
+    });
 	}
 
 	@SuppressFBWarnings("SIC_INNER_SHOULD_BE_STATIC_ANON")

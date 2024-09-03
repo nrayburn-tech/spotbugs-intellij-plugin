@@ -3,13 +3,13 @@
  *
  * This file is part of IntelliJ SpotBugs plugin.
  *
- * IntelliJ SpotBugs plugin is free software: you can redistribute it 
+ * IntelliJ SpotBugs plugin is free software: you can redistribute it
  * and/or modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation, either version 3 of 
+ * as published by the Free Software Foundation, either version 3 of
  * the License, or (at your option) any later version.
  *
  * IntelliJ SpotBugs plugin is distributed in the hope that it will
- * be useful, but WITHOUT ANY WARRANTY; without even the implied 
+ * be useful, but WITHOUT ANY WARRANTY; without even the implied
  * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  *
@@ -40,8 +40,7 @@ public final class TreePreviousOccurence extends AbstractAction {
 
 		final Content content = toolWindow.getContentManager().getContent(0);
 		if (content == null) {
-			e.getPresentation().setEnabled(false);
-			e.getPresentation().setVisible(false);
+			e.getPresentation().setEnabledAndVisible(false);
 			return;
 		}
 		final ToolWindowPanel panel = (ToolWindowPanel) content.getComponent();

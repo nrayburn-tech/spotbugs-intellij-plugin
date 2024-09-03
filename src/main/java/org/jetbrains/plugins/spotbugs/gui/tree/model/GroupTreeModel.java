@@ -3,13 +3,13 @@
  *
  * This file is part of IntelliJ SpotBugs plugin.
  *
- * IntelliJ SpotBugs plugin is free software: you can redistribute it 
+ * IntelliJ SpotBugs plugin is free software: you can redistribute it
  * and/or modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation, either version 3 of 
+ * as published by the Free Software Foundation, either version 3 of
  * the License, or (at your option) any later version.
  *
  * IntelliJ SpotBugs plugin is distributed in the hope that it will
- * be useful, but WITHOUT ANY WARRANTY; without even the implied 
+ * be useful, but WITHOUT ANY WARRANTY; without even the implied
  * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  *
@@ -19,6 +19,7 @@
  */
 package org.jetbrains.plugins.spotbugs.gui.tree.model;
 
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
@@ -94,8 +95,12 @@ public class GroupTreeModel extends AbstractTreeModel<VisitableTreeNode, RootNod
 
 	@SuppressWarnings({"MethodMayBeStatic", "AnonymousInnerClass"})
 	private void addProblem(final BugInstanceNode leaf) {
-		final PsiFile psiFile = leaf.getPsiFile();
-		_addProblem(psiFile, leaf);
+    ApplicationManager.getApplication().executeOnPooledThread(() -> {
+      final PsiFile psiFile = leaf.getPsiFile();
+      _addProblem(psiFile, leaf);
+
+      ApplicationManager.getApplication().invokeLater(() -> nodeStructureChanged(leaf.getParent()));
+    });
 	}
 
 	private void _addProblem(@Nullable final PsiFile value, final BugInstanceNode leaf) {
@@ -196,7 +201,6 @@ public class GroupTreeModel extends AbstractTreeModel<VisitableTreeNode, RootNod
 			final BugInstanceNode childNode = new BugInstanceNode(member, parentGroup, _project);
 			parentGroup.addChild(childNode);
 			addProblem(childNode);
-			nodeStructureChanged(parentGroup);
 		} else {
 			//noinspection ThrowableInstanceNeverThrown
 			LOGGER.error("parentSubGroup can not be null. ", new NullPointerException());

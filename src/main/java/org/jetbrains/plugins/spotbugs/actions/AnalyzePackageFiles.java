@@ -3,13 +3,13 @@
  *
  * This file is part of IntelliJ SpotBugs plugin.
  *
- * IntelliJ SpotBugs plugin is free software: you can redistribute it 
+ * IntelliJ SpotBugs plugin is free software: you can redistribute it
  * and/or modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation, either version 3 of 
+ * as published by the Free Software Foundation, either version 3 of
  * the License, or (at your option) any later version.
  *
  * IntelliJ SpotBugs plugin is distributed in the hope that it will
- * be useful, but WITHOUT ANY WARRANTY; without even the implied 
+ * be useful, but WITHOUT ANY WARRANTY; without even the implied
  * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  *
@@ -20,6 +20,8 @@
 package org.jetbrains.plugins.spotbugs.actions;
 
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.application.ReadAction;
 import com.intellij.openapi.compiler.CompileScope;
 import com.intellij.openapi.compiler.CompilerManager;
 import com.intellij.openapi.module.Module;
@@ -57,15 +59,20 @@ public final class AnalyzePackageFiles extends AbstractAnalyzeAction {
 			@NotNull final FindBugsState state
 	) {
 
+    ApplicationManager.getApplication().executeOnPooledThread(() -> {
+      final boolean enable;
+      if (state.isIdle()) {
+        final VirtualFile directory = getDirectory(e, project);
+        enable = directory != null && ModuleUtilCore.findModuleForFile(directory, project) != null;
+      } else {
+        enable = false;
+      }
 
-		boolean enable = false;
-		if (state.isIdle()) {
-			final VirtualFile directory = getDirectory(e, project);
-			enable = directory != null && ModuleUtilCore.findModuleForFile(directory, project) != null;
-		}
-
-		e.getPresentation().setEnabled(enable);
-		e.getPresentation().setVisible(true);
+      ApplicationManager.getApplication().invokeLater(() -> {
+        e.getPresentation().setEnabled(enable);
+        e.getPresentation().setVisible(true);
+      });
+    });
 	}
 
 	@SuppressFBWarnings("SIC_INNER_SHOULD_BE_STATIC_ANON")
@@ -76,45 +83,46 @@ public final class AnalyzePackageFiles extends AbstractAnalyzeAction {
 			@NotNull final ToolWindow toolWindow,
 			@NotNull final FindBugsState state
 	) {
+    ApplicationManager.getApplication().executeOnPooledThread(() -> {
+      final VirtualFile directory = getDirectory(e, project);
+      final Module module = ModuleUtilCore.findModuleForFile(directory, project);
+      if (module == null) {
+        throw new IllegalStateException("No module found for " + directory);
+      }
+      final ProjectFileIndex fileIndex = ProjectRootManager.getInstance(project).getFileIndex();
+      final String packageName = fileIndex.getPackageNameByDirectory(directory);
+      final boolean isTest = fileIndex.isInTestSourceContent(directory);
 
-		final VirtualFile directory = getDirectory(e, project);
-		final Module module = ModuleUtilCore.findModuleForFile(directory, project);
-		if (module == null) {
-			throw new IllegalStateException("No module found for " + directory);
-		}
-		final ProjectFileIndex fileIndex = ProjectRootManager.getInstance(project).getFileIndex();
-		final String packageName = fileIndex.getPackageNameByDirectory(directory);
-		final boolean isTest = fileIndex.isInTestSourceContent(directory);
+      new FindBugsStarter(project, "Running SpotBugs analysis for package '" + packageName + "'...") {
+        @Override
+        protected void createCompileScope(@NotNull final CompilerManager compilerManager, @NotNull final Consumer<CompileScope> consumer) {
+          consumer.consume(compilerManager.createProjectCompileScope(project));
+        }
 
-		new FindBugsStarter(project, "Running SpotBugs analysis for package '" + packageName + "'...") {
-			@Override
-			protected void createCompileScope(@NotNull final CompilerManager compilerManager, @NotNull final Consumer<CompileScope> consumer) {
-				consumer.consume(compilerManager.createProjectCompileScope(project));
-			}
-
-			@Override
-			protected boolean configure(@NotNull final ProgressIndicator indicator, @NotNull final FindBugsProjects projects, final boolean justCompiled) {
-				final CompilerModuleExtension extension = CompilerModuleExtension.getInstance(module);
-				if (extension == null) {
-					throw new IllegalStateException("No compiler extension for module " + module.getName());
-				}
-				final VirtualFile compilerOutputPath = isTest ? extension.getCompilerOutputPathForTests() : extension.getCompilerOutputPath();
-				if (compilerOutputPath == null) {
-					showWarning("Source is not compiled.");
-					return false;
-				}
-				final File outputPath = new File(compilerOutputPath.getCanonicalPath(), packageName.replace(".", File.separator));
-				if (!outputPath.exists()) {
-					showWarning("Source is not compiled (" + outputPath + ").");
-					return false;
-				}
-				indicator.setText("Collecting files for analysis...");
-				final FindBugsProject findBugsProject = projects.get(module, isTest);
-				final int[] count = new int[1];
-				RecurseFileCollector.addFiles(project, indicator, findBugsProject, outputPath, count);
-				return true;
-			}
-		}.start();
+        @Override
+        protected boolean configure(@NotNull final ProgressIndicator indicator, @NotNull final FindBugsProjects projects, final boolean justCompiled) {
+          final CompilerModuleExtension extension = CompilerModuleExtension.getInstance(module);
+          if (extension == null) {
+            throw new IllegalStateException("No compiler extension for module " + module.getName());
+          }
+          final VirtualFile compilerOutputPath = isTest ? extension.getCompilerOutputPathForTests() : extension.getCompilerOutputPath();
+          if (compilerOutputPath == null) {
+            showWarning("Source is not compiled.");
+            return false;
+          }
+          final File outputPath = new File(compilerOutputPath.getCanonicalPath(), packageName.replace(".", File.separator));
+          if (!outputPath.exists()) {
+            showWarning("Source is not compiled (" + outputPath + ").");
+            return false;
+          }
+          indicator.setText("Collecting files for analysis...");
+          final FindBugsProject findBugsProject = projects.get(module, isTest);
+          final int[] count = new int[1];
+          RecurseFileCollector.addFiles(project, indicator, findBugsProject, outputPath, count);
+          return true;
+        }
+      }.start();
+    });
 	}
 
 	@Nullable
@@ -137,11 +145,13 @@ public final class AnalyzePackageFiles extends AbstractAnalyzeAction {
 				return null;
 			}
 		}
-		final PsiDirectory psiDirectory = PsiManager.getInstance(project).findDirectory(directory);
+    final VirtualFile finalDirectory = directory;
+		final PsiDirectory psiDirectory = ReadAction.compute(() -> PsiManager.getInstance(project).findDirectory(finalDirectory));
 		if (psiDirectory == null) {
 			return null;
 		}
-		if (!PsiDirectoryFactory.getInstance(project).isPackage(psiDirectory)) {
+    final boolean isPackage = ReadAction.compute(() -> PsiDirectoryFactory.getInstance(project).isPackage(psiDirectory));
+		if (!isPackage) {
 			return null;
 		}
 		return directory;

@@ -3,13 +3,13 @@
  *
  * This file is part of IntelliJ SpotBugs plugin.
  *
- * IntelliJ SpotBugs plugin is free software: you can redistribute it 
+ * IntelliJ SpotBugs plugin is free software: you can redistribute it
  * and/or modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation, either version 3 of 
+ * as published by the Free Software Foundation, either version 3 of
  * the License, or (at your option) any later version.
  *
  * IntelliJ SpotBugs plugin is distributed in the hope that it will
- * be useful, but WITHOUT ANY WARRANTY; without even the implied 
+ * be useful, but WITHOUT ANY WARRANTY; without even the implied
  * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  *
@@ -19,8 +19,10 @@
  */
 package org.jetbrains.plugins.spotbugs.actions;
 
+import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.ToggleAction;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
@@ -35,69 +37,73 @@ import org.jetbrains.plugins.spotbugs.gui.toolwindow.view.ToolWindowPanel;
 
 abstract class AbstractToggleAction extends ToggleAction {
 
-	@Override
+  @Override
+  public @NotNull ActionUpdateThread getActionUpdateThread() {
+    return ActionUpdateThread.EDT;
+  }
+
+  @Override
 	public final void update(@NotNull AnActionEvent e) {
 		final Project project = IdeaUtilImpl.getProject(e.getDataContext());
 		if (project == null || !project.isInitialized() || !project.isOpen()) {
-			e.getPresentation().setEnabled(false);
-			e.getPresentation().setVisible(false);
+			e.getPresentation().setEnabledAndVisible(false);
 			return;
 		}
 		final ToolWindow toolWindow = ToolWindowPanel.getWindow(project);
 		if (toolWindow == null || !toolWindow.isAvailable()) {
-			e.getPresentation().setEnabled(false);
-			e.getPresentation().setVisible(false);
+			e.getPresentation().setEnabledAndVisible(false);
 			return;
 		}
 		final ToolWindowPanel panel = ToolWindowPanel.getInstance(toolWindow);
 		if (panel == null) {
-			e.getPresentation().setEnabled(false);
-			e.getPresentation().setVisible(false);
+			e.getPresentation().setEnabledAndVisible(false);
 			return;
 		}
-		final Module module = IdeaUtilImpl.getModule(e.getDataContext(), project);
-		final ProjectSettings projectSettings = ProjectSettings.getInstance(project);
-		AbstractSettings settings = projectSettings;
-		if (module != null) {
-			final ModuleSettings moduleSettings = ModuleSettings.getInstance(module);
-			if (moduleSettings.overrideProjectSettings) {
-				settings = moduleSettings;
-			}
-		}
-		final boolean select = isSelectedImpl(
-				e,
-				project,
-				module,
-				toolWindow,
-				panel,
-				FindBugsState.get(project),
-				projectSettings,
-				settings
-		);
-		final Boolean selected = select ? Boolean.TRUE : Boolean.FALSE;
-		e.getPresentation().putClientProperty(SELECTED_PROPERTY, selected);
-		e.getPresentation().setEnabled(true);
-		e.getPresentation().setVisible(true);
+    ApplicationManager.getApplication().executeOnPooledThread(() -> {
+      final Module module = IdeaUtilImpl.getModule(e.getDataContext(), project);
+      final ProjectSettings projectSettings = ProjectSettings.getInstance(project);
+      AbstractSettings settings = projectSettings;
+      if (module != null) {
+        final ModuleSettings moduleSettings = ModuleSettings.getInstance(module);
+        if (moduleSettings.overrideProjectSettings) {
+          settings = moduleSettings;
+        }
+      }
+
+      final AbstractSettings finalSettings = settings;
+      ApplicationManager.getApplication().invokeLater(() -> {
+        final boolean select = isSelectedImpl(
+          e,
+          project,
+          module,
+          toolWindow,
+          panel,
+          FindBugsState.get(project),
+          projectSettings,
+          finalSettings
+        );
+        final Boolean selected = select ? Boolean.TRUE : Boolean.FALSE;
+        e.getPresentation().putClientProperty(SELECTED_KEY, selected);
+        e.getPresentation().setEnabledAndVisible(true);
+      });
+    });
 	}
 
 	@Override
 	public final boolean isSelected(@NotNull AnActionEvent e) {
 		final Project project = IdeaUtilImpl.getProject(e.getDataContext());
 		if (project == null || !project.isInitialized() || !project.isOpen()) {
-			e.getPresentation().setEnabled(false);
-			e.getPresentation().setVisible(false);
+			e.getPresentation().setEnabledAndVisible(false);
 			return false;
 		}
 		final ToolWindow toolWindow = ToolWindowPanel.getWindow(project);
 		if (toolWindow == null || !toolWindow.isAvailable()) {
-			e.getPresentation().setEnabled(false);
-			e.getPresentation().setVisible(false);
+			e.getPresentation().setEnabledAndVisible(false);
 			return false;
 		}
 		final ToolWindowPanel panel = ToolWindowPanel.getInstance(toolWindow);
 		if (panel == null) {
-			e.getPresentation().setEnabled(false);
-			e.getPresentation().setVisible(false);
+			e.getPresentation().setEnabledAndVisible(false);
 			return false;
 		}
 		final Module module = IdeaUtilImpl.getModule(e.getDataContext(), project);
@@ -136,20 +142,17 @@ abstract class AbstractToggleAction extends ToggleAction {
 	public final void setSelected(@NotNull AnActionEvent e, boolean select) {
 		final Project project = IdeaUtilImpl.getProject(e.getDataContext());
 		if (project == null || !project.isInitialized() || !project.isOpen()) {
-			e.getPresentation().setEnabled(false);
-			e.getPresentation().setVisible(false);
+			e.getPresentation().setEnabledAndVisible(false);
 			return;
 		}
 		final ToolWindow toolWindow = ToolWindowPanel.getWindow(project);
 		if (toolWindow == null || !toolWindow.isAvailable()) {
-			e.getPresentation().setEnabled(false);
-			e.getPresentation().setVisible(false);
+			e.getPresentation().setEnabledAndVisible(false);
 			return;
 		}
 		final ToolWindowPanel panel = ToolWindowPanel.getInstance(toolWindow);
 		if (panel == null) {
-			e.getPresentation().setEnabled(false);
-			e.getPresentation().setVisible(false);
+			e.getPresentation().setEnabledAndVisible(false);
 			return;
 		}
 		final Module module = IdeaUtilImpl.getModule(e.getDataContext(), project);
