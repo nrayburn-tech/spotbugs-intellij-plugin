@@ -111,13 +111,6 @@ dependencies {
     }
 }
 
-tasks.register<Copy>("copyGradleProperties") {
-    description = "Copy gradle.properties to project resources."
-    from ("gradle.properties")
-    into ("build/resources/main/org/jetbrains/plugins/spotbugs/common")
-    rename { _ -> "version.properties" }
-}
-
 tasks.register<Copy>("downloadThirdPartyPlugins") {
     description = "Downloads third-party plugins Find Security Bugs and FB-Contrib."
     from (thirdPartyPlugins)
@@ -137,7 +130,7 @@ tasks.register<Delete>("deleteThirdPartyPlugins") {
 }
 
 tasks.compileJava {
-    dependsOn(tasks["downloadThirdPartyPlugins"], tasks["copyGradleProperties"])
+    dependsOn(tasks["downloadThirdPartyPlugins"])
 }
 tasks.buildPlugin {
     dependsOn(tasks["copyThirdPartyPlugins"])

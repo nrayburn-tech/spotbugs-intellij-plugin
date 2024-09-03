@@ -23,7 +23,6 @@ import org.jetbrains.plugins.spotbugs.common.util.IoUtil;
 
 import java.io.*;
 import java.nio.charset.*;
-import java.util.Properties;
 
 
 /**
@@ -31,9 +30,7 @@ import java.util.Properties;
  */
 @SuppressWarnings({"UseOfSystemOutOrSystemErr", "StringConcatenation", "CallToPrintStackTrace", "CallToPrintStackTrace"})
 public class VersionManager {
-
-	private static final String PROPERTIES_FILE = "version.properties";
-	private static final Version VERSION = Version.load(PROPERTIES_FILE);
+	private static final Version VERSION = Version.load();
 
 	static class Version {
 		private final long major;
@@ -51,21 +48,10 @@ public class VersionManager {
 			return major + "." + minor + "." + build;
 		}
 
-		@SuppressWarnings("SameParameterValue")
-		static Version load(String resource) {
-			Properties properties = new Properties();
-			try (InputStream stream = VersionManager.class.getResourceAsStream(resource)) {
-				properties.load(stream);
-			} catch (IOException e) {
-				throw new RuntimeException("Unable to read '"+resource+"': build corrupted", e);
-			}
-			return load(properties);
-		}
-
-		static Version load(Properties properties) {
-			String version = properties.getProperty("pluginVersion");
+		static Version load() {
+			String version = FindBugsPluginUtil.getIdeaPluginDescriptor().getVersion();
 			if (version == null) {
-				throw new RuntimeException("Unable to read version from '"+PROPERTIES_FILE+"': build corrupted");
+				throw new RuntimeException("Unable to read version from IdeaPluginDescriptor");
 			}
 			String[] components = version.split("\\.");
 			if (components.length != 3) {
